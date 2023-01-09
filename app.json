@@ -1,0 +1,41 @@
+{
+  "id": "9d21f859-860e-4a4d-ab73-d2bf6815a030",
+  "name": "Customer_Trends",
+  "publisher": "Robosol",
+  "version": "19.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+  {
+      "id": "f339ac69-5888-4062-beab-84901628424d",
+      "name": "Robosol_Base_Application",
+      "publisher": "Robosol",
+      "version": "19.0.0.0"
+    }
+    
+  
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "21.0.0.0",
+  "idRanges": [
+    {
+      "from": 80125,
+      "to": 80130
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "10.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
