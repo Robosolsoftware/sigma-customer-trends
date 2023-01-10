@@ -169,7 +169,7 @@ page 80126 "Customer Trends"
         CH_ILE.SetRange("Item No.", Rec."Item No.");
         CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-2M+1D>', Today()), Today); //8 weeks
         if CH_ILE.FindLast() then
-            ColorCode := 'Ambiguous'
+            ColorCode := 'Favorable'
         else begin
 
             CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-4M+1D>', Today), CalcDate('CM', CalcDate('CM-2M', Today)));
@@ -178,11 +178,14 @@ page 80126 "Customer Trends"
             else begin
                 CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-6M>', Today()), CalcDate('<CM-4M>', Today));
                 if CH_ILE.FindLast() then
-                    ColorCode := 'Unfavorable'; //6 Months
+                    ColorCode := 'Attention'//6 Months
+                else
+                    ColorCode := 'Ambiguous';
+                // end;
+
             end;
 
         end;
-
     end;
 
     procedure ResetFlag()

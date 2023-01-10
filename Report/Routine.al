@@ -5,8 +5,44 @@ report 80125 Populate_CustomerTrends
     ProcessingOnly = true;
     UseRequestPage = false;
 
-    local procedure
-    PopulateTrends(ILE: Record "Item Ledger Entry")
+    local procedure PopulateTrendsForRecurringIfNotILE(Ch_RecuLine: Record "Standard Sales Line"; var CustNo: Code[20])
+
+    begin
+        CH_CustTrends.Init();
+        CH_CustTrends.Validate("Item No.", Ch_RecuLine."No.");
+        CH_CustTrends.Validate("Customer No.", CustNo);
+        if CH_Items.Get(Ch_RecuLine."No.") then;
+
+        CH_CustTrends.Validate("Units of Measure", CH_Items."Sales Unit of Measure");
+        SalesPrice.Reset();
+        SalesPrice.SetRange("Source Type", SalesPrice."Source Type"::Customer);
+        SalesPrice.SetRange("Source No.", CustNo);
+        SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
+        SalesPrice.SetRange("Asset No.", Ch_RecuLine."No.");
+        SalesPrice.SetRange(Status, SalesPrice.Status::Active);
+        SalesPrice.SetRange("Unit of Measure Code", CH_Items."Sales Unit of Measure");
+        if SalesPrice.FindLast() then
+            CH_CustTrends.Validate("Unit Price", SalesPrice."Unit Price")
+        else begin
+            Clear(SalesPrice);
+            SalesPrice.Reset();
+            SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
+            SalesPrice.SetRange("Asset No.", Ch_RecuLine."No.");
+            SalesPrice.SetRange(Status, SalesPrice.Status::Active);
+            if SalesPrice.FindLast() then
+                CH_CustTrends.Validate("Unit Price", SalesPrice."Unit Price")
+            else
+                CH_CustTrends."Unit Price" := 0;
+
+            CH_CustTrends.Updated := true;
+            CH_CustTrends."Updated By" := UserId;
+            CH_CustTrends."Updated On" := CurrentDateTime;
+
+            CH_CustTrends.Insert(true);
+        end;
+    end;
+
+    local procedure PopulateTrends(ILE: Record "Item Ledger Entry")
     var
         Rec_ILE: Record "Item Ledger Entry";
     begin
@@ -218,7 +254,7 @@ report 80125 Populate_CustomerTrends
 
         CH_CustTrends.ModifyAll(Updated, false);
         CH_ILE.Reset();
-        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-2M+1D>', Today), CALCDATE('CM', CALCDATE('-CM-1D', TODAY)));
+        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
         CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
         CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
         CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
@@ -238,17 +274,8 @@ report 80125 Populate_CustomerTrends
                 Ch_RecuLine.SetRange(Type, Ch_RecuLine.Type::Item);
                 if Ch_RecuLine.FindSet() then begin
                     repeat
-                        CH_ILE.Reset();
-                        CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-1M>', Today()), CalcDate('<CM>', Today()));
-                        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-                        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-                        CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
-                        CH_ILE.SetRange("Item No.", Ch_RecuLine."No.");
-                        if CH_ILE.FindSet() then begin
-                            repeat
-                                InsertAndModifyTrends(CH_ILE);
-                            until CH_ILE.Next() = 0;
-                        end;
+                        InsertAndModifyTrends(CH_ILE); //if ILE is created
+                        PopulateTrendsForRecurringIfNotILE(Ch_RecuLine, CH_RecuH."Customer No.");
                     until Ch_RecuLine.Next() = 0;
                 end;
             until CH_RecuH.Next() = 0;
