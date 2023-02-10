@@ -17,8 +17,8 @@ pageextension 80125 CustCard extends "Customer Card"
                 trigger OnAction()
                 begin
                     ChTrends.DeleteAll();
-                    RouRepo.AssignCustNo(Rec);
-
+                    //RouRepo.AssignCustNo(Rec);
+                    G_EventSub.CreateCustomertrends(SalesH, Rec."No.");
                 end;
 
             }
@@ -29,4 +29,6 @@ pageextension 80125 CustCard extends "Customer Card"
     var
         RouRepo: Report Populate_CustomerTrends;
         ChTrends: Record CustomerTrends;
+        G_EventSub: Codeunit EventSub;
+        SalesH: Record "Sales Header";
 }

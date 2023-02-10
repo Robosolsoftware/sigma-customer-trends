@@ -6,17 +6,16 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "Robo_Dev",
-            //"environmentName": "nbsandbox_01082022",
+            //"environmentName": "Robosol_Dev",
+            "environmentName": "Sandbox_UAT",
             "startupObjectId": 22,
             "startupObjectType": "Page",
             "breakOnError": "All",
             "launchBrowser": true,
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
-            "tenant": "1cf41952-b687-4c56-8f2b-96e0a300c5c7",
-            //"tenant": "50c95979-0ee7-4f60-a575-1b5723dd1367",
-            "schemaUpdateMode": "Synchronize"
+            "tenant": "50c95979-0ee7-4f60-a575-1b5723dd1367",
+            "schemaUpdateMode": "ForceSync"
         }
     ]
 }

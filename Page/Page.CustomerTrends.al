@@ -102,58 +102,61 @@ page 80126 "Customer Trends"
     {
         area(Processing)
         {
-            action("Past 3 Months")
+            // action("Customer Trend Details")
+            action("Past Months Details")
             {
                 ApplicationArea = All;
+                RunObject = report "Customer Trend Details";
+                Image = Report;
 
                 trigger OnAction();
                 var
-                    CH_CustTrends: Record CustomerTrends;
-                    CH_ILE: Record "Item Ledger Entry";
-                    Routine: Report Populate_CustomerTrends;
-                    SHRec: Record "Sales Header";
+                // CH_CustTrends: Record CustomerTrends;
+                // CH_ILE: Record "Item Ledger Entry";
+                // Routine: Report Populate_CustomerTrends;
+                // SHRec: Record "Sales Header";
                 begin
-                    SHRec.Reset();
-                    if SHRec.get(SHRec."Document Type"::Order, OrderNo) then;
+                    // SHRec.Reset();
+                    // if SHRec.get(SHRec."Document Type"::Order, OrderNo) then;
 
-                    CH_ILE.Reset();
-                    CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-4M+1D>', Today), CalcDate('CM', CalcDate('CM-2M', Today)));
-                    CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-                    CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-                    CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
-                    if CH_ILE.FindSet() then begin
-                        repeat
-                            Routine.InsertAndModifyTrends(CH_ILE);
-                        until CH_ILE.Next() = 0;
-                    end;
+                    // CH_ILE.Reset();
+                    // CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-4M+1D>', Today), CalcDate('CM', CalcDate('CM-2M', Today)));
+                    // CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+                    // CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+                    // CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
+                    // if CH_ILE.FindSet() then begin
+                    //     repeat
+                    //         Routine.InsertAndModifyTrends(CH_ILE);
+                    //     until CH_ILE.Next() = 0;
+                    // end;
                 end;
 
             }
-            action("Past 6 Months")
-            {
-                ApplicationArea = All;
+            // action("Past 6 Months")
+            // {
+            //     ApplicationArea = All;
 
-                trigger OnAction();
-                var
-                    CH_CustTrends: Record CustomerTrends;
-                    CH_ILE: Record "Item Ledger Entry";
-                    Routine: Report Populate_CustomerTrends;
-                    SHRec: Record "Sales Header";
-                begin
-                    SHRec.Reset();
-                    if SHRec.get(SHRec."Document Type"::Order, OrderNo) then;
-                    CH_ILE.Reset();
-                    CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-6M>', Today()), CalcDate('CM', CalcDate('CM-2M', Today)));
-                    CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-                    CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-                    CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
-                    if CH_ILE.FindSet() then begin
-                        repeat
-                            Routine.InsertAndModifyTrends(CH_ILE);
-                        until CH_ILE.Next() = 0;
-                    end;
-                end;
-            }
+            //     trigger OnAction();
+            //     var
+            //         CH_CustTrends: Record CustomerTrends;
+            //         CH_ILE: Record "Item Ledger Entry";
+            //         Routine: Report Populate_CustomerTrends;
+            //         SHRec: Record "Sales Header";
+            //     begin
+            //         SHRec.Reset();
+            //         if SHRec.get(SHRec."Document Type"::Order, OrderNo) then;
+            //         CH_ILE.Reset();
+            //         CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-6M>', Today()), CalcDate('CM', CalcDate('CM-2M', Today)));
+            //         CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+            //         CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+            //         CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
+            //         if CH_ILE.FindSet() then begin
+            //             repeat
+            //                 Routine.InsertAndModifyTrends(CH_ILE);
+            //             until CH_ILE.Next() = 0;
+            //         end;
+            //     end;
+            // }
         }
     }
 
@@ -188,6 +191,44 @@ page 80126 "Customer Trends"
         end;
     end;
 
+    procedure GetCustomertrendDetails(L_Months: Option " ","3M","6M"; CH_CustTrends: Record CustomerTrends)
+    var
+        CH_ILE: Record "Item Ledger Entry";
+        Routine: Report Populate_CustomerTrends;
+        SHRec: Record "Sales Header";
+    begin
+
+        if L_Months = L_Months::"3M" then begin
+            CH_ILE.Reset();
+            //CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-4M+1D>', Today), CalcDate('CM', CalcDate('CM-2M', Today)));
+            CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-4M+1D>', Today), Today);
+            CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+            CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+            //CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
+            CH_ILE.SetRange("Source No.", CH_CustTrends."Customer No.");
+            if CH_ILE.FindSet() then begin
+                repeat
+                    Routine.InsertAndModifyTrends(CH_ILE);
+                until CH_ILE.Next() = 0;
+            end;
+        end;
+
+        if L_Months = L_Months::"6M" then begin
+            CH_ILE.Reset();
+            //CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-6M>', Today()), CalcDate('CM', CalcDate('CM-2M', Today)));
+            CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-6M>', Today()), Today);
+            CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+            CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+            //CH_ILE.SetRange("Source No.", SHRec."Sell-to Customer No.");
+            CH_ILE.SetRange("Source No.", CH_CustTrends."Customer No.");
+            if CH_ILE.FindSet() then begin
+                repeat
+                    Routine.InsertAndModifyTrends(CH_ILE);
+                until CH_ILE.Next() = 0;
+            end;
+        end;
+    end;
+
     procedure ResetFlag()
     begin
         Flag := false;
@@ -197,12 +238,20 @@ page 80126 "Customer Trends"
     begin
         Clear(OrderNo);
         OrderNo := sh."No.";
-        Flag := true;
+        if OrderNo <> '' then
+            Flag := true
+        else
+            Flag := false;
     end;
 
     trigger OnQueryClosePage(CloseAction: Action): Boolean
     var
         CustTrends: Record CustomerTrends;
+        SalesAndRecSetup: Record "Sales & Receivables Setup";
+        L_EventSub: Codeunit EventSub;
+        L_SalesOrderNo: Code[100];
+        L_SalesOrderCard: Page "Sales Order";
+        L_SalesH: Record "Sales Header";
     begin
         if Flag then begin
             CustTrends.Reset();
@@ -216,7 +265,28 @@ page 80126 "Customer Trends"
                     Message('Items have been added to Sales order %1', OrderNo);
                 end;
             end;
-
+        end else begin
+            CustTrends.Reset();
+            CustTrends.SetCurrentKey("Qty. to be added to SO");
+            CustTrends.SetFilter("Qty. to be added to SO", '<>%1', 0);
+            if CustTrends.FindSet() then begin
+                L_EventSub.CreateOrder(Rec."Customer No.", L_SalesOrderNo);
+                repeat
+                    CustTrends.InsertSalesLinesfromTrends(L_SalesOrderNo, CustTrends);
+                until CustTrends.Next() = 0;
+                //Message('Sales Order Created %1 .');
+                If Confirm('Sales Order %1 Created, Do you want to open?', true, L_SalesOrderNo) then begin
+                    Clear(L_SalesOrderCard);
+                    L_SalesH.Reset();
+                    L_SalesH.SetRange("Document Type", L_SalesH."Document Type"::Order);
+                    L_SalesH.SetRange("No.", L_SalesOrderNo);
+                    if L_SalesH.FindFirst() then begin
+                        L_SalesOrderCard.SetTableView(L_SalesH);
+                        L_SalesOrderCard.Run();
+                    end;
+                end Else
+                    exit;
+            end;
         end;
     end;
 

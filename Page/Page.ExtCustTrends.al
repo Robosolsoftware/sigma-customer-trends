@@ -22,7 +22,8 @@ pageextension 80127 CallRoutine extends "Customer List"
                     else begin
                         //CurrPage.SetSelectionFilter(Rec);
                         ChTrends.DeleteAll();
-                        RouRepo.AssignCustNo(Rec);
+                        //RouRepo.AssignCustNo(Rec);
+                        G_EventSub.CreateCustomertrends(SalesH, Rec."No.");
                         //Report.Run(50120, false, false, Rec);
                     end;
 
@@ -34,6 +35,8 @@ pageextension 80127 CallRoutine extends "Customer List"
     var
         RouRepo: Report Populate_CustomerTrends;
         ChTrends: Record CustomerTrends;
+        G_EventSub: Codeunit EventSub;
+        SalesH: Record "Sales Header";
 
 
 }

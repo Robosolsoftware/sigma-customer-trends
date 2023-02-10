@@ -42,10 +42,10 @@ table 80125 CustomerTrends
             DataClassification = CustomerContent;
             Caption = 'Quantity purchased Last Month';
         }
-        field(8; "Updated"; Boolean)
-        {
-            DataClassification = CustomerContent;
-        }
+        // field(8; "Updated"; Boolean)
+        // {
+        //     DataClassification = CustomerContent;
+        // }
         field(9; "Updated By"; Code[20])
         {
             DataClassification = CustomerContent;

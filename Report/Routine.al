@@ -34,7 +34,7 @@ report 80125 Populate_CustomerTrends
             else
                 CH_CustTrends."Unit Price" := 0;
 
-            CH_CustTrends.Updated := true;
+            //CH_CustTrends.Updated := true; //Test
             CH_CustTrends."Updated By" := UserId;
             CH_CustTrends."Updated On" := CurrentDateTime;
 
@@ -121,7 +121,7 @@ report 80125 Populate_CustomerTrends
         if CH_SShip.FindLast() then
             CH_CustTrends."Last Price" := CH_SShip."Unit Price";
 
-        CH_CustTrends.Updated := true;
+        //CH_CustTrends.Updated := true;
         CH_CustTrends."Updated By" := UserId;
         CH_CustTrends."Updated On" := CurrentDateTime;
 
@@ -201,41 +201,41 @@ report 80125 Populate_CustomerTrends
         if CH_SShip.FindLast() then
             CH_CustTrends."Last Price" := CH_SShip."Unit Price";
 
-        CH_CustTrends.Updated := true;
+        //CH_CustTrends.Updated := true; //Test
         CH_CustTrends."Updated By" := UserId;
         CH_CustTrends."Updated On" := CurrentDateTime;
 
         CH_CustTrends.Modify(true);
     end;
 
-    procedure AssignCustNo(CustTble: Record Customer)
-    begin
-        CH_CustTrends.ModifyAll(Updated, false);
-        CH_ILE.Reset();
-        CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-1M>', Today()), CalcDate('<CM>', Today()));
-        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-        CH_ILE.SetRange("Source No.", CustTble."No.");
-        if CH_ILE.FindSet() then begin
-            repeat
-                CH_CustTrends.Reset();
-                CH_CustTrends.SetRange("Item No.", CH_ILE."Item No.");
-                CH_CustTrends.SetRange("Customer No.", CH_ILE."Source No.");
-                if not CH_CustTrends.FindFirst() then
-                    PopulateTrends(CH_ILE)
-                else
-                    if not CH_CustTrends.Updated then
-                        ModifyTrends(CH_ILE);
-            until CH_ILE.Next() = 0;
+    // procedure AssignCustNo(CustTble: Record Customer)
+    // begin
+    //     // CH_CustTrends.ModifyAll(Updated, false); //Test
+    //     CH_ILE.Reset();
+    //     CH_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('<-CM-1M>', Today()), CalcDate('<CM>', Today()));
+    //     CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+    //     CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+    //     CH_ILE.SetRange("Source No.", CustTble."No.");
+    //     if CH_ILE.FindSet() then begin
+    //         repeat
+    //             CH_CustTrends.Reset();
+    //             CH_CustTrends.SetRange("Item No.", CH_ILE."Item No.");
+    //             CH_CustTrends.SetRange("Customer No.", CH_ILE."Source No.");
+    //             if not CH_CustTrends.FindFirst() then
+    //                 PopulateTrends(CH_ILE)
+    //             else
+    //                 //if not CH_CustTrends.Updated then //Test
+    //                     ModifyTrends(CH_ILE);
+    //         until CH_ILE.Next() = 0;
 
-        end;
-        clear(CH_CustTrends);
-        CH_CustTrends.SetCurrentKey("Customer No.");
-        CH_CustTrends.SetRange("Customer No.", CustTble."No.");
-        PgCutTr.ResetFlag();
-        PgCutTr.SetTableView(CH_CustTrends);
-        PgCutTr.Run();
-    end;
+    //     end;
+    //     clear(CH_CustTrends);
+    //     CH_CustTrends.SetCurrentKey("Customer No.");
+    //     CH_CustTrends.SetRange("Customer No.", CustTble."No.");
+    //     PgCutTr.ResetFlag();
+    //     PgCutTr.SetTableView(CH_CustTrends);
+    //     PgCutTr.Run();
+    // end;
 
     procedure InsertAndModifyTrends(CH_ILE: Record "Item Ledger Entry")
     begin
@@ -245,50 +245,50 @@ report 80125 Populate_CustomerTrends
         if not CH_CustTrends.FindFirst() then
             PopulateTrends(CH_ILE)
         else
-            if not CH_CustTrends.Updated then
-                ModifyTrends(CH_ILE);
+            //     //if not CH_CustTrends.Updated then //Test
+            ModifyTrends(CH_ILE);
     end;
 
-    procedure AssignCustNofromSO(SalesH: Record "Sales Header")
-    begin
+    // procedure AssignCustNofromSO(SalesH: Record "Sales Header")
+    // begin
 
-        CH_CustTrends.ModifyAll(Updated, false);
-        CH_ILE.Reset();
-        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
-        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-        CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
-        if CH_ILE.FindSet() then begin
-            repeat
-                InsertAndModifyTrends(CH_ILE);
-            until CH_ILE.Next() = 0;
-        end;
+    //     //CH_CustTrends.ModifyAll(Updated, false); //Test
+    //     CH_ILE.Reset();
+    //     CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
+    //     CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+    //     CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+    //     CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
+    //     if CH_ILE.FindSet() then begin
+    //         repeat
+    //             InsertAndModifyTrends(CH_ILE);
+    //         until CH_ILE.Next() = 0;
+    //     end;
 
 
-        CH_RecuH.Reset();
-        CH_RecuH.SetRange("Customer No.", SalesH."Sell-to Customer No.");
-        if CH_RecuH.FindSet() then begin
-            repeat
-                Ch_RecuLine.Reset();
-                Ch_RecuLine.SetRange("Standard Sales Code", CH_RecuH.Code);
-                Ch_RecuLine.SetRange(Type, Ch_RecuLine.Type::Item);
-                if Ch_RecuLine.FindSet() then begin
-                    repeat
-                        InsertAndModifyTrends(CH_ILE); //if ILE is created
-                        PopulateTrendsForRecurringIfNotILE(Ch_RecuLine, CH_RecuH."Customer No.");
-                    until Ch_RecuLine.Next() = 0;
-                end;
-            until CH_RecuH.Next() = 0;
-        end;
+    //     CH_RecuH.Reset();
+    //     CH_RecuH.SetRange("Customer No.", SalesH."Sell-to Customer No.");
+    //     if CH_RecuH.FindSet() then begin
+    //         repeat
+    //             Ch_RecuLine.Reset();
+    //             Ch_RecuLine.SetRange("Standard Sales Code", CH_RecuH.Code);
+    //             Ch_RecuLine.SetRange(Type, Ch_RecuLine.Type::Item);
+    //             if Ch_RecuLine.FindSet() then begin
+    //                 repeat
+    //                     InsertAndModifyTrends(CH_ILE); //if ILE is created
+    //                     PopulateTrendsForRecurringIfNotILE(Ch_RecuLine, CH_RecuH."Customer No.");
+    //                 until Ch_RecuLine.Next() = 0;
+    //             end;
+    //         until CH_RecuH.Next() = 0;
+    //     end;
 
-        clear(CH_CustTrends);
-        CH_CustTrends.SetCurrentKey("Customer No.");
-        CH_CustTrends.SetRange("Customer No.", SalesH."Sell-to Customer No.");
-        PgCutTr.ResetFlag();
-        PgCutTr.GetSODetails(SalesH);
-        PgCutTr.SetTableView(CH_CustTrends);
-        PgCutTr.Run();
-    end;
+    //     clear(CH_CustTrends);
+    //     CH_CustTrends.SetCurrentKey("Customer No.");
+    //     CH_CustTrends.SetRange("Customer No.", SalesH."Sell-to Customer No.");
+    //     PgCutTr.ResetFlag();
+    //     PgCutTr.GetSODetails(SalesH);
+    //     PgCutTr.SetTableView(CH_CustTrends);
+    //     PgCutTr.Run();
+    // end;
 
     var
         CH_CustTrends: Record CustomerTrends;
