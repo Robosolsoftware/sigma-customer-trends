@@ -86,12 +86,44 @@ page 80126 "Customer Trends"
                     ApplicationArea = all;
 
                 }
+                field("Last 1 Week Sales"; Rec."Last 1 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 2 Week Sales"; Rec."Last 2 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 3 Week Sales"; Rec."Last 3 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 4 Week Sales"; Rec."Last 4 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 5 Week Sales"; Rec."Last 5 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 6 Week Sales"; Rec."Last 6 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 7 Week Sales"; Rec."Last 7 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+                field("Last 8 Week Sales"; Rec."Last 8 Week Sales")
+                {
+                    ApplicationArea = All;
+                }
+
                 field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {
                     ApplicationArea = all;
 
                 }
-
             }
         }
 

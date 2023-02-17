@@ -74,6 +74,38 @@ table 80125 CustomerTrends
         {
             DataClassification = CustomerContent;
         }
+        field(16; "Last 1 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(17; "Last 2 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(18; "Last 3 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(19; "Last 4 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(20; "Last 5 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(21; "Last 6 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(22; "Last 7 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(23; "Last 8 Week Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys
@@ -109,7 +141,7 @@ table 80125 CustomerTrends
             Rec_SalesL.Validate("Unit Price", CustTrends."New Price");
         if Rec_SalesL."Shipment Date" < WorkDate() then
             Rec_SalesL.Validate("Shipment Date", WorkDate());
-            
+
         Rec_SalesL.Insert(true);
 
     end;

@@ -290,6 +290,26 @@ report 80125 Populate_CustomerTrends
     //     PgCutTr.Run();
     // end;
 
+    procedure Calculate8WeeksSales(L_StartDate: Date; L_EndDate: Date; L_Location: Code[20]; P_ItemNo: Code[20]; P_SourceNo: Code[100]) L_TotalQty: Decimal
+    var
+        myInt: Integer;
+        Rec_ILE: Record "Item Ledger Entry";
+    begin
+        //Week
+        Clear(L_TotalQty);
+        Rec_ILE.Reset();
+        Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+        Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+        Rec_ILE.SetRange("Item No.", P_ItemNo);
+        Rec_ILE.SetRange("Source No.", P_SourceNo);
+        Rec_ILE.SetFilter("Posting Date", '%1..%2', L_StartDate, L_EndDate);
+        if Rec_ILE.FindSet() then begin
+            repeat
+                L_TotalQty += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+            until Rec_ILE.Next() = 0;
+        end;
+    end;
+
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;

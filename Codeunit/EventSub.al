@@ -96,6 +96,14 @@ codeunit 80125 EventSub
                 CH_CustTrends."Qty purchased Last Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
             until Rec_ILE.Next() = 0;
         end;
+        CH_CustTrends."Last 1 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-2W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 2 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-3W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 3 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-4W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 4 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-5W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 5 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-6W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
 
 
         SalesPrice.Reset();
@@ -199,6 +207,16 @@ codeunit 80125 EventSub
                 CH_CustTrends."Unit Price" := 0;
         end;
 
+        CH_CustTrends."Last 1 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-2W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 2 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-3W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 3 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-4W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 4 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-5W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 5 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-6W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+
+
         CH_SShip.Reset();
         CH_SShip.SetRange("Sell-to Customer No.", ILE."Source No.");
         CH_SShip.SetRange("No.", ILE."Item No.");
@@ -209,6 +227,7 @@ codeunit 80125 EventSub
         //CH_CustTrends.Updated := true;//Test
         CH_CustTrends."Updated By" := UserId;
         CH_CustTrends."Updated On" := CurrentDateTime;
+
 
         CH_CustTrends.Modify(true);
     end;
@@ -302,4 +321,5 @@ codeunit 80125 EventSub
         CH_RecuH: Record "Standard Customer Sales Code";
 
         Ch_RecuLine: Record "Standard Sales Line";
+        G_Routine: Report Populate_CustomerTrends;
 }
