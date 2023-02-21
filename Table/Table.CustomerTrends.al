@@ -106,6 +106,22 @@ table 80125 CustomerTrends
         {
             DataClassification = ToBeClassified;
         }
+        field(24; "Last 3 Months Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(25; "Last 6 Months Sales"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(26; "Free Stock Quanyity"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(27; "Stock at Other Locations"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

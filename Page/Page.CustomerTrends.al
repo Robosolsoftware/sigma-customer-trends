@@ -32,6 +32,13 @@ page 80126 "Customer Trends"
                     Editable = false;
                     StyleExpr = ColorCode;
                     TableRelation = Item;
+                    trigger OnValidate()
+                    var
+                        myInt: Integer;
+                    begin
+                        FreeStockQty(); //ShubhamM03112022_US_9208
+                        StockOtherlocation//ShubhamM04112022_US_9228
+                    end;
 
                 }
                 field("Item Description"; Rec."Item Description")
@@ -84,49 +91,106 @@ page 80126 "Customer Trends"
                 field("New Price"; Rec."New Price")
                 {
                     ApplicationArea = all;
-
+                    StyleExpr = ColorCode;
+                }
+                field("Free Stock Quanyity"; Rec."Free Stock Quanyity")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    StyleExpr = ColorCode;
+                }
+                field("Stock at Other Locations"; Rec."Stock at Other Locations")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 1 Week Sales"; Rec."Last 1 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 2 Week Sales"; Rec."Last 2 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 3 Week Sales"; Rec."Last 3 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 4 Week Sales"; Rec."Last 4 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 5 Week Sales"; Rec."Last 5 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 6 Week Sales"; Rec."Last 6 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 7 Week Sales"; Rec."Last 7 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
                 }
                 field("Last 8 Week Sales"; Rec."Last 8 Week Sales")
                 {
                     ApplicationArea = All;
+                    Visible = EnableWeekWise;
+                    StyleExpr = ColorCode;
+                }
+                field("Last 3 Months Sales"; Rec."Last 3 Months Sales")
+                {
+                    ApplicationArea = all;
+                    Visible = EnableMonthWise;
+                    StyleExpr = ColorCode;
+                }
+                field("Last 6 Months Sales"; Rec."Last 6 Months Sales")
+                {
+                    ApplicationArea = all;
+                    Visible = EnableMonthWise;
+                    StyleExpr = ColorCode;
                 }
 
                 field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {
                     ApplicationArea = all;
-
+                    StyleExpr = ColorCode;
                 }
             }
         }
-
+        area(factboxes)
+        {
+            part(Control1902018507; "Customer Statistics FactBox")
+            {
+                ApplicationArea = Basic, Suite;
+                SubPageLink = "No." = FIELD("Customer No.");
+            }
+            part(Control1900316107; "Customer Details FactBox")
+            {
+                ApplicationArea = Basic, Suite;
+                SubPageLink = "No." = FIELD("Customer No.");
+            }
+            part(Control1901314507; "Item Invoicing FactBox")
+            {
+                ApplicationArea = Basic, Suite;
+                SubPageLink = "No." = FIELD("Item No.");
+            }
+        }
     }
 
 
@@ -195,6 +259,7 @@ page 80126 "Customer Trends"
     trigger OnAfterGetRecord()
     var
         CH_ILE: Record "Item Ledger Entry";
+        GenSetupCustTrend: Record "General Setup - Customer Trend";
     begin
         Clear(ColorCode);
         CH_ILE.Reset();
@@ -221,6 +286,15 @@ page 80126 "Customer Trends"
             end;
 
         end;
+
+        EnableMonthWise := false;
+        EnableWeekWise := false;
+        GenSetupCustTrend.Get();
+        if GenSetupCustTrend."Enable Week Wise" = true then
+            EnableWeekWise := true;
+        if GenSetupCustTrend."Enable Month Wise" = true then
+            EnableMonthWise := true;
+
     end;
 
     procedure GetCustomertrendDetails(L_Months: Option " ","3M","6M"; CH_CustTrends: Record CustomerTrends)
@@ -270,6 +344,7 @@ page 80126 "Customer Trends"
     begin
         Clear(OrderNo);
         OrderNo := sh."No.";
+        LocationCode := SH."Location Code";
         if OrderNo <> '' then
             Flag := true
         else
@@ -322,11 +397,60 @@ page 80126 "Customer Trends"
         end;
     end;
 
+    procedure StockOtherlocation()
+    var
+        L_Item: Record Item;
+        IUOM: Record "Item Unit of Measure";
+        QtyPerUnitOfMeasure: Decimal;
+    begin
+        Clear(QtyPerUnitOfMeasure);
+        L_Item.Reset();
+        L_Item.SetRange("No.", Rec."Item No.");
+        L_Item.SetFilter("Location Filter", '<>%1', LocationCode);
+        if L_Item.FindFirst() then begin
+            IUOM.Reset();
+            IUOM.SetFilter("Item No.", Rec."Item No.");
+            IUOM.SetFilter(Code, Rec."Units of Measure");
+            if IUOM.FindFirst() then begin
+                QtyPerUnitOfMeasure := IUOM."Qty. per Unit of Measure";
+            end;
+
+            L_Item.CalcFields(Inventory, "Qty. on Sales Order");
+            Rec."Stock at Other Locations" := (L_Item.Inventory - L_Item."Qty. on Sales Order") / QtyPerUnitOfMeasure;
+        end;
+    end;
+
+    procedure FreeStockQty()
+    var
+        L_Item: Record Item;
+        IUOM: Record "Item Unit of Measure";
+        QtyPerUnitOfMeasure: Decimal;
+    begin
+        Clear(QtyPerUnitOfMeasure);
+        L_Item.Reset();
+        L_Item.SetRange("No.", Rec."Item No.");
+        L_Item.SetFilter("Location Filter", '%1', LocationCode);
+        if L_Item.FindFirst() then begin
+            IUOM.Reset();
+            IUOM.SetFilter("Item No.", Rec."Item No.");
+            IUOM.SetFilter(Code, Rec."Units of Measure");
+            if IUOM.FindFirst() then begin
+                QtyPerUnitOfMeasure := IUOM."Qty. per Unit of Measure";
+            end;
+
+            L_Item.CalcFields(Inventory, "Qty. on Sales Order");
+            Rec."Free Stock Quanyity" := (L_Item.Inventory - L_Item."Qty. on Sales Order") / QtyPerUnitOfMeasure;
+        end;
+    end;
+
 
     var
         OrderNo: Code[20];
         Flag: Boolean;
         [InDataSet]
         ColorCode: Text;
+        EnableWeekWise: Boolean;
+        EnableMonthWise: Boolean;
+        LocationCode: code[20];
 
 }

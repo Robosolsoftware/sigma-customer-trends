@@ -310,6 +310,22 @@ report 80125 Populate_CustomerTrends
         end;
     end;
 
+    procedure CalculateFreeStockQuantity(ItemNo: Code[250]; LocationCode: code[10]): Decimal
+    var
+        L_WhseQty: Decimal;
+        L_Item: Record Item;
+    begin
+        Clear(L_WhseQty);
+        L_Item.Reset();
+        L_Item.SetRange("No.", ItemNo);
+        L_Item.SetRange(L_Item."Location Filter", LocationCode);
+        if L_Item.FindFirst() then begin
+            L_Item.CalcFields(Inventory, "Qty. on Sales Order");
+            L_WhseQty := L_Item.Inventory - L_Item."Qty. on Sales Order";
+        end;
+        exit(L_WhseQty);
+    end;
+
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;

@@ -104,7 +104,9 @@ codeunit 80125 EventSub
         CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
         CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
         CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-
+        CH_CustTrends."Last 3 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-3M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-6M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Free Stock Quanyity" := G_Routine.CalculateFreeStockQuantity(ILE."Item No.", ILE."Location Code");
 
         SalesPrice.Reset();
         SalesPrice.SetRange("Source Type", SalesPrice."Source Type"::Customer);
@@ -215,6 +217,9 @@ codeunit 80125 EventSub
         CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
         CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
         CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 3 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-3M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-6M>'), CALCDATE('<-CM-5M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Free Stock Quanyity" := G_Routine.CalculateFreeStockQuantity(ILE."Item No.", ILE."Location Code");
 
 
         CH_SShip.Reset();
