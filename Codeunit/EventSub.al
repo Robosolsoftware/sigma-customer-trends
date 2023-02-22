@@ -5,7 +5,7 @@ codeunit 80125 EventSub
 
     end;
 
-    local procedure PopulateTrendsForRecurringIfNotILE(Ch_RecuLine: Record "Standard Sales Line"; var CustNo: Code[20])
+    procedure PopulateTrendsForRecurringIfNotILE(Ch_RecuLine: Record "Standard Sales Line"; var CustNo: Code[20])
 
     begin
         CH_CustTrends.Reset();

@@ -295,6 +295,8 @@ page 80126 "Customer Trends"
         if GenSetupCustTrend."Enable Month Wise" = true then
             EnableMonthWise := true;
 
+        StockOtherlocation;
+
     end;
 
     procedure GetCustomertrendDetails(L_Months: Option " ","3M","6M"; CH_CustTrends: Record CustomerTrends)
