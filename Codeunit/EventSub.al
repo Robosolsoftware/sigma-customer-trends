@@ -6,7 +6,8 @@ codeunit 80125 EventSub
     end;
 
     procedure PopulateTrendsForRecurringIfNotILE(Ch_RecuLine: Record "Standard Sales Line"; var CustNo: Code[20])
-
+    var
+        Rec_ILE: Record "Item Ledger Entry";
     begin
         CH_CustTrends.Reset();
         CH_CustTrends.SetRange("Customer No.", CustNo);
@@ -41,6 +42,60 @@ codeunit 80125 EventSub
                 //CH_CustTrends.Updated := true; //Test
                 CH_CustTrends."Updated By" := UserId;
                 CH_CustTrends."Updated On" := CurrentDateTime;
+
+                //Week
+                Rec_ILE.Reset();
+                Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+                Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+                Rec_ILE.SetRange("Item No.", Ch_RecuLine."No.");
+                Rec_ILE.SetRange("Source No.", CustNo);
+                Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CW', Today()), CalcDate('CW', Today()));
+                if Rec_ILE.FindSet() then begin
+                    repeat
+                        CH_CustTrends."Quantity purchased this Week" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+                    until Rec_ILE.Next() = 0;
+                end;
+
+                //Current Month
+                Rec_ILE.Reset();
+                Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+                Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+                Rec_ILE.SetRange("Item No.", Ch_RecuLine."No.");
+                Rec_ILE.SetRange("Source No.", CustNo);
+                Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CM', Today()), CalcDate('CM', Today()));
+                if Rec_ILE.FindSet() then begin
+                    repeat
+                        CH_CustTrends."Quantity purchased this Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+                    until Rec_ILE.Next() = 0;
+                end;
+
+                //Last Month
+                Rec_ILE.Reset();
+                Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+                Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+                Rec_ILE.SetRange("Item No.", Ch_RecuLine."No.");
+                Rec_ILE.SetRange("Source No.", CustNo);
+                Rec_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-2M+1D>', Today), CALCDATE('CM', CALCDATE('-CM-1D', TODAY)));
+                if Rec_ILE.FindSet() then begin
+                    repeat
+                        CH_CustTrends."Qty purchased Last Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+                    until Rec_ILE.Next() = 0;
+                end;
+                CH_CustTrends."Last 1 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-2W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 2 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-3W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 3 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-4W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 4 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-5W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 5 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-6W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 3 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-3M>'), CALCDATE('<-CM-2M-1D>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Last 6 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-6M>'), CALCDATE('<-CM-2M-1D>'), '', Ch_RecuLine."No.", CH_CustTrends."Customer No.");
+                CH_CustTrends."Free Stock Quanyity" := G_Routine.CalculateFreeStockQuantity(Ch_RecuLine."No.", '');
+
+                if CH_CustTrends."Last 8 Week Sales" = 0 then begin
+                    CH_CustTrends."Not Sold for Last 8 Weeks" := true;
+                end;
 
                 CH_CustTrends.Insert(true);
             end;
@@ -233,25 +288,11 @@ codeunit 80125 EventSub
         CH_CustTrends."Updated By" := UserId;
         CH_CustTrends."Updated On" := CurrentDateTime;
 
-
         CH_CustTrends.Modify(true);
     end;
 
     procedure CreateCustomertrends(SalesH: Record "Sales Header"; CustNumber: Code[100])
     begin
-        //CH_CustTrends.ModifyAll(Updated, false); //Test
-        CH_ILE.Reset();
-        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
-        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-        // CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
-        CH_ILE.SetRange("Source No.", CustNumber);
-        if CH_ILE.FindSet() then begin
-            repeat
-                InsertAndModifyTrends(CH_ILE);
-            until CH_ILE.Next() = 0;
-        end;
-
 
         CH_RecuH.Reset();
         CH_RecuH.SetRange("Customer No.", CustNumber);
@@ -268,6 +309,20 @@ codeunit 80125 EventSub
                 end;
             until CH_RecuH.Next() = 0;
         end;
+
+        //CH_CustTrends.ModifyAll(Updated, false); //Test
+        CH_ILE.Reset();
+        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
+        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+        // CH_ILE.SetRange("Source No.", SalesH."Sell-to Customer No.");
+        CH_ILE.SetRange("Source No.", CustNumber);
+        if CH_ILE.FindSet() then begin
+            repeat
+                InsertAndModifyTrends(CH_ILE);
+            until CH_ILE.Next() = 0;
+        end;
+
 
         clear(CH_CustTrends);
         CH_CustTrends.SetCurrentKey("Customer No.");

@@ -172,6 +172,10 @@ page 80126 "Customer Trends"
                     StyleExpr = ColorCode;
                 }
             }
+            part(CTLast8WeeksNotSoldDetails; CustomerTrendsNotSold)
+            {
+                ApplicationArea = All;
+            }
         }
         area(factboxes)
         {
@@ -445,6 +449,10 @@ page 80126 "Customer Trends"
         end;
     end;
 
+    trigger OnOpenPage()
+    begin
+        Rec.SetFilter(Rec."Not Sold for Last 8 Weeks", '%1', false);
+    end;
 
     var
         OrderNo: Code[20];

@@ -122,6 +122,10 @@ table 80125 CustomerTrends
         {
             DataClassification = ToBeClassified;
         }
+        field(28; "Not Sold for Last 8 Weeks"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys
