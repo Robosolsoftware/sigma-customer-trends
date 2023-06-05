@@ -138,18 +138,6 @@ pageextension 80128 SalesOr_CustTr extends "Sales Order"
     begin
         CH_CustTrends.DeleteAll();
 
-        CH_ILE.Reset();
-        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
-        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
-        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
-        CH_ILE.SetRange("Source No.", Rec."Sell-to Customer No.");
-        if CH_ILE.FindSet() then begin
-            repeat
-                EventSub.InsertAndModifyTrends(CH_ILE);
-            until CH_ILE.Next() = 0;
-        end;
-
-
         CH_RecuH.Reset();
         CH_RecuH.SetRange("Customer No.", Rec."Sell-to Customer No.");
         if CH_RecuH.FindSet() then begin
@@ -164,6 +152,18 @@ pageextension 80128 SalesOr_CustTr extends "Sales Order"
                 end;
             until CH_RecuH.Next() = 0;
         end;
+
+        CH_ILE.Reset();
+        CH_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CW-8W>', Today), TODAY);
+        CH_ILE.SetRange("Entry Type", CH_ILE."Entry Type"::Sale);
+        CH_ILE.SetRange("Document Type", CH_ILE."Document Type"::"Sales Shipment");
+        CH_ILE.SetRange("Source No.", Rec."Sell-to Customer No.");
+        if CH_ILE.FindSet() then begin
+            repeat
+                EventSub.InsertAndModifyTrends(CH_ILE);
+            until CH_ILE.Next() = 0;
+        end;
+
 
         CH_CustTrends.Reset();
         CH_CustTrends.SetRange("Customer No.", Rec."Sell-to Customer No.");

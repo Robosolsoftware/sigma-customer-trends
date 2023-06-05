@@ -103,101 +103,96 @@ codeunit 80125 EventSub
     var
         Rec_ILE: Record "Item Ledger Entry";
     begin
-        CH_CustTrends.Reset();
-        CH_CustTrends.SetRange("Customer No.", ILE."Source No.");
-        CH_CustTrends.SetRange("Item No.", ILE."Item No.");
-        if NOT CH_CustTrends.FindFirst() then begin
-            CH_CustTrends.Init();
-            CH_CustTrends.Validate("Item No.", ILE."Item No.");
-            CH_CustTrends.Validate("Customer No.", ILE."Source No.");
-            if CH_Items.Get(ILE."Item No.") then;
+        CH_CustTrends.Init();
+        CH_CustTrends.Validate("Item No.", ILE."Item No.");
+        CH_CustTrends.Validate("Customer No.", ILE."Source No.");
+        if CH_Items.Get(ILE."Item No.") then;
 
-            CH_CustTrends.Validate("Units of Measure", CH_Items."Sales Unit of Measure");
+        CH_CustTrends.Validate("Units of Measure", CH_Items."Sales Unit of Measure");
 
-            //Week
-            Rec_ILE.Reset();
-            Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
-            Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
-            Rec_ILE.SetRange("Item No.", ILE."Item No.");
-            Rec_ILE.SetRange("Source No.", ILE."Source No.");
-            Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CW', Today()), CalcDate('CW', Today()));
-            if Rec_ILE.FindSet() then begin
-                repeat
-                    CH_CustTrends."Quantity purchased this Week" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
-                until Rec_ILE.Next() = 0;
-            end;
+        //Week
+        Rec_ILE.Reset();
+        Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+        Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+        Rec_ILE.SetRange("Item No.", ILE."Item No.");
+        Rec_ILE.SetRange("Source No.", ILE."Source No.");
+        Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CW', Today()), CalcDate('CW', Today()));
+        if Rec_ILE.FindSet() then begin
+            repeat
+                CH_CustTrends."Quantity purchased this Week" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+            until Rec_ILE.Next() = 0;
+        end;
 
-            //Current Month
-            Rec_ILE.Reset();
-            Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
-            Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
-            Rec_ILE.SetRange("Item No.", ILE."Item No.");
-            Rec_ILE.SetRange("Source No.", ILE."Source No.");
-            Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CM', Today()), CalcDate('CM', Today()));
-            if Rec_ILE.FindSet() then begin
-                repeat
-                    CH_CustTrends."Quantity purchased this Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
-                until Rec_ILE.Next() = 0;
-            end;
+        //Current Month
+        Rec_ILE.Reset();
+        Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+        Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+        Rec_ILE.SetRange("Item No.", ILE."Item No.");
+        Rec_ILE.SetRange("Source No.", ILE."Source No.");
+        Rec_ILE.SetFilter("Posting Date", '%1..%2', CalcDate('-CM', Today()), CalcDate('CM', Today()));
+        if Rec_ILE.FindSet() then begin
+            repeat
+                CH_CustTrends."Quantity purchased this Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+            until Rec_ILE.Next() = 0;
+        end;
 
-            //Last Month
-            Rec_ILE.Reset();
-            Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
-            Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
-            Rec_ILE.SetRange("Item No.", ILE."Item No.");
-            Rec_ILE.SetRange("Source No.", ILE."Source No.");
-            Rec_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-2M+1D>', Today), CALCDATE('CM', CALCDATE('-CM-1D', TODAY)));
-            if Rec_ILE.FindSet() then begin
-                repeat
-                    CH_CustTrends."Qty purchased Last Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
-                until Rec_ILE.Next() = 0;
-            end;
-            CH_CustTrends."Last 1 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-2W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 2 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-3W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 3 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-4W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 4 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-5W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 5 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-6W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 3 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-3M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Last 6 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-6M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
-            CH_CustTrends."Free Stock Quanyity" := G_Routine.CalculateFreeStockQuantity(ILE."Item No.", ILE."Location Code");
+        //Last Month
+        Rec_ILE.Reset();
+        Rec_ILE.SetRange("Entry Type", Rec_ILE."Entry Type"::Sale);
+        Rec_ILE.SetRange("Document Type", Rec_ILE."Document Type"::"Sales Shipment");
+        Rec_ILE.SetRange("Item No.", ILE."Item No.");
+        Rec_ILE.SetRange("Source No.", ILE."Source No.");
+        Rec_ILE.SetFilter("Posting Date", '%1..%2', CALCDATE('<CM-2M+1D>', Today), CALCDATE('CM', CALCDATE('-CM-1D', TODAY)));
+        if Rec_ILE.FindSet() then begin
+            repeat
+                CH_CustTrends."Qty purchased Last Month" += -Rec_ILE.Quantity / Rec_ILE."Qty. per Unit of Measure";
+            until Rec_ILE.Next() = 0;
+        end;
+        CH_CustTrends."Last 1 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-2W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 2 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-3W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 3 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-4W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 4 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-5W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 5 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-6W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-7W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 7 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-8W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 8 Week Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<CW-9W+1D>'), CALCDATE('<CW-1W>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 3 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-3M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Last 6 Months Sales" := G_Routine.Calculate8WeeksSales(CALCDATE('<-CM-6M>'), CALCDATE('<-CM-2M-1D>'), '', ILE."Item No.", CH_CustTrends."Customer No.");
+        CH_CustTrends."Free Stock Quanyity" := G_Routine.CalculateFreeStockQuantity(ILE."Item No.", ILE."Location Code");
 
+        SalesPrice.Reset();
+        SalesPrice.SetRange("Source Type", SalesPrice."Source Type"::Customer);
+        SalesPrice.SetRange("Source No.", ILE."Source No.");
+        SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
+        SalesPrice.SetRange("Asset No.", ILE."Item No.");
+        SalesPrice.SetRange(Status, SalesPrice.Status::Active);
+        SalesPrice.SetRange("Unit of Measure Code", CH_Items."Sales Unit of Measure");
+        if SalesPrice.FindLast() then
+            CH_CustTrends.Validate("Unit Price", SalesPrice."Unit Price")
+        else begin
+            Clear(SalesPrice);
             SalesPrice.Reset();
-            SalesPrice.SetRange("Source Type", SalesPrice."Source Type"::Customer);
-            SalesPrice.SetRange("Source No.", ILE."Source No.");
             SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
             SalesPrice.SetRange("Asset No.", ILE."Item No.");
             SalesPrice.SetRange(Status, SalesPrice.Status::Active);
-            SalesPrice.SetRange("Unit of Measure Code", CH_Items."Sales Unit of Measure");
             if SalesPrice.FindLast() then
                 CH_CustTrends.Validate("Unit Price", SalesPrice."Unit Price")
-            else begin
-                Clear(SalesPrice);
-                SalesPrice.Reset();
-                SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
-                SalesPrice.SetRange("Asset No.", ILE."Item No.");
-                SalesPrice.SetRange(Status, SalesPrice.Status::Active);
-                if SalesPrice.FindLast() then
-                    CH_CustTrends.Validate("Unit Price", SalesPrice."Unit Price")
-                else
-                    CH_CustTrends."Unit Price" := 0;
-            end;
-
-            CH_SShip.Reset();
-            CH_SShip.SetRange("Sell-to Customer No.", ILE."Source No.");
-            CH_SShip.SetRange("No.", ILE."Item No.");
-            CH_SShip.SetRange("Unit of Measure Code", CH_Items."Sales Unit of Measure");
-            if CH_SShip.FindLast() then
-                CH_CustTrends."Last Price" := CH_SShip."Unit Price";
-
-            //CH_CustTrends.Updated := true;//Test
-            CH_CustTrends."Updated By" := UserId;
-            CH_CustTrends."Updated On" := CurrentDateTime;
-
-            CH_CustTrends.Insert(true);
+            else
+                CH_CustTrends."Unit Price" := 0;
         end;
+
+        CH_SShip.Reset();
+        CH_SShip.SetRange("Sell-to Customer No.", ILE."Source No.");
+        CH_SShip.SetRange("No.", ILE."Item No.");
+        CH_SShip.SetRange("Unit of Measure Code", CH_Items."Sales Unit of Measure");
+        if CH_SShip.FindLast() then
+            CH_CustTrends."Last Price" := CH_SShip."Unit Price";
+
+        //CH_CustTrends.Updated := true;//Test
+        CH_CustTrends."Updated By" := UserId;
+        CH_CustTrends."Updated On" := CurrentDateTime;
+
+        CH_CustTrends.Insert(true);
     end;
 
     local procedure ModifyTrends(ILE: Record "Item Ledger Entry")
