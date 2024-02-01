@@ -131,12 +131,21 @@ page 80126 "Customer Trends"
                     trigger OnValidate()
                     var
                         L_Customertrends: Record CustomerTrends;
+                        ShippingAgent: Record "Shipping Agent";
                     begin
                         L_Customertrends.Reset();
                         L_Customertrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
                         L_Customertrends.SetRange("Customer No.", CustomerAccountNoFilter);
                         if L_Customertrends.FindSet() then begin
                             L_Customertrends.ModifyAll("Shipping Agent Code", ShippingAgentCodeFilter);
+                        end;
+
+                        if ShippingAgentCodeFilter <> '' then begin
+                            ShippingAgent.Reset();
+                            ShippingAgent.SetRange(code, ShippingAgentCodeFilter);
+                            ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                            if Not ShippingAgent.FindFirst() then
+                                Error('Status must be equal to Released in Shipping Agent Services');
                         end;
                     end;
                 }
@@ -170,12 +179,20 @@ page 80126 "Customer Trends"
                     trigger OnValidate()
                     var
                         L_Customertrends: Record CustomerTrends;
+                        ShippingAgentServices: Record "Shipping Agent Services";
                     begin
                         L_Customertrends.Reset();
                         L_Customertrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
                         L_Customertrends.SetRange("Customer No.", CustomerAccountNoFilter);
                         if L_Customertrends.FindSet() then begin
                             L_Customertrends.ModifyAll("Shipping Agent Service Code", ShippingAgentServiceCodeFilter);
+                        end;
+                        if ShippingAgentServiceCodeFilter <> '' then begin
+                            ShippingAgentServices.Reset();
+                            ShippingAgentServices.SetRange(code, ShippingAgentServiceCodeFilter);
+                            ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
+                            if Not ShippingAgentServices.FindFirst() then
+                                Error('Status must be equal to Released in Shipping Agent Services');
                         end;
                     end;
                 }

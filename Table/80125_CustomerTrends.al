@@ -187,12 +187,38 @@ table 80125 CustomerTrends
             Caption = 'Shipping Agent Code';
             DataClassification = ToBeClassified;
             TableRelation = "Shipping Agent";
+
+            trigger OnValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Shipping Agent Code");
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Services');
+                end;
+            end;
         }
         field(41; "Shipping Agent Service Code"; Code[10])
         {
             Caption = 'Shipping Agent Service Code';
             DataClassification = ToBeClassified;
             TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+
+            trigger OnValidate()
+            var
+                ShippingAgentServices: Record "Shipping Agent Services";
+            begin
+                if Rec."Shipping Agent Service Code" <> '' then begin
+                    ShippingAgentServices.Reset();
+                    ShippingAgentServices.SetRange(code, Rec."Shipping Agent Service Code");
+                    ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
+                    if Not ShippingAgentServices.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent Services');
+                end;
+            end;
         }
         field(42; "UnShipped Qty."; Decimal)
         {
