@@ -21,6 +21,7 @@ table 80125 CustomerTrends
         }
         field(3; "Customer No."; Code[20])
         {
+            Caption = 'Sell to Customer No.';
             DataClassification = CustomerContent;
             TableRelation = Customer."No.";
         }
@@ -65,6 +66,7 @@ table 80125 CustomerTrends
         field(13; "Qty. to be added to SO"; Decimal)
         {
             DataClassification = CustomerContent;
+            DecimalPlaces = 0 : 5;
         }
         field(14; "New Price"; Decimal)
         {
@@ -126,11 +128,85 @@ table 80125 CustomerTrends
         {
             DataClassification = ToBeClassified;
         }
+        field(29; "Salesperson Code"; Code[20])
+        {
+            TableRelation = "Salesperson/Purchaser";
+            Caption = 'SalesPerson/Purchaser Code';
+        }
+        field(30; "Special Promotion"; Boolean)
+        {
+
+        }
+        field(31; "Created By"; Code[20])
+        {
+            DataClassification = CustomerContent;
+        }
+        field(32; "Created On"; DateTime)
+        {
+            DataClassification = CustomerContent;
+        }
+        field(33; "Qty on SO(Saleable)"; Decimal)
+        {
+            FieldClass = FlowField;
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Unit of Measure" = field("Units of Measure")));
+            DecimalPlaces = 0 : 5;
+            Caption = 'Qty on Sales Order (Saleable)';
+            //GHST Customization++
+        }
+
+        field(34; Inventory; Decimal)
+        {
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure")));
+            Caption = 'Inventory';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(36; "Min Sell Price"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(37; "Shipper Qty"; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(38; "Delivery Date"; Date)
+        {
+            Caption = 'Shipment Date';
+        }
+        field(39; "Saleable Inventory"; Decimal)
+        {
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Saleable Location" = const(true)));
+            Caption = 'Saleable Inventory';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(40; "Shipping Agent Code"; Text[30])
+        {
+            Caption = 'Shipping Agent Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent";
+        }
+        field(41; "Shipping Agent Service Code"; Code[10])
+        {
+            Caption = 'Shipping Agent Service Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+        }
+        field(42; "UnShipped Qty."; Decimal)
+        {
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" where(Type = const(Item), "No." = FIELD("Item No.")));
+            Caption = 'Unshipped Qty';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+        }
     }
 
     keys
     {
-        key(PrimaryKey; "Item No.", "Customer No.")
+        key(PrimaryKey; "Item No.", "Customer No.", "Salesperson Code", "Special Promotion")
         {
             Clustered = true;
         }
@@ -164,20 +240,6 @@ table 80125 CustomerTrends
 
         Rec_SalesL.Insert(true);
 
-    end;
-
-    procedure CheckSOStatus(OrderNo: Code[20]): Boolean
-    begin
-        salesH.Reset();
-        salesH.SetRange("Document Type", SalesL."Document Type"::Order);
-        salesH.SetRange("No.", OrderNo);
-        salesH.SetRange(Status, salesH.Status::Open);
-        if salesH.FindLast() then
-            exit(true)
-        else begin
-            Message(AddItemErrorTxt);
-            exit(false);
-        end;
     end;
 
     trigger OnInsert()

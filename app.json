@@ -11,14 +11,12 @@
   "url": "",
   "logo": "",
   "dependencies": [
-  {
-      "id": "f339ac69-5888-4062-beab-84901628424d",
-      "name": "Robosol_Base_Application",
+    {
+      "id": "89b2d3ff-cff9-4506-9a14-597a5b6d370f",
+      "name": "Interim WMS BC Customisation",
       "publisher": "Robosol",
-      "version": "19.0.0.1"
+      "version": "1.0.0.2"
     }
-    
-  
   ],
   "screenshots": [],
   "platform": "1.0.0.0",
