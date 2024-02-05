@@ -314,35 +314,44 @@ page 80126 "Customer Trends"
                     ApplicationArea = all;
                     Editable = false;
                     StyleExpr = ColorCode;
+                    ToolTip = 'Last sales unit price';
                 }
 
                 field(Inventory; Rec.Inventory)
                 {
                     Editable = false;
                     ApplicationArea = All;
+                    ToolTip = 'Total Inventory';
                 }
                 field("Saleable Inventory"; Rec."Saleable Inventory")
                 {
                     Editable = false;
                     ApplicationArea = All;
+                    ToolTip = 'Qty available in HD and SH';
+                    DecimalPlaces = 0 : 5;
                 }
                 field("Qty on SO(Saleable)"; Rec."Qty on SO(Saleable)")
                 {
                     Editable = false;
                     ApplicationArea = All;
+                    ToolTip = 'Sum of Outstanding Qty in HD and SH';
+                    DecimalPlaces = 0 : 5;
                 }
                 field("Total Available Quantity"; TotalAvailableQty(Rec))
                 {
                     ApplicationArea = All;
                     Editable = false;
                     DecimalPlaces = 0 : 5;
-                    ToolTip = 'Total Available Qty (Saleable Inventory – Qty on SO(Saleable)';
+                    ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
                     Caption = 'Total Available Quantity(Saleable)';
                 }
                 field("UnShipped Qty."; Rec."UnShipped Qty.")
                 {
-                    Editable = false;
+                    Caption = 'Unshipped Qty.';
                     ApplicationArea = All;
+                    Editable = false;
+                    DecimalPlaces = 0 : 5;
+                    ToolTip = 'Total unshipped qty.';
                 }
                 field("Shipper Qty"; Rec."Shipper Qty")
                 {
