@@ -15,7 +15,13 @@
       "id": "89b2d3ff-cff9-4506-9a14-597a5b6d370f",
       "name": "Interim WMS BC Customisation",
       "publisher": "Robosol",
-      "version": "1.0.0.2"
+      "version": "22.0.0.0"
+    },
+    {
+      "id": "1a0f1d96-00b3-4f86-b25b-d0af4bcd74f4",
+      "name": "Company License Management",
+      "publisher": "Robosol Software UK Ltd",
+      "version": "22.0.0.0"
     }
   ],
   "screenshots": [],

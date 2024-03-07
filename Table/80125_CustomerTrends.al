@@ -12,6 +12,30 @@ table 80125 CustomerTrends
             DataClassification = CustomerContent;
             TableRelation = Item."No.";
 
+            trigger OnValidate()
+            var
+                CompanyLicenseValidation: Codeunit "Check Item License";
+                CalledFrom: Option "Sales","Purchase";
+                L_Customer: Record Customer;
+                L_ShiptoAddress: Record "Ship-to Address";
+            begin
+                // //Company License Validatio++
+                // L_Customer.Reset();
+                // L_Customer.SetRange("No.", CustomerAccountNoFilter);
+                // if L_Customer.FindFirst() then begin
+                //     if L_Customer."Ship-to Code" <> '' then begin
+                //         L_ShiptoAddress.Reset();
+                //         L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
+                //         L_ShiptoAddress.SetRange("Customer No.", CustomerAccountNoFilter);
+                //         if L_ShiptoAddress.FindFirst() then begin
+                //             CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustomerAccountNoFilter, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", DeliveryDate, Rec."Item No.", L_ShiptoAddress."Post Code");
+                //         end;
+                //     end else begin
+                //         CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustomerAccountNoFilter, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", DeliveryDate, Rec."Item No.", L_Customer."Post Code");
+                //     end;
+                // end;
+            end;
+
         }
         field(2; "Item Description"; Text[100])
         {
@@ -58,6 +82,29 @@ table 80125 CustomerTrends
         field(11; "Unit Price"; Decimal)
         {
             DataClassification = CustomerContent;
+
+            trigger OnValidate()
+            var
+                UserSetup: Record "User Setup";
+                DisUnitPrice: Decimal;
+            begin
+                //Check Min Sell Price Validation++
+                Clear(DisUnitPrice);
+                UserSetup.Reset();
+                UserSetup.SetRange("User ID", UserId);
+                UserSetup.SetRange("Allow to change unit price", true);
+                if not UserSetup.FindFirst() then begin
+                    if Rec."Min Sell Price" > 0 then begin
+                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                            Error('Unit price should not be less than Min Sell Price');
+                        end;
+                    end else begin
+                        DisUnitPrice := (xRec."Unit Price" / 100) * 10;
+                        if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
+                            Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
+                    end;
+                end;
+            end;
         }
         field(12; "Last Price"; Decimal)
         {
@@ -148,16 +195,22 @@ table 80125 CustomerTrends
         field(33; "Qty on SO(Saleable)"; Decimal)
         {
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Unit of Measure" = field("Units of Measure")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."),
+            Type = CONST(Item),
+            "Outstanding Quantity" = filter(> 0),
+            "Saleable Location" = const(true),
+            "Unit of Measure" = field("Units of Measure")));
             DecimalPlaces = 0 : 5;
-            Caption = 'Qty on Sales Order (Saleable)';
-            //GHST Customization++
+            //Caption = 'Qty on Sales Order (Saleable)';
+            Caption = 'Allocated on SO';
         }
 
         field(34; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure")));
-            Caption = 'Inventory';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."),
+            "Unit of Measure Code" = field("Units of Measure")));
+            //Caption = 'Inventory';
+            Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -176,8 +229,10 @@ table 80125 CustomerTrends
         }
         field(39; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Saleable Location" = const(true)));
-            Caption = 'Saleable Inventory';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."),
+            "Saleable Location" = const(true)));
+            //Caption = 'Saleable Inventory';
+            Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
             FieldClass = FlowField;
@@ -220,13 +275,28 @@ table 80125 CustomerTrends
                 end;
             end;
         }
-        field(42; "UnShipped Qty."; Decimal)
+        // field(42; "Back Orders (Saleable)"; Decimal)
+        // {
+        //     // CalcFormula = Sum("Sales Line"."Outstanding Quantity" where(Type = const(Item), "No." = FIELD("Item No.")));
+        //     Caption = 'Back Orders (Saleable)';
+        //     DecimalPlaces = 0 : 5;
+        //     Editable = false;
+        //     //FieldClass = FlowField;
+        // }
+
+        field(43; "Weekend Ship. Agnt. Serv. Code"; Code[10])
         {
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" where(Type = const(Item), "No." = FIELD("Item No.")));
-            Caption = 'Unshipped Qty';
-            DecimalPlaces = 0 : 5;
+            Caption = 'Weekend Shipping Agent Service Code';
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+        }
+        // field(44; "Total Back Orders"; Decimal)
+        // {
+
+        // }
+        field(45; "Location Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
             Editable = false;
-            FieldClass = FlowField;
         }
     }
 
