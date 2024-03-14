@@ -28,6 +28,16 @@ page 80126 "Customer Trends"
                     var
                         L_SpecialPromotions: Page "Special Promotions";
                     begin
+                        //Clear Filters++
+                        Clear(CustomerAccountNoFilter);
+                        Clear(CustomerAccountName);
+                        Clear(ShippingAgentCodeFilter);
+                        Clear(ShippingAgentServiceCodeFilter);
+                        Clear(WeekendShippingAgentServiceCodeFilter);
+                        Clear(DeliveryDate);
+                        Clear(LocationCodeFilter);
+                        Clear(OrderDateFilter);
+
                         //Aply Filter++
                         FilterOnAfterValidate;
                     end;
@@ -77,12 +87,13 @@ page 80126 "Customer Trends"
                             Clear(WeekendShippingAgentServiceCodeFilter);
                             Clear(DeliveryDate);
                             Clear(LocationCodeFilter);
+                            Clear(OrderDateFilter);
                         end;
 
                         //Inset customer trends for 1 week and Promotion Items++
                         if CustomerAccountNoFilter <> '' then begin
                             if SalesPersonCodeFilter = '' then
-                                Error('SalesPerson/Purchaser Code should not be blank');
+                                Error('SalesPerson/Purchaser Code should not be blank.');
 
                             //Insert Special Promotions Item++
                             L_SalesPriceHeader.Reset();
@@ -120,6 +131,12 @@ page 80126 "Customer Trends"
                     Caption = 'Sell-to Customer Name';
                     Editable = false;
                 }
+                field(OrderDateFilter; OrderDateFilter)
+                {
+                    Caption = 'Order Date';
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field(DeliveryDate; DeliveryDate)
                 {
                     Caption = 'Shipment Date';
@@ -131,10 +148,10 @@ page 80126 "Customer Trends"
                         L_ConfimationMessage: Label 'Customer trend lines are exist.\\Do you want to modify Shipping Agent Service Code?';
                     begin
                         if CustomerAccountNoFilter = '' then
-                            Error('Sell-to Customer No. should not be blank');
+                            Error('Sell-to Customer No. should not be blank.');
 
                         if SalesPersonCodeFilter = '' then
-                            Error('SalesPerson/Purchaser Code should not be blank');
+                            Error('SalesPerson/Purchaser Code should not be blank.');
 
                         //Confimation++
                         L_Customertrends.Reset();
@@ -170,7 +187,7 @@ page 80126 "Customer Trends"
                             ShippingAgent.SetRange(code, ShippingAgentCodeFilter);
                             ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
                             if Not ShippingAgent.FindFirst() then
-                                Error('Status must be equal to Released in Shipping Agent');
+                                Error('Status must be equal to Released in Shipping Agent.');
                         end else begin
                             Clear(ShippingAgentServiceCodeFilter);
                             Clear(WeekendShippingAgentServiceCodeFilter);
@@ -226,7 +243,7 @@ page 80126 "Customer Trends"
                             ShippingAgentServices.SetRange(code, ShippingAgentServiceCodeFilter);
                             ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
                             if Not ShippingAgentServices.FindFirst() then
-                                Error('Status must be equal to Released in Shipping Agent Service');
+                                Error('Status must be equal to Released in Shipping Agent Service.');
 
 
                             //Check Shipping Restriction for existing Lines++
@@ -298,7 +315,7 @@ page 80126 "Customer Trends"
                             ShippingAgentServices.SetRange(code, WeekendShippingAgentServiceCodeFilter);
                             ShippingAgentServices.SetRange(Status, ShippingAgentServices.Status::Released);
                             if Not ShippingAgentServices.FindFirst() then
-                                Error('Status must be equal to Released in Shipping Agent Service');
+                                Error('Status must be equal to Released in Shipping Agent Service.');
 
                             //Check Shipping Restriction for existing Lines++
                             L_Customertrends.Reset();
@@ -362,13 +379,14 @@ page 80126 "Customer Trends"
                         CalledFrom: Option "Sales","Purchase";
                         L_Customer: Record Customer;
                         L_ShiptoAddress: Record "Ship-to Address";
+                        EventAndSubscriber: Codeunit EventSub;
                     begin
 
                         if SalesPersonCodeFilter = '' then
-                            Error('SalesPerson/Purchaser Code should not be blank');
+                            Error('SalesPerson/Purchaser Code should not be blank.');
 
                         if CustomerAccountNoFilter = '' then
-                            Error('Customer Account No. should not be blank');
+                            Error('Customer Account No. should not be blank.');
 
                         //Check Shipping Restriction for existing Lines++
                         L_Funcion.CheckShippingAgentServiceRestriction(Rec."Item No.", ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter);
@@ -380,42 +398,20 @@ page 80126 "Customer Trends"
                             L_Item.TestField("QAU Approved", true);
                             L_Item.TestField(Status, L_Item.Status::Released);
 
+
                             Rec."Units of Measure" := L_Item."Sales Unit of Measure";
                             Rec.Validate("Min Sell Price", L_Item."Min Sell Price");
-                            Rec.Validate("Unit Price", L_Item."Unit Price");
-                            // SalesPrice.Reset();
-                            // SalesPrice.SetRange("Source Type", SalesPrice."Source Type"::Customer);
-                            // SalesPrice.SetRange("Source No.", Rec."Customer No.");
-                            // SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
-                            // SalesPrice.SetRange("Asset No.", Rec."Item No.");
-                            // SalesPrice.SetRange(Status, SalesPrice.Status::Active);
-                            // SalesPrice.SetRange("Unit of Measure Code", Rec."Units of Measure");
-                            // if SalesPrice.FindLast() then
-                            //     Rec.Validate("Unit Price", SalesPrice."Unit Price")
-                            // else begin
-                            //     Clear(SalesPrice);
-                            //     SalesPrice.Reset();
-                            //     SalesPrice.SetRange("Asset Type", SalesPrice."Asset Type"::Item);
-                            //     SalesPrice.SetRange("Asset No.", Rec."Item No.");
-                            //     SalesPrice.SetRange(Status, SalesPrice.Status::Active);
-                            //     if SalesPrice.FindLast() then
-                            //         Rec.Validate("Unit Price", SalesPrice."Unit Price")
-                            //     else
-                            //         Rec."Unit Price" := 0;
-                            // end;
+                            Rec."Special Promotion" := false;
+                            Rec."Item Category Code" := L_Item."Item Category Code";
+                            //Rec.Validate("Unit Price", L_Item."Unit Price");
+                            Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", 0));
 
-                            CH_SShip.Reset();
-                            CH_SShip.SetRange("Sell-to Customer No.", Rec."Customer No.");
-                            CH_SShip.SetRange("No.", Rec."Item No.");
-                            CH_SShip.SetRange("Unit of Measure Code", Rec."Units of Measure");
-                            if CH_SShip.FindLast() then
-                                Rec."Last Price" := CH_SShip."Unit Price";
 
                             Rec.Validate("Created By", UserId);
                             Rec.Validate("Created On", CurrentDateTime);
                             Rec.Validate("Updated By", UserId);
                             Rec.Validate("Updated On", CurrentDateTime);
-                            Rec."Special Promotion" := false;
+                            Rec."Order Date" := WorkDate();
                             Rec."Salesperson Code" := SalesPersonCodeFilter;
                             Rec."Customer No." := CustomerAccountNoFilter;
                             Rec."Delivery Date" := DeliveryDate;
@@ -424,6 +420,18 @@ page 80126 "Customer Trends"
                             Rec."Shipping Agent Code" := ShippingAgentCodeFilter;
                             Rec."Shipping Agent Service Code" := ShippingAgentServiceCodeFilter;
                             Rec."Weekend Ship. Agnt. Serv. Code" := WeekendShippingAgentServiceCodeFilter;
+
+
+                            //GHet the last unit price from sales shipment table++
+                            CH_SShip.Reset();
+                            CH_SShip.SetRange("Sell-to Customer No.", Rec."Customer No.");
+                            CH_SShip.SetRange("No.", Rec."Item No.");
+                            CH_SShip.SetRange("Unit of Measure Code", Rec."Units of Measure");
+                            if CH_SShip.FindLast() then
+                                Rec."Last Price" := CH_SShip."Unit Price";
+
+
+                            //Get Shipper Quantity from Item unit measure table++
                             L_ItemUnitofMeasure.Reset();
                             L_ItemUnitofMeasure.SetRange("Item No.", Rec."Item No.");
                             L_ItemUnitofMeasure.SetRange(Code, Rec."Units of Measure");
@@ -442,6 +450,9 @@ page 80126 "Customer Trends"
                             L_Customer.Reset();
                             L_Customer.SetRange("No.", CustomerAccountNoFilter);
                             if L_Customer.FindFirst() then begin
+                                Rec."Ship-to Code" := L_Customer."Ship-to Code";
+                                Rec."Customer Price Group" := L_Customer."Customer Price Group";
+
                                 if L_Customer."Ship-to Code" <> '' then begin
                                     L_ShiptoAddress.Reset();
                                     L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
@@ -468,6 +479,13 @@ page 80126 "Customer Trends"
 
                 }
                 field("Units of Measure"; Rec."Units of Measure")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    StyleExpr = ColorCode;
+                    Visible = false;
+                }
+                field("Item Category Code"; Rec."Item Category Code")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -692,13 +710,13 @@ page 80126 "Customer Trends"
                     CustomerTrendDetails: report "Customer Trend Details";
                 begin
                     if SalesPersonCodeFilter = '' then
-                        Error('SalesPerson/Purchaser Code should not be blank');
+                        Error('SalesPerson/Purchaser Code should not be blank.');
 
                     if CustomerAccountNoFilter = '' then
-                        Error('Customer Account No. should not be blank');
+                        Error('Customer Account No. should not be blank.');
 
                     if DeliveryDate = 0D then
-                        Error('Delivery Date should not be blank');
+                        Error('Delivery Date should not be blank.');
 
                     Clear(CustomerTrendDetails);
                     CustomerTrendDetails.GetFilters(SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter);
@@ -764,6 +782,7 @@ page 80126 "Customer Trends"
             ShippingAgentServiceCodeFilter := L_CustomerTrends."Shipping Agent Service Code";
             WeekendShippingAgentServiceCodeFilter := L_CustomerTrends."Weekend Ship. Agnt. Serv. Code";
             LocationCodeFilter := L_CustomerTrends."Location Code";
+            OrderDateFilter := L_CustomerTrends."Order Date";
         end;
 
         //Update Customer Name++
@@ -904,5 +923,6 @@ page 80126 "Customer Trends"
         G_CustomerAccountNo: Code[20];
 
         LocationCodeFilter: Code[20];
+        OrderDateFilter: Date;
 
 }

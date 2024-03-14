@@ -1,4 +1,5 @@
-page 80128 "Special Promotions"
+page 80128
+"Special Promotions"
 {
     ApplicationArea = All;
     Caption = 'Special Promotions';
@@ -43,11 +44,13 @@ page 80128 "Special Promotions"
                 field("Unit Price"; Rec."Unit Price")
                 {
                     ApplicationArea = all;
+                    Editable = false;
                 }
                 field("Last Price"; Rec."Last Price")
                 {
                     ToolTip = 'Specifies the value of the Last Price field.';
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 // field("New Price"; Rec."New Price")
                 // {
@@ -155,6 +158,12 @@ page 80128 "Special Promotions"
                 {
                     ApplicationArea = All;
                     Editable = false;
+                }
+                field("Minimum Quantity"; Rec."Minimum Quantity")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    ToolTip = 'Specifies the minimum quantity of the product.';
                 }
                 field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {

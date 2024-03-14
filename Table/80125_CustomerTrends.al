@@ -88,20 +88,22 @@ table 80125 CustomerTrends
                 UserSetup: Record "User Setup";
                 DisUnitPrice: Decimal;
             begin
-                //Check Min Sell Price Validation++
-                Clear(DisUnitPrice);
-                UserSetup.Reset();
-                UserSetup.SetRange("User ID", UserId);
-                UserSetup.SetRange("Allow to change unit price", true);
-                if not UserSetup.FindFirst() then begin
-                    if Rec."Min Sell Price" > 0 then begin
-                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                            Error('Unit price should not be less than Min Sell Price');
+                //Check Min Sell Price Validation. only for Normal Items. (Top Screen)++
+                if Rec."Special Promotion" = false then begin
+                    Clear(DisUnitPrice);
+                    UserSetup.Reset();
+                    UserSetup.SetRange("User ID", UserId);
+                    UserSetup.SetRange("Allow to change unit price", true);
+                    if not UserSetup.FindFirst() then begin
+                        if Rec."Min Sell Price" > 0 then begin
+                            if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                                Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3, Special Promotion: %4.', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.", Rec."Special Promotion");
+                            end;
+                        end else begin
+                            DisUnitPrice := (xRec."Unit Price" / 100) * 10;
+                            if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
+                                Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2, Special Promotion: %3.', xRec."Unit Price" - DisUnitPrice, Rec."Item No.", Rec."Special Promotion");
                         end;
-                    end else begin
-                        DisUnitPrice := (xRec."Unit Price" / 100) * 10;
-                        if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                            Error('Unit price should not be less than %1', xRec."Unit Price" - DisUnitPrice);
                     end;
                 end;
             end;
@@ -114,6 +116,75 @@ table 80125 CustomerTrends
         {
             DataClassification = CustomerContent;
             DecimalPlaces = 0 : 5;
+
+
+            trigger OnValidate()
+            var
+                EventAndSubscriber: Codeunit EventSub;
+                L_PriceListLine: Record "Price List Line";
+                L_SalesPriceHeader: Record "Price List Header";
+                L_CustomerTrend: Record CustomerTrends;
+                CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
+                RecUserSetup: Record "User Setup";
+            begin
+                if (Rec."Qty. to be added to SO" <> 0) then begin
+                    //Check duplicate Item on both screen of customer trends Top and Bottom++
+                    if Rec."Special Promotion" = true then begin
+                        L_CustomerTrend.Reset();
+                        L_CustomerTrend.SetRange("Salesperson Code", Rec."Salesperson Code");
+                        L_CustomerTrend.SetRange("Customer No.", Rec."Customer No.");
+                        L_CustomerTrend.SetRange("Item No.", Rec."Item No.");
+                        L_CustomerTrend.SetRange("Special Promotion", false);
+                        L_CustomerTrend.SetFilter("Qty. to be added to SO", '>%1', 0);
+                        if L_CustomerTrend.FindFirst() then
+                            Error('Qty. to be added to SO should be blank on top screen. current value is %1.', L_CustomerTrend."Qty. to be added to SO");
+                    end else begin
+                        L_CustomerTrend.Reset();
+                        L_CustomerTrend.SetRange("Salesperson Code", Rec."Salesperson Code");
+                        L_CustomerTrend.SetRange("Customer No.", Rec."Customer No.");
+                        L_CustomerTrend.SetRange("Item No.", Rec."Item No.");
+                        L_CustomerTrend.SetRange("Special Promotion", true);
+                        L_CustomerTrend.SetFilter("Qty. to be added to SO", '>%1', 0);
+                        if L_CustomerTrend.FindFirst() then
+                            Error('Qty. to be added to SO should be blank on the Special Promotions screen. current value is %1.', L_CustomerTrend."Qty. to be added to SO");
+                    end;
+
+                    //Check Min Quantity (For Promotion Item)++
+                    if Rec."Special Promotion" = true then begin
+                        if Rec."Minimum Quantity" > Rec."Qty. to be added to SO" then
+                            Error('Qty. to be added to SO should not be less than Minimum Quantity %1. Item Number: %2.', Rec."Minimum Quantity", Rec."Item No.");
+                    end;
+
+
+
+                    if Rec."Special Promotion" = false then begin
+                        //user can still add the Special Promotion item on Top section with less than min qty and it should allow (in this case price should be more).
+                        L_SalesPriceHeader.Reset();
+                        L_SalesPriceHeader.SetRange("Special Price Daily", true);
+                        if L_SalesPriceHeader.FindFirst() then begin
+                            L_PriceListLine.Reset();
+                            L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                            L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                            L_PriceListLine.SetRange("Product No.", Rec."Item No.");
+                            if not L_PriceListLine.FindFirst() then begin
+                                Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+                            end;
+                        end;
+                    end else begin
+                        //For Promotion Item only (Promotion Tab)++
+                        //Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+                    end;
+
+                    //Check Item Sales Quota (For Both Promotion and Normal Item)++
+                    IF RecUserSetup.GET(USERID) THEN BEGIN
+                        IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                            CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                        END;
+                    END ELSE BEGIN
+                        CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                    END;
+                end;
+            end;
         }
         field(14; "New Price"; Decimal)
         {
@@ -298,6 +369,26 @@ table 80125 CustomerTrends
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(46; "Minimum Quantity"; Decimal)
+        {
+
+        }
+        field(47; "Order Date"; Date)
+        {
+
+        }
+        field(48; "Ship-to Code"; Code[10])
+        {
+            TableRelation = "Ship-to Address";
+        }
+        field(49; "Item Category Code"; Code[20])
+        {
+            TableRelation = "Item Category";
+        }
+        field(50; "Customer Price Group"; Code[20])
+        {
+            TableRelation = "Customer Price Group";
+        }
     }
 
     keys
@@ -310,6 +401,7 @@ table 80125 CustomerTrends
 
     var
         myInt: Integer;
+
 
     procedure InsertSalesLinesfromTrends(OrderNo: Code[20]; CustTrends: Record CustomerTrends)
     var
