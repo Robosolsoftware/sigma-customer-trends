@@ -5,6 +5,10 @@ page 80128
     Caption = 'Special Promotions';
     PageType = ListPart;
     SourceTable = CustomerTrends;
+    LinksAllowed = false;
+    DelayedInsert = true;
+    RefreshOnActivate = false;
+    SaveValues = true;
 
     layout
     {
@@ -12,18 +16,6 @@ page 80128
         {
             repeater(General)
             {
-                // field("Customer No."; Rec."Customer No.")
-                // {
-                //     ToolTip = 'Specifies the value of the Customer No. field.';
-                //     ApplicationArea = All;
-                //     Editable = false;
-                // }
-                // field("Customer Name"; Rec."Customer Name")
-                // {
-                //     ToolTip = 'Specifies the value of the Customer Name field.';
-                //     ApplicationArea = All;
-                //     Editable = false;
-                // }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item No. field.';
@@ -41,6 +33,11 @@ page 80128
                     ApplicationArea = all;
                     Editable = false;
                 }
+                field("Line Disc %"; Rec."Line Disc %")
+                {
+                    ApplicationArea = all;
+                    Editable = false;
+                }
                 field("Unit Price"; Rec."Unit Price")
                 {
                     ApplicationArea = all;
@@ -52,22 +49,6 @@ page 80128
                     ApplicationArea = All;
                     Editable = false;
                 }
-                // field("New Price"; Rec."New Price")
-                // {
-                //     ToolTip = 'Specifies the value of the New Price field.';
-                //     ApplicationArea = All;
-                // }
-                // field("Stock at Other Locations"; Rec."Stock at Other Locations")
-                // {
-                //     ToolTip = 'Specifies the value of the Stock at Other Locations field.';
-                //     ApplicationArea = All;
-                // }
-
-                // field("Free Stock Quanyity"; Rec."Free Stock Quanyity")
-                // {
-                //     ToolTip = 'Specifies the value of the Free Stock Quanyity field.';
-                //     ApplicationArea = All;
-                // }
                 field(Inventory; Rec.Inventory)
                 {
                     Editable = false;
@@ -168,6 +149,23 @@ page 80128
                 field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {
                     ApplicationArea = All;
+                    Editable = Rec."Item No." <> '';
+
+                    trigger OnValidate()
+                    var
+                        RecUserSetup: Record "User Setup";
+                        CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
+                    begin
+                        //Check Item Sales Quota (For Both Promotion and Normal Item)++
+                        CurrPage.Update();
+                        IF RecUserSetup.GET(USERID) THEN BEGIN
+                            IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                                CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                            END;
+                        END ELSE BEGIN
+                            CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                        END;
+                    end;
                 }
             }
         }
