@@ -1,14 +1,14 @@
-page 80128
-"Special Promotions"
+page 80128 "Special Promotions"
 {
     ApplicationArea = All;
-    Caption = 'Special Promotions';
+    Caption = 'Daily Promotions';
     PageType = ListPart;
     SourceTable = CustomerTrends;
-    LinksAllowed = false;
     DelayedInsert = true;
-    RefreshOnActivate = false;
-    SaveValues = true;
+    DeleteAllowed = false;
+    InsertAllowed = false;
+
+
 
     layout
     {
@@ -56,11 +56,19 @@ page 80128
                     Caption = 'Total Physical';
                     ToolTip = 'Total Inventory';
                 }
+                field(Allocated; Rec.Allocated)
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+                    ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
+                    DecimalPlaces = 0 : 5;
+                    Caption = 'Total Allocated on SO';
+                }
                 field("Physical"; Rec."Saleable Inventory")
                 {
                     Editable = false;
                     ApplicationArea = All;
-                    ToolTip = 'Qty available in HD and SH';
+                    ToolTip = 'Qty available';
                     DecimalPlaces = 0 : 5;
                     Caption = 'Physical';
                 }
@@ -68,7 +76,7 @@ page 80128
                 {
                     Editable = false;
                     ApplicationArea = All;
-                    ToolTip = 'Sum of Outstanding SO Qty in HD and SH';
+                    ToolTip = 'Sum of Outstanding SO Qty.';
                     DecimalPlaces = 0 : 5;
                     Caption = 'Allocated on SO';
                 }

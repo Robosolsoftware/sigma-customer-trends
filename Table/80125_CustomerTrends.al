@@ -63,12 +63,13 @@ table 80125 CustomerTrends
                 L_PriceListLine: Record "Price List Line";
                 L_SalesPriceHeader: Record "Price List Header";
             begin
-                //Check Min Sell Price Validation. only for Normal Items. (Top Screen)++
-                //We can add Promotion Items on the top screen also which we consider as a normal Item++
+                //Min Sell price Validation application only for Normal Item.
+                //The below code only for Top Screen Items (We can Add Promotion Items on Top Screen)++
                 if Rec."Special Promotion" = false then begin
                     L_SalesPriceHeader.Reset();
                     L_SalesPriceHeader.SetRange("Special Price Daily", true);
                     if L_SalesPriceHeader.FindFirst() then begin
+                        //If not Promotion Item then checking Min Sell Price Validation++
                         L_PriceListLine.Reset();
                         L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
                         L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
@@ -81,14 +82,24 @@ table 80125 CustomerTrends
                             if not UserSetup.FindFirst() then begin
                                 if Rec."Min Sell Price" > 0 then begin
                                     if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                        Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3, Special Promotion: %4.', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.", Rec."Special Promotion");
+                                        Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");
                                     end;
                                 end else begin
                                     DisUnitPrice := (xRec."Unit Price" / 100) * 10;
                                     if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                                        Error('You cannot enter the Unit Price less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2, Special Promotion: %3.', xRec."Unit Price" - DisUnitPrice, Rec."Item No.", Rec."Special Promotion");
+                                        Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."Item No.");
                                 end;
                             end;
+                        end;
+
+                        //If Promostion Item then checking Unit Price should not be less then Promostion Price++
+                        L_PriceListLine.Reset();
+                        L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                        L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                        L_PriceListLine.SetRange("Product No.", Rec."Item No.");
+                        if L_PriceListLine.FindFirst() then begin
+                            if L_PriceListLine."Unit Price" > Rec."Unit Price" then
+                                Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."Item No.");
                         end;
                     end;
                 end;
@@ -114,7 +125,7 @@ table 80125 CustomerTrends
                 CalledFrom: Option "Sales","Purchase";
                 L_Customer: Record Customer;
                 L_ShiptoAddress: Record "Ship-to Address";
-                L_Function: Codeunit "SC Events & Subscriber";
+                L_SalesEventAndFunction: Codeunit "Sales Event & Function";
             begin
                 if (Rec."Qty. to be added to SO" <> 0) then begin
                     //Check duplicate Item on both screen of customer trends Top and Bottom++
@@ -159,7 +170,7 @@ table 80125 CustomerTrends
 
 
                         //Check Shipping Restriction for existing Lines++
-                        L_Function.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Shipping Agent Code", Rec."Shipping Agent Service Code");
+                        L_SalesEventAndFunction.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Shipping Agent Code", Rec."Shipping Agent Service Code");
 
 
                         //Company License Validatio++
@@ -182,6 +193,11 @@ table 80125 CustomerTrends
                     //Update Price++
                     if Rec."Special Promotion" = false then
                         Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+
+                    //Update Discount %
+                    if Rec."Special Promotion" = false then
+                        Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+
 
                 end;
             end;
@@ -266,21 +282,14 @@ table 80125 CustomerTrends
         field(33; "Qty on SO(Saleable)"; Decimal)
         {
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."),
-            Type = CONST(Item),
-            "Outstanding Quantity" = filter(> 0),
-            "Saleable Location" = const(true),
-            "Unit of Measure" = field("Units of Measure")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Document Type" = CONST(Order), Type = CONST(Item), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Unit of Measure" = field("Units of Measure")));
             DecimalPlaces = 0 : 5;
-            //Caption = 'Qty on Sales Order (Saleable)';
             Caption = 'Allocated on SO';
         }
 
         field(34; Inventory; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."),
-            "Unit of Measure Code" = field("Units of Measure")));
-            //Caption = 'Inventory';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure")));
             Caption = 'Total Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -300,9 +309,7 @@ table 80125 CustomerTrends
         }
         field(39; "Saleable Inventory"; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."),
-            "Saleable Location" = const(true)));
-            //Caption = 'Saleable Inventory';
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure"), "Saleable Location" = const(true)));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -393,11 +400,42 @@ table 80125 CustomerTrends
         {
 
         }
+        field(52; "Allocated"; Decimal)
+        {
+            AccessByPermission = TableData "Sales Shipment Header" = R;
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("Item No."), "Unit of Measure Code" = FIELD("Units of Measure"), "Outstanding Qty. (Base)" = filter(> 0)));
+            Caption = 'Total Allocated on SO';
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        field(53; "Qty On Customer Trends"; Decimal)
+        {
+            CalcFormula = Sum(CustomerTrends."Qty. to be added to SO" where("Item No." = field("Item No."), "Units of Measure" = field("Units of Measure")));
+            DecimalPlaces = 0 : 5;
+            Editable = false;
+            FieldClass = FlowField;
+
+            //This is only For Update Free quantity after enter "Qty. to be added to SO".
+        }
+        field(54; "Work Description"; Text[2048])
+        {
+
+        }
+        field(55; "Entry Number"; Integer)
+        {
+            AutoIncrement = true;
+        }
+        field(56; "Special Item on Top SCreen"; Boolean)
+        {
+            //Dont use this field++
+        }
+
     }
 
     keys
     {
-        key(PrimaryKey; "Item No.", "Customer No.", "Salesperson Code", "Special Promotion")
+        key(PrimaryKey; "Entry Number", "Item No.", "Customer No.", "Salesperson Code", "Special Promotion")
         {
             Clustered = true;
         }
@@ -405,6 +443,7 @@ table 80125 CustomerTrends
 
     var
         myInt: Integer;
+        res: Page "Sales Order";
 
 
     procedure InsertSalesLinesfromTrends(OrderNo: Code[20]; CustTrends: Record CustomerTrends)
