@@ -49,6 +49,11 @@ page 80128 "Special Promotions"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field(RRP; Rec.RRP)
+                {
+                    ApplicationArea = all;
+                    Editable = false;
+                }
                 field(Inventory; Rec.Inventory)
                 {
                     Editable = false;

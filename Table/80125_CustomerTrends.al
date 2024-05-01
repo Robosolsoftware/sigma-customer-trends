@@ -62,6 +62,7 @@ table 80125 CustomerTrends
                 DisUnitPrice: Decimal;
                 L_PriceListLine: Record "Price List Line";
                 L_SalesPriceHeader: Record "Price List Header";
+                L_CustomerPriceGroupChanges: Codeunit "Customer Price Group Changes";
             begin
                 //Min Sell price Validation application only for Normal Item.
                 //The below code only for Top Screen Items (We can Add Promotion Items on Top Screen)++
@@ -80,14 +81,16 @@ table 80125 CustomerTrends
                             UserSetup.SetRange("User ID", UserId);
                             UserSetup.SetRange("Allow to change unit price", true);
                             if not UserSetup.FindFirst() then begin
-                                if Rec."Min Sell Price" > 0 then begin
-                                    if Rec."Unit Price" < Rec."Min Sell Price" then begin
-                                        Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");
+                                if CurrFieldNo = 11 then begin
+                                    if Rec."Min Sell Price" > 0 then begin
+                                        if Rec."Unit Price" < Rec."Min Sell Price" then begin
+                                            Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");
+                                        end;
+                                    end else begin
+                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") / 100) * 10;
+                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") - DisUnitPrice) > Rec."Unit Price" then
+                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") - DisUnitPrice, Rec."Item No.");
                                     end;
-                                end else begin
-                                    DisUnitPrice := (xRec."Unit Price" / 100) * 10;
-                                    if (xRec."Unit Price" - DisUnitPrice) > Rec."Unit Price" then
-                                        Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', xRec."Unit Price" - DisUnitPrice, Rec."Item No.");
                                 end;
                             end;
                         end;
@@ -192,11 +195,11 @@ table 80125 CustomerTrends
 
                     //Update Price++
                     if Rec."Special Promotion" = false then
-                        Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+                        Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date"));
 
                     //Update Discount %
                     if Rec."Special Promotion" = false then
-                        Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO"));
+                        Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date"));
 
 
                 end;
@@ -429,6 +432,14 @@ table 80125 CustomerTrends
         field(56; "Special Item on Top SCreen"; Boolean)
         {
             //Dont use this field++
+        }
+        field(57; RRP; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+        }
+        field(58; "Min Order Value"; Decimal)
+        {
+
         }
 
     }

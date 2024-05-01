@@ -871,7 +871,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -881,7 +881,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 //PerDay Cust Trends Order Qty++++++
                 L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-                //L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DaywiseCustTrendsquantity.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_Category_Code, ItemCat);
                 L_DaywiseCustTrendsquantity.OPEN;
@@ -902,7 +902,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
                 //PerDay Shipped Qty++
                 L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Sell_to_Customer_No, _CustomerTrends."Customer No.");
-                //L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DayWiseShippedQty.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Item_Category_Code, ItemCat);
                 L_DayWiseShippedQty.OPEN;
@@ -941,7 +941,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -951,7 +951,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 //PerDay Cust Trends Order Qty++++++
                 L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-                //L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DaywiseCustTrendsquantity.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
                 L_DaywiseCustTrendsquantity.OPEN;
@@ -972,7 +972,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
                 //PerDay Shipped Qty++
                 L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Sell_to_Customer_No, _CustomerTrends."Customer No.");
-                //L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DayWiseShippedQty.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
                 L_DayWiseShippedQty.OPEN;
@@ -1013,7 +1013,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -1023,7 +1023,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 //PerDay Cust Trends Order Qty++++++
                 L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-                //L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SetRange(L_DaywiseCustTrendsquantity.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DaywiseCustTrendsquantity.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
                 L_DaywiseCustTrendsquantity.OPEN;
@@ -1044,7 +1044,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
                 //PerDay Shipped Qty++
                 L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Sell_to_Customer_No, _CustomerTrends."Customer No.");
-                //L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SetRange(L_DayWiseShippedQty.Ship_to_Code, _CustomerTrends."Ship-to Code");
                 L_DayWiseShippedQty.SetFilter(Order_Date, '%1..%2', Sdate, Edate);
                 L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
                 L_DayWiseShippedQty.OPEN;
@@ -1600,7 +1600,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -1608,7 +1608,7 @@ codeunit 80128 "Customer Trend Sales Quota"
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-            //L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_Category_Code, ItemCat);
             L_DaywiseCustTrendsquantity.OPEN;
@@ -1629,7 +1629,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
             //PerDay Shipped Qty++
             L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
-            //L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Item_Category_Code, ItemCat);
             L_DayWiseShippedQty.OPEN;
@@ -1668,7 +1668,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -1676,7 +1676,7 @@ codeunit 80128 "Customer Trend Sales Quota"
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-            //L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
             L_DaywiseCustTrendsquantity.OPEN;
@@ -1698,7 +1698,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
             //PerDay Shipped Qty++
             L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
-            //L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
             L_DayWiseShippedQty.OPEN;
@@ -1737,7 +1737,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -1745,7 +1745,7 @@ codeunit 80128 "Customer Trend Sales Quota"
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
-            //L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
             L_DaywiseCustTrendsquantity.OPEN;
@@ -1766,7 +1766,7 @@ codeunit 80128 "Customer Trend Sales Quota"
 
             //PerDay Shipped Qty++
             L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
-            //L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+            L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
             L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
             L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
             L_DayWiseShippedQty.OPEN;
@@ -2143,7 +2143,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -2189,7 +2189,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
@@ -2441,7 +2441,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
-        //L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN

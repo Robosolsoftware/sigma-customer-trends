@@ -219,6 +219,7 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends."Special Promotion" := false;
                         CH_CustTrends.Validate("Item Category Code", CH_Items."Item Category Code");
                         CH_CustTrends.Validate("Delivery Date", _DeliveryDate);
+                        CH_CustTrends.RRP := CH_Items.RRP;
                         CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
                         CH_CustTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
                         CH_CustTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
@@ -229,8 +230,8 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends."Order Date" := WorkDate();
 
                         //Get Price From Sale price table based on all default combination and filter. (Only on Top Screen of Customer Trends)++
-                        CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CH_ILE."Source No.", CH_ILE."Item No.", 0));
-                        CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CH_ILE."Source No.", CH_ILE."Item No.", 0));
+                        CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CH_ILE."Source No.", CH_ILE."Item No.", 0, CH_CustTrends."Order Date"));
+                        CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CH_ILE."Source No.", CH_ILE."Item No.", 0, CH_CustTrends."Order Date"));
 
                         //Get Shipper Qty From Item Unit of Measure table++
                         L_ItemUnitofMeasure.Reset();
@@ -262,6 +263,7 @@ codeunit 80126 "CT Functions"
                         if L_Customer.FindFirst() then begin
                             CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
                             CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                            CH_CustTrends.Validate("Min Order Value", L_Customer."Min Order Value");
 
                             if L_Customer."Ship-to Code" <> '' then begin
                                 L_ShiptoAddress.Reset();
@@ -358,11 +360,13 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends.Validate("Min Sell Price", CH_Items."Min Sell Price");
                         CH_CustTrends."Special Promotion" := false;
                         CH_CustTrends.Validate("Item Category Code", CH_Items."Item Category Code");
+                        CH_CustTrends.RRP := CH_Items.RRP;
+                        CH_CustTrends."Order Date" := WorkDate();
                         //CH_CustTrends.Validate("Unit Price", CH_Items."Unit Price");
 
                         //Get Price From Sale price table based on all default combination and filter. (Only on Top Screen of Customer Trends)++
-                        CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CH_ILE."Source No.", CH_ILE."Item No.", 0));
-                        CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CH_ILE."Source No.", CH_ILE."Item No.", 0));
+                        CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CH_ILE."Source No.", CH_ILE."Item No.", 0, CH_CustTrends."Order Date"));
+                        CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CH_ILE."Source No.", CH_ILE."Item No.", 0, CH_CustTrends."Order Date"));
 
                         CH_CustTrends.Validate("Delivery Date", _DeliveryDate);
                         CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
@@ -372,7 +376,7 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends."Updated On" := CurrentDateTime;
                         CH_CustTrends."Created By" := UserId;
                         CH_CustTrends."Created On" := CurrentDateTime;
-                        CH_CustTrends."Order Date" := WorkDate();
+
                         CH_CustTrends."Work Description" := _WorkDescription;
 
                         //Get Shipper Qty From Item Unit of Measure table++
@@ -405,6 +409,7 @@ codeunit 80126 "CT Functions"
                         if L_Customer.FindFirst() then begin
                             CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
                             CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                            CH_CustTrends.Validate("Min Order Value", L_Customer."Min Order Value");
 
                             if L_Customer."Ship-to Code" <> '' then begin
                                 L_ShiptoAddress.Reset();
@@ -511,6 +516,7 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Units of Measure", CH_Items."Sales Unit of Measure");
                     CH_CustTrends.Validate("Min Sell Price", CH_Items."Min Sell Price");
                     CH_CustTrends.Validate("Item Category Code", L_Item."Item Category Code");
+                    CH_CustTrends.RRP := L_Item.RRP;
                     //CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CustNumber, _PriceListLine."Product No.", 0));
                     CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
                     //CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CustNumber, _PriceListLine."Product No.", 0));
@@ -562,29 +568,31 @@ codeunit 80126 "CT Functions"
                     if L_Location.FindFirst() then
                         CH_CustTrends."Location Code" := L_Location.Code;
 
-                    //Not Need this validation for Promostion Items at the time of insert Sell to customer Number+++
+                    // Not Need this validation for Promostion Items at the time of insert Sell to customer Number+++
                     // //Check Shipping Restriction for existing Lines++
                     // L_Function.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
 
-                    // //Company License Validatio++
-                    // L_Customer.Reset();
-                    // L_Customer.SetRange("No.", CustNumber);
-                    // if L_Customer.FindFirst() then begin
-                    //     CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
-                    //     CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                    //Company License Validatio++
+                    L_Customer.Reset();
+                    L_Customer.SetRange("No.", CustNumber);
+                    if L_Customer.FindFirst() then begin
+                        CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
+                        CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                        CH_CustTrends.Validate("Min Order Value", L_Customer."Min Order Value");
 
-                    //     if L_Customer."Ship-to Code" <> '' then begin
-                    //         L_ShiptoAddress.Reset();
-                    //         L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
-                    //         L_ShiptoAddress.SetRange("Customer No.", CustNumber);
-                    //         if L_ShiptoAddress.FindFirst() then begin
-                    //             CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
-                    //         end;
-                    //     end else begin
-                    //         CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
-                    //     end;
-                    // end;
-                    //Not Need this validation for Promostion Items at the time of insert Sell to customer Number+++
+                        // Not Need this validation for Promostion Items at the time of insert Sell to customer Number+++
+                        // if L_Customer."Ship-to Code" <> '' then begin
+                        //     L_ShiptoAddress.Reset();
+                        //     L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
+                        //     L_ShiptoAddress.SetRange("Customer No.", CustNumber);
+                        //     if L_ShiptoAddress.FindFirst() then begin
+                        //         CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
+                        //     end;
+                        // end else begin
+                        //     CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
+                        // end;
+                    end;
+
 
                     CH_CustTrends.Insert(true);
                 end;
@@ -629,6 +637,7 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Units of Measure", CH_Items."Sales Unit of Measure");
                     CH_CustTrends.Validate("Min Sell Price", CH_Items."Min Sell Price");
                     CH_CustTrends.Validate("Item Category Code", CH_Items."Item Category Code");
+                    CH_CustTrends.RRP := CH_Items.RRP;
                     //CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CustNumber, _PriceListLine."Product No.", 0));
                     CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
                     //CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CustNumber, _PriceListLine."Product No.", 0));
@@ -670,25 +679,27 @@ codeunit 80126 "CT Functions"
                     // //Check Shipping Restriction for existing Lines++
                     // L_Function.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
 
-                    // //Company License Validatio++
-                    // L_Customer.Reset();
-                    // L_Customer.SetRange("No.", CustNumber);
-                    // if L_Customer.FindFirst() then begin
-                    //     CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
-                    //     CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                    //Company License Validatio++
+                    L_Customer.Reset();
+                    L_Customer.SetRange("No.", CustNumber);
+                    if L_Customer.FindFirst() then begin
+                        CH_CustTrends.Validate("Ship-to Code", L_Customer."Ship-to Code");
+                        CH_CustTrends.Validate("Customer Price Group", L_Customer."Customer Price Group");
+                        CH_CustTrends.Validate("Min Order Value", L_Customer."Min Order Value");
 
-                    //     if L_Customer."Ship-to Code" <> '' then begin
-                    //         L_ShiptoAddress.Reset();
-                    //         L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
-                    //         L_ShiptoAddress.SetRange("Customer No.", CustNumber);
-                    //         if L_ShiptoAddress.FindFirst() then begin
-                    //             CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
-                    //         end;
-                    //     end else begin
-                    //         CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
-                    //     end;
-                    // end;
-                    //Not Rquired for Promostion Items at the time of insert sell to customer number++
+                        //Not Rquired for Promostion Items at the time of insert sell to customer number++
+                        // if L_Customer."Ship-to Code" <> '' then begin
+                        //     L_ShiptoAddress.Reset();
+                        //     L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
+                        //     L_ShiptoAddress.SetRange("Customer No.", CustNumber);
+                        //     if L_ShiptoAddress.FindFirst() then begin
+                        //         CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
+                        //     end;
+                        // end else begin
+                        //     CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustNumber, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
+                        // end;
+                    end;
+
 
                     CH_CustTrends.Insert(true);
                 end;

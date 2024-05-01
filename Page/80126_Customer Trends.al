@@ -36,6 +36,7 @@ page 80126 "Customer Trends"
                         Clear(LocationCodeFilter);
                         Clear(OrderDateFilter);
                         Clear(WorkDescription);
+                        Clear(MinOrderValue);
 
                         //Aply Filter++
                         FilterOnAfterValidate;
@@ -88,6 +89,7 @@ page 80126 "Customer Trends"
                             Clear(LocationCodeFilter);
                             Clear(OrderDateFilter);
                             Clear(WorkDescription);
+                            Clear(MinOrderValue);
                         end;
 
                         //Inset customer trends for 1 week and Promotion Items++
@@ -329,6 +331,12 @@ page 80126 "Customer Trends"
                         end;
                     end;
                 }
+                field(MinOrderValue; MinOrderValue)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Caption = 'Min Order Value';
+                }
                 field(LocationCodeFilter; LocationCodeFilter)
                 {
                     Caption = 'Location Code';
@@ -405,18 +413,20 @@ page 80126 "Customer Trends"
                             Rec."Item Description" := L_Item.Description;
                             Rec."Units of Measure" := L_Item."Sales Unit of Measure";
                             Rec.Validate("Min Sell Price", L_Item."Min Sell Price");
+                            Rec.RRP := L_Item.RRP;
                             Rec."Special Promotion" := false;
                             Rec."Item Category Code" := L_Item."Item Category Code";
+                            Rec."Order Date" := WorkDate();
                             //Rec.Validate("Unit Price", L_Item."Unit Price");
-                            Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", 0));
-                            Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", 0));
+                            Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
+                            Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
 
                             Rec."Work Description" := WorkDescription;
                             Rec.Validate("Created By", UserId);
                             Rec.Validate("Created On", CurrentDateTime);
                             Rec.Validate("Updated By", UserId);
                             Rec.Validate("Updated On", CurrentDateTime);
-                            Rec."Order Date" := WorkDate();
+
                             Rec."Salesperson Code" := SalesPersonCodeFilter;
                             Rec."Customer No." := CustomerAccountNoFilter;
                             Rec."Delivery Date" := DeliveryDate;
@@ -455,6 +465,7 @@ page 80126 "Customer Trends"
                             if L_Customer.FindFirst() then begin
                                 Rec."Ship-to Code" := L_Customer."Ship-to Code";
                                 Rec."Customer Price Group" := L_Customer."Customer Price Group";
+                                Rec."Min Order Value" := L_Customer."Min Order Value";
 
                                 if L_Customer."Ship-to Code" <> '' then begin
                                     L_ShiptoAddress.Reset();
@@ -526,6 +537,12 @@ page 80126 "Customer Trends"
                     ApplicationArea = all;
                     StyleExpr = G_Colour;
                     Editable = Rec."Item No." <> '';
+                }
+                field(RRP; Rec.RRP)
+                {
+                    ApplicationArea = all;
+                    Editable = false;
+                    StyleExpr = G_Colour;
                 }
 
                 field("Last Unit Price"; Rec."Last Price")
@@ -788,6 +805,7 @@ page 80126 "Customer Trends"
                     Clear(WeekendShippingAgentServiceCodeFilter);
                     Clear(LocationCodeFilter);
                     Clear(WorkDescription);
+                    Clear(MinOrderValue);
                     CurrPage.Update();
                 end;
             }
@@ -898,6 +916,7 @@ page 80126 "Customer Trends"
             LocationCodeFilter := L_CustomerTrends."Location Code";
             OrderDateFilter := L_CustomerTrends."Order Date";
             WorkDescription := L_CustomerTrends."Work Description";
+            MinOrderValue := L_CustomerTrends."Min Order Value";
         end;
 
         //Update Customer Name++
@@ -926,6 +945,7 @@ page 80126 "Customer Trends"
         Clear(WeekendShippingAgentServiceCodeFilter);
         Clear(LocationCodeFilter);
         Clear(WorkDescription);
+        Clear(MinOrderValue);
         if G_IsopenFromCallDistribution = true then begin
             SalesPersonCodeFilter := G_SalesPersonCode;
             CustomerAccountNoFilter := G_CustomerAccountNo;
@@ -1056,5 +1076,7 @@ page 80126 "Customer Trends"
         WorkDescription: Text[2048];
 
         G_Colour: Text;
+        MinOrderValue: Decimal;
+
 
 }

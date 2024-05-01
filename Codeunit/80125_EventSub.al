@@ -425,14 +425,14 @@ codeunit 80125 EventSub
     end;
 
 
-    procedure CustomerTrend_GetUnitPrice(_BilltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal): Decimal
+    procedure CustomerTrend_GetUnitPrice(_SelltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal; _OrderDate: Date): Decimal
     var
         L_PriceListLine: Record "Price List Line";
         L_Customer: Record Customer;
         L_Item: Record Item;
     begin
         L_Customer.Reset();
-        If L_Customer.Get(_BilltoCustomerNumber) then begin
+        If L_Customer.Get(_SelltoCustomerNumber) then begin
             //1st Price++
             L_PriceListLine.Reset();
             L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
@@ -445,11 +445,11 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                    if L_PriceListLine."Minimum Quantity" < _Quantity then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
                         exit(L_PriceListLine."Unit Price");
                     end;
                 end else begin
@@ -470,11 +470,11 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                    if L_PriceListLine."Minimum Quantity" < _Quantity then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
                         exit(L_PriceListLine."Unit Price");
                     end;
                 end else begin
@@ -494,11 +494,11 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                    if L_PriceListLine."Minimum Quantity" < _Quantity then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
                         exit(L_PriceListLine."Unit Price");
                     end;
                 end else begin
@@ -518,11 +518,11 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                    if L_PriceListLine."Minimum Quantity" < _Quantity then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
                         exit(L_PriceListLine."Unit Price");
                     end;
                 end else begin
@@ -542,11 +542,11 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
-                    if L_PriceListLine."Minimum Quantity" < _Quantity then begin
+                    if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
                         exit(L_PriceListLine."Unit Price");
                     end;
                 end else begin
@@ -562,7 +562,7 @@ codeunit 80125 EventSub
     end;
 
 
-    procedure CustomerTrend_GetLineDiscount(_BilltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal): Decimal
+    procedure CustomerTrend_GetLineDiscount(_BilltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal; _OrderDate: Date): Decimal
     var
         L_PriceListLine: Record "Price List Line";
         L_Customer: Record Customer;
@@ -582,8 +582,8 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -607,8 +607,8 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -631,8 +631,8 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -655,8 +655,8 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -679,8 +679,8 @@ codeunit 80125 EventSub
             if L_Item.FindFirst() then
                 L_PriceListLine.SetRange("Unit of Measure Code", L_Item."Sales Unit of Measure");
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
-            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', WorkDate(), 0D);
-            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', WorkDate(), 0D);
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
