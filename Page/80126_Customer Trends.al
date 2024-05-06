@@ -553,7 +553,7 @@ page 80126 "Customer Trends"
                     ToolTip = 'Last sales unit price';
                 }
 
-                field(Inventory; Rec.Inventory)
+                field("Total Physical"; Rec."Total Physical")
                 {
                     Editable = false;
                     ApplicationArea = All;
@@ -561,7 +561,7 @@ page 80126 "Customer Trends"
                     Caption = 'Total Physical';
                     StyleExpr = G_Colour;
                 }
-                field(Allocated; Rec.Allocated)
+                field("Total Allocated on SO"; Rec."Total Allocated on SO")
                 {
                     Editable = false;
                     ApplicationArea = All;
@@ -570,7 +570,7 @@ page 80126 "Customer Trends"
                     Caption = 'Total Allocated on SO';
                     StyleExpr = G_Colour;
                 }
-                field("Physical"; Rec."Saleable Inventory")
+                field(Physical; Rec.Physical)
                 {
                     Editable = false;
                     ApplicationArea = All;
@@ -579,7 +579,7 @@ page 80126 "Customer Trends"
                     Caption = 'Physical';
                     StyleExpr = G_Colour;
                 }
-                field("Allocated on SO"; Rec."Qty on SO(Saleable)")
+                field("Allocated on SO"; Rec."Allocated on SO")
                 {
                     Editable = false;
                     ApplicationArea = All;
@@ -588,70 +588,6 @@ page 80126 "Customer Trends"
                     Caption = 'Allocated on SO';
                     StyleExpr = G_Colour;
                 }
-
-                //Moved this code on Ochannel Extension for calculation++
-                // field("Free (Saleable)"; TotalAvailableQtyForSealable(Rec))
-                // {
-                //     ApplicationArea = All;
-                //     Editable = false;
-                //     DecimalPlaces = 0 : 5;
-                //     ToolTip = 'Saleable Inventory – Sum of Outstanding Qty on SO (Saleable)';
-                //     //Caption = 'Total Available Quantity(Saleable)';
-                //     Caption = 'Free (Saleable)';
-                // }
-                //Moved this code on Ochannel Extension for calculation++
-
-                // field("Back Orders (Saleable)"; Rec."Back Orders (Saleable)")
-                // {
-                //     Caption = 'Back Orders (Saleable)';
-                //     ApplicationArea = All;
-                //     Editable = false;
-                //     DecimalPlaces = 0 : 5;
-                //     ToolTip = 'Unshipped Qty in HD and SH';
-
-                //     trigger OnAssistEdit()
-                //     var
-                //         L_SalesLine: Record "Sales Line";
-                //         Page_SalesLinePage: Page "Sales Lines";
-                //     begin
-                //         Clear(Page_SalesLinePage);
-                //         L_SalesLine.Reset();
-                //         L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-                //         L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-                //         L_SalesLine.SetRange("No.", Rec."Item No.");
-                //         L_SalesLine.SetRange("Unit of Measure Code", Rec."Units of Measure");
-                //         L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-                //         L_SalesLine.SetRange("Saleable Location", true);
-                //         L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-                //         Page_SalesLinePage.SetTableView(L_SalesLine);
-                //         Page_SalesLinePage.Run();
-                //     end;
-                // }
-                // field("Total Back Orders"; Rec."Total Back Orders")
-                // {
-                //     Caption = 'Back Orders (Saleable)';
-                //     ApplicationArea = All;
-                //     Editable = false;
-                //     DecimalPlaces = 0 : 5;
-                //     ToolTip = 'Unshipped Qty across ALL Locations';
-                //     trigger OnAssistEdit()
-                //     var
-                //         L_SalesLine: Record "Sales Line";
-                //         Page_SalesLinePage: Page "Sales Lines";
-                //     begin
-                //         Clear(Page_SalesLinePage);
-                //         L_SalesLine.Reset();
-                //         L_SalesLine.SetRange("Document Type", L_SalesLine."Document Type"::Order);
-                //         L_SalesLine.SetRange(Type, L_SalesLine.Type::Item);
-                //         L_SalesLine.SetRange("No.", Rec."Item No.");
-                //         L_SalesLine.SetRange("Unit of Measure Code", Rec."Units of Measure");
-                //         L_SalesLine.SetFilter("Outstanding Quantity", '>%1', 0);
-                //         //L_SalesLine.SetRange("Saleable Location", true);
-                //         L_SalesLine.SetFilter("Shipment Date", '<%1', Today);
-                //         Page_SalesLinePage.SetTableView(L_SalesLine);
-                //         Page_SalesLinePage.Run();
-                //     end;
-                // }
                 field("Shipper Qty"; Rec."Shipper Qty")
                 {
                     ApplicationArea = All;
@@ -665,19 +601,6 @@ page 80126 "Customer Trends"
                     DecimalPlaces = 0 : 5;
                     Editable = Rec."Item No." <> '';
                     StyleExpr = G_Colour;
-
-                    //Code Moved into Ochannel+++
-                    // trigger OnValidate()
-                    // begin
-                    //     if Rec."Qty. to be added to SO" > 0 then begin
-                    //         Rec.CalcFields("Saleable Inventory");
-                    //         if Rec."Qty. to be added to SO" > Rec."Saleable Inventory" then
-                    //             Error('Qty. to be added to SO should not be less than Saleable Inventory');
-                    //     end;
-                    // end;
-                    //Code Moved into Ochannel+++
-
-
                     trigger OnValidate()
                     var
                         RecUserSetup: Record "User Setup";
@@ -932,6 +855,9 @@ page 80126 "Customer Trends"
     var
         L_UserSetup: Record "User Setup";
     begin
+        Rec.SetFilter("Date Filter", '%1..%2', CalcDate('-1D', WorkDate()), CalcDate('1D', WorkDate()));
+
+
         //Filter Promotion Item++
         Rec.SetFilter("Special Promotion", '%1', false);
 
@@ -1077,6 +1003,5 @@ page 80126 "Customer Trends"
 
         G_Colour: Text;
         MinOrderValue: Decimal;
-
 
 }

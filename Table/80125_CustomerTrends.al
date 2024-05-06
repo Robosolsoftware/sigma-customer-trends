@@ -282,15 +282,15 @@ table 80125 CustomerTrends
         {
             DataClassification = CustomerContent;
         }
-        field(33; "Qty on SO(Saleable)"; Decimal)
+        field(33; "Allocated on SO"; Decimal)
         {
             FieldClass = FlowField;
-            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Document Type" = CONST(Order), Type = CONST(Item), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Unit of Measure" = field("Units of Measure")));
+            CalcFormula = sum("Sales Line"."Outstanding Quantity" where("No." = field("Item No."), "Document Type" = CONST(Order), Type = CONST(Item), "Outstanding Quantity" = filter(> 0), "Saleable Location" = const(true), "Unit of Measure" = field("Units of Measure"), "Shipment Date" = field("Date Filter")));
             DecimalPlaces = 0 : 5;
             Caption = 'Allocated on SO';
         }
 
-        field(34; Inventory; Decimal)
+        field(34; "Total Physical"; Decimal)
         {
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure")));
             Caption = 'Total Physical';
@@ -310,9 +310,9 @@ table 80125 CustomerTrends
         {
             Caption = 'Shipment Date';
         }
-        field(39; "Saleable Inventory"; Decimal)
+        field(39; Physical; Decimal)
         {
-            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure"), "Saleable Location" = const(true)));
+            CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."), "Unit of Measure Code" = field("Units of Measure"), "Saleable Location" = const(true), "Daily Priority Exist" = field("Variant Code mandatory")));
             Caption = 'Physical';
             DecimalPlaces = 0 : 5;
             Editable = false;
@@ -403,7 +403,7 @@ table 80125 CustomerTrends
         {
 
         }
-        field(52; "Allocated"; Decimal)
+        field(52; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
             CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("Item No."), "Unit of Measure Code" = FIELD("Units of Measure"), "Outstanding Qty. (Base)" = filter(> 0)));
@@ -440,6 +440,15 @@ table 80125 CustomerTrends
         field(58; "Min Order Value"; Decimal)
         {
 
+        }
+        field(59; "Variant Code mandatory"; Boolean)
+        {
+            FieldClass = FlowField;
+            CalcFormula = exist("Item Variant" where("Item No." = field("Item No.")));
+        }
+        field(70158; "Date Filter"; Date)
+        {
+            FieldClass = FlowFilter;
         }
 
     }
