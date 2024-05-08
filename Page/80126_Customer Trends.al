@@ -855,7 +855,7 @@ page 80126 "Customer Trends"
     var
         L_UserSetup: Record "User Setup";
     begin
-        Rec.SetFilter("Date Filter", '%1..%2', CalcDate('-1D', WorkDate()), CalcDate('1D', WorkDate()));
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
 
 
         //Filter Promotion Item++

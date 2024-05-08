@@ -430,9 +430,28 @@ codeunit 80125 EventSub
         L_PriceListLine: Record "Price List Line";
         L_Customer: Record Customer;
         L_Item: Record Item;
+        L_CustomerNumber: Code[20];
+        L_CurrencyFactor: Decimal;
+        CurrencyDate: Date;
+        UpdateCurrencyExchangeRates: Codeunit "Update Currency Exchange Rates";
+        CurrExchRate: Record "Currency Exchange Rate";
     begin
+        Clear(L_CustomerNumber);
+        Clear(L_CurrencyFactor);
+        Clear(CurrencyDate);
+
         L_Customer.Reset();
-        If L_Customer.Get(_SelltoCustomerNumber) then begin
+        L_Customer.SetRange("No.", _SelltoCustomerNumber);
+        if L_Customer.FindFirst() then begin
+            if L_Customer."Bill-to Customer No." <> '' then
+                L_CustomerNumber := L_Customer."Bill-to Customer No."
+            else
+                L_CustomerNumber := L_Customer."No.";
+        end;
+
+
+        L_Customer.Reset();
+        If L_Customer.Get(L_CustomerNumber) then begin
             //1st Price++
             L_PriceListLine.Reset();
             L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
@@ -447,6 +466,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
@@ -472,6 +492,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
@@ -496,6 +517,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
@@ -520,6 +542,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
@@ -544,6 +567,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
@@ -555,21 +579,51 @@ codeunit 80125 EventSub
             end;
 
             //If Price List not found
-            IF L_Item.Get(_ItemNumber) then
-                exit(L_Item."Unit Price");
+            Clear(L_CurrencyFactor);
+            Clear(CurrencyDate);
+            IF L_Item.Get(_ItemNumber) then begin
+                if L_Customer."Currency Code" <> '' then begin
+                    if _OrderDate <> 0D then
+                        CurrencyDate := _OrderDate
+                    else
+                        CurrencyDate := WorkDate();
+
+                    if UpdateCurrencyExchangeRates.ExchangeRatesForCurrencyExist(CurrencyDate, L_Customer."Currency Code") then begin
+                        L_CurrencyFactor := CurrExchRate.ExchangeRate(CurrencyDate, L_Customer."Currency Code");
+                    end else
+                        UpdateCurrencyExchangeRates.ShowMissingExchangeRatesNotification(L_Customer."Currency Code");
+                end else begin
+                    L_CurrencyFactor := 1;
+                end;
+
+                //Return Unit Price Price++
+                exit(L_Item."Unit Price" / L_CurrencyFactor);
+            end;
 
         end;
     end;
 
 
-    procedure CustomerTrend_GetLineDiscount(_BilltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal; _OrderDate: Date): Decimal
+    procedure CustomerTrend_GetLineDiscount(_SelltoCustomerNumber: Code[100]; _ItemNumber: Code[20]; _Quantity: Decimal; _OrderDate: Date): Decimal
     var
         L_PriceListLine: Record "Price List Line";
         L_Customer: Record Customer;
         L_Item: Record Item;
+        L_CustomerNumber: Code[20];
     begin
+        Clear(L_CustomerNumber);
         L_Customer.Reset();
-        If L_Customer.Get(_BilltoCustomerNumber) then begin
+        L_Customer.SetRange("No.", _SelltoCustomerNumber);
+        if L_Customer.FindFirst() then begin
+            if L_Customer."Bill-to Customer No." <> '' then
+                L_CustomerNumber := L_Customer."Bill-to Customer No."
+            else
+                L_CustomerNumber := L_Customer."No.";
+        end;
+
+
+        L_Customer.Reset();
+        If L_Customer.Get(L_CustomerNumber) then begin
             //1st Price++
             L_PriceListLine.Reset();
             L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
@@ -584,6 +638,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -609,6 +664,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -633,6 +689,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -657,6 +714,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -681,6 +739,7 @@ codeunit 80125 EventSub
             //L_PriceListLine.SetRange("Variant Code", SalesLine."Variant Code");
             L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _OrderDate, 0D);
             L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _OrderDate, 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
             if L_PriceListLine.FindFirst() then begin
                 if L_PriceListLine."Minimum Quantity" <> 0 then begin
                     if L_PriceListLine."Minimum Quantity" < _Quantity then begin
@@ -694,6 +753,167 @@ codeunit 80125 EventSub
             //If Price List not found
             exit(0);
 
+        end;
+    end;
+
+
+    procedure GetOriginalUnitPrice(_CustomerTrend: Record CustomerTrends): Decimal
+    var
+        L_PriceListLine: Record "Price List Line";
+        L_Customer: Record Customer;
+        L_Item: Record Item;
+        L_CustomerNumber: Code[20];
+        L_CurrencyFactor: Decimal;
+        CurrencyDate: Date;
+        UpdateCurrencyExchangeRates: Codeunit "Update Currency Exchange Rates";
+        CurrExchRate: Record "Currency Exchange Rate";
+    begin
+        Clear(L_CustomerNumber);
+        Clear(L_CurrencyFactor);
+        Clear(CurrencyDate);
+
+
+        L_Customer.Reset();
+        L_Customer.SetRange("No.", _CustomerTrend."Customer No.");
+        if L_Customer.FindFirst() then begin
+            if L_Customer."Bill-to Customer No." <> '' then
+                L_CustomerNumber := L_Customer."Bill-to Customer No."
+            else
+                L_CustomerNumber := L_Customer."No.";
+        end;
+
+
+        L_Customer.Reset();
+        If L_Customer.Get(L_CustomerNumber) then begin
+            //1st Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _CustomerTrend."Item No.");
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group");
+            L_PriceListLine.SetRange("Unit of Measure Code", _CustomerTrend."Units of Measure");
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _CustomerTrend."Qty. to be added to SO" then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //2nd Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _CustomerTrend."Item No.");
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 2");
+            L_PriceListLine.SetRange("Unit of Measure Code", _CustomerTrend."Units of Measure");
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _CustomerTrend."Qty. to be added to SO" then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //3rd Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _CustomerTrend."Item No.");
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 3");
+            L_PriceListLine.SetRange("Unit of Measure Code", _CustomerTrend."Units of Measure");
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _CustomerTrend."Qty. to be added to SO" then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+
+            //4th Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _CustomerTrend."Item No.");
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 4");
+            L_PriceListLine.SetRange("Unit of Measure Code", _CustomerTrend."Units of Measure");
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _CustomerTrend."Qty. to be added to SO" then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+            //5th Price++
+            L_PriceListLine.Reset();
+            L_PriceListLine.SetFilter(Status, '%1', L_PriceListLine.Status::Active);
+            L_PriceListLine.SetRange("Price Type", L_PriceListLine."Price Type"::Sale);
+            L_PriceListLine.SetRange("Asset No.", _CustomerTrend."Item No.");
+            L_PriceListLine.SetRange("Source Type", L_PriceListLine."Source Type"::"Customer Price Group");
+            L_PriceListLine.SetRange("Source No.", L_Customer."Customer Price Group 5");
+            L_PriceListLine.SetRange("Unit of Measure Code", _CustomerTrend."Units of Measure");
+            L_PriceListLine.SetFilter("Ending Date", '>%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetFilter("Starting Date", '<%1|%2', _CustomerTrend."Order Date", 0D);
+            L_PriceListLine.SetRange("Currency Code", L_Customer."Currency Code");
+            if L_PriceListLine.FindFirst() then begin
+                if L_PriceListLine."Minimum Quantity" <> 0 then begin
+                    if L_PriceListLine."Minimum Quantity" <= _CustomerTrend."Qty. to be added to SO" then begin
+                        exit(L_PriceListLine."Unit Price");
+                    end;
+                end else begin
+                    exit(L_PriceListLine."Unit Price");
+                end;
+            end;
+
+            //If Price List not found
+            Clear(L_CurrencyFactor);
+            Clear(CurrencyDate);
+            IF L_Item.Get(_CustomerTrend."Item No.") then begin
+                if L_Customer."Currency Code" <> '' then begin
+                    if _CustomerTrend."Order Date" <> 0D then
+                        CurrencyDate := _CustomerTrend."Order Date"
+                    else
+                        CurrencyDate := WorkDate();
+
+                    if UpdateCurrencyExchangeRates.ExchangeRatesForCurrencyExist(CurrencyDate, L_Customer."Currency Code") then begin
+                        L_CurrencyFactor := CurrExchRate.ExchangeRate(CurrencyDate, L_Customer."Currency Code");
+                    end else
+                        UpdateCurrencyExchangeRates.ShowMissingExchangeRatesNotification(L_Customer."Currency Code");
+                end else begin
+                    L_CurrencyFactor := 1;
+                end;
+
+                //Return Unit Price Price++
+                exit(L_Item."Unit Price" / L_CurrencyFactor);
+            end;
         end;
     end;
 

@@ -62,7 +62,7 @@ table 80125 CustomerTrends
                 DisUnitPrice: Decimal;
                 L_PriceListLine: Record "Price List Line";
                 L_SalesPriceHeader: Record "Price List Header";
-                L_CustomerPriceGroupChanges: Codeunit "Customer Price Group Changes";
+                L_CustomerPriceGroupChanges: Codeunit EventSub;
             begin
                 //Min Sell price Validation application only for Normal Item.
                 //The below code only for Top Screen Items (We can Add Promotion Items on Top Screen)++
@@ -87,9 +87,9 @@ table 80125 CustomerTrends
                                             Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");
                                         end;
                                     end else begin
-                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") / 100) * 10;
-                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") - DisUnitPrice) > Rec."Unit Price" then
-                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Units of Measure", '', Rec."Order Date") - DisUnitPrice, Rec."Item No.");
+                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) / 100) * 10;
+                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) - DisUnitPrice) > Rec."Unit Price" then
+                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) - DisUnitPrice, Rec."Item No.");
                                     end;
                                 end;
                             end;
@@ -406,7 +406,7 @@ table 80125 CustomerTrends
         field(52; "Total Allocated on SO"; Decimal)
         {
             AccessByPermission = TableData "Sales Shipment Header" = R;
-            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("Item No."), "Unit of Measure Code" = FIELD("Units of Measure"), "Outstanding Qty. (Base)" = filter(> 0)));
+            CalcFormula = Sum("Sales Line"."Outstanding Quantity" WHERE("Document Type" = CONST(Order), Type = CONST(Item), "No." = FIELD("Item No."), "Unit of Measure Code" = FIELD("Units of Measure"), "Outstanding Qty. (Base)" = filter(> 0), "Shipment Date" = field("Date Filter")));
             Caption = 'Total Allocated on SO';
             DecimalPlaces = 0 : 5;
             Editable = false;

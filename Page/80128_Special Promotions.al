@@ -123,6 +123,6 @@ page 80128 "Special Promotions"
 
     trigger OnOpenPage()
     begin
-        Rec.SetFilter("Date Filter", '%1..%2', CalcDate('-1D', WorkDate()), CalcDate('1D', WorkDate()));
+        Rec.SetFilter("Date Filter", '>=%1', WorkDate());
     end;
 }
