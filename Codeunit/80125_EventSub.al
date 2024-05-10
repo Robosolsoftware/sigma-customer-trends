@@ -597,7 +597,10 @@ codeunit 80125 EventSub
                 end;
 
                 //Return Unit Price Price++
-                exit(L_Item."Unit Price" / L_CurrencyFactor);
+                if L_CurrencyFactor > 0 then
+                    exit(L_Item."Unit Price" / L_CurrencyFactor)
+                else
+                    exit(L_Item."Unit Price");
             end;
 
         end;
@@ -912,7 +915,10 @@ codeunit 80125 EventSub
                 end;
 
                 //Return Unit Price Price++
-                exit(L_Item."Unit Price" / L_CurrencyFactor);
+                if L_CurrencyFactor > 0 then
+                    exit(L_Item."Unit Price" / L_CurrencyFactor)
+                else
+                    exit(L_Item."Unit Price");
             end;
         end;
     end;
