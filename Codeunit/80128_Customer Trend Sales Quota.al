@@ -39,90 +39,168 @@ codeunit 80128 "Customer Trend Sales Quota"
         EndDate := CalcDate('-1D', EndDate);
         //EndDate--
 
+        //ExceptionPer Day all 12 validation+++++++
+        //-------------1: Selected Customer, Selected Item, ErrorCode(SCSIPDQ)-------------
+        if ExceptionPerDaySelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------2: Selected Customer, All Item, ErrorCode(SCAPDQ)-------------
+        if ExceptionPerDaySelCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------3: Selected Customer, Selected Item Category, ErrorCode(SCSICPDQ)-------
+        if ExceptionPerDaySelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------4: Selected Dimension, Selected Item, ErrorCode(SCAPOQ)-------------
+        if ExceptionPerDaySelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------5: Selected Dimension, All Item, ErrorCode(SCAPOQ)-------------
+        if ExceptionPerDaySelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPOQ)-------------
+        if ExceptionPerDaySelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------7: All Customer, Selected Item, ErrorCode(ASIPDQ)-------------
+        if ExceptionPerDayAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------8: All Customer, All Item, ErrorCode(AAPDQ)-------------
+        if ExceptionPerDayAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------9: All Customer, Selected Item Category, ErrorCode(ASICPDQ)-------------
+        if ExceptionPerDayAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPDQ)-------
+        if ExceptionPerDaySelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPDQ)-------------
+        if ExceptionPerDaySelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPOQ)-------------
+        if ExceptionPerDaySelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //ExceptionPer Day all 12 validation+++++++
+
+
+
 
         //Per Order all 12 Validation++
         //-------------1: Selected Customer, Selected Item, ErrorCode(SCSIPOQ)-------------
-        PerOrderSelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------2: Selected Customer, All Item, ErrorCode(SCAPOQ)-------------
-        PerOrderSelCustomerAllItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerAllItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------3: Selected Customer, Selected Item Category, ErrorCode(SCSICPOQ)-------------
-        PerOrderSelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------4: Selected Dimension, Selected Item, ErrorCode(SCAPOQ)-------------
-        PerOrderSelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------5: Selected Dimension, All Item, ErrorCode(SCAPOQ)-------------
-        PerOrderSelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPOQ)-------------
-        PerOrderSelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------7: All Customer, Selected Item, ErrorCode(ASIPOQ)-------------
-        PerOrderAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------8: All Customer, All Item, ErrorCode(AAPOQ)-------------
-        PerOrderAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //------------9: All Customer, Selected Item Category, ErrorCode(ASICPOQ)-------------
-        PerOrderAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPOQ)-------------
-        PerOrderSelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPOQ)-------------
-        PerOrderSelCustomerGroupAllItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerGroupAllItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPOQ)-------------
-        PerOrderSelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerOrderSelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //Per Order all 12 Validation--
+
 
         //Per Day all 12 validation+++++++
         //-------------1: Selected Customer, Selected Item, ErrorCode(SCSIPDQ)-------------
-        PerDaySelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------2: Selected Customer, All Item, ErrorCode(SCAPDQ)-------------
-        PerDaySelCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------3: Selected Customer, Selected Item Category, ErrorCode(SCSICPDQ)-------
-        PerDaySelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------4: Selected Dimension, Selected Item, ErrorCode(SCAPOQ)-------------
-        PerDaySelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------5: Selected Dimension, All Item, ErrorCode(SCAPOQ)-------------
-        PerDaySelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPOQ)-------------
-        PerDaySelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------7: All Customer, Selected Item, ErrorCode(ASIPDQ)-------------
-        PerDayAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDayAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------8: All Customer, All Item, ErrorCode(AAPDQ)-------------
-        PerDayAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDayAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------9: All Customer, Selected Item Category, ErrorCode(ASICPDQ)-------------
-        PerDayAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDayAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPDQ)-------
-        PerDaySelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPDQ)-------------
-        PerDaySelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code");
+        if PerDaySelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
         //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPOQ)-------------
-        PerDaySelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code");
-        //Per Day all 12 validation------
+        if PerDaySelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+            exit;
+        //Per Day all 12 validation----
 
 
         //Per Month all 12 validation++
-        PerMonthSelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------2: Selected Customer, All Item, ErrorCode(SCAPMQ)-------------
-        PerMonthSelCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------3: Selected Customer, Selected Item Category, ErrorCode(SCSICPMQ)-------
-        PerMonthSelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------4: Selected Dimension, Selected Item, ErrorCode(SCSIPMQ)-------------
-        PerMonthSelDimensionSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelDimensionSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------5: Selected Dimension, All Item, ErrorCode(SCAPMQ)-------------
-        PerMonthSelDimensionAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelDimensionAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPMQ)-------
-        PerMonthSelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------7: All Customer, Selected Item, ErrorCode(ASIPMQ)-------------
-        PerMonthAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------8: All Customer, All Item, ErrorCode(AAPMQ)-------------
-        PerMonthAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------9: All Customer, Selected Item Category, ErrorCode(ASICPMQ)-------------
-        PerMonthAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPMQ)-------
-        PerMonthSelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPMQ)-------------
-        PerMonthSelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPMQ)-------------
-        PerMonthSelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate);
+        if PerMonthSelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code", CurrentMonthStartDate, EndDate) then
+            exit;
         // //Per Month all 12 validation--
     end;
 
-    procedure PerMonthSelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -221,7 +299,9 @@ codeunit 80128 "Customer Trend Sales Quota"
                         IF L_RemainingQuantity < 0 THEN
                             L_RemainingQuantity := 0;
 
-                        CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
                     end;
                 end;
             until L_DefaultDimension.Next() = 0;
@@ -229,7 +309,7 @@ codeunit 80128 "Customer Trend Sales Quota"
     end;
 
 
-    procedure PerMonthSelDimensionAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelDimensionAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -327,7 +407,9 @@ codeunit 80128 "Customer Trend Sales Quota"
                         IF L_RemainingQuantity < 0 THEN
                             L_RemainingQuantity := 0;
 
-                        CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
                     end;
                 end;
             until L_DefaultDimension.Next() = 0;
@@ -335,7 +417,7 @@ codeunit 80128 "Customer Trend Sales Quota"
     end;
 
 
-    procedure PerMonthSelDimensionSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelDimensionSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -435,14 +517,16 @@ codeunit 80128 "Customer Trend Sales Quota"
                         IF L_RemainingQuantity < 0 THEN
                             L_RemainingQuantity := 0;
 
-                        CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
                     end;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-    procedure PerMonthSelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -506,12 +590,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthSelCustomerGroupAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerGroupAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -574,12 +658,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthSelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -642,14 +726,14 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
 
 
-    procedure PerMonthAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -711,12 +795,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -777,12 +861,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -844,12 +928,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthSelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -915,12 +999,12 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             End;
         end;
     end;
 
-    procedure PerMonthSelCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -985,13 +1069,13 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             end;
         End;
     end;
 
 
-    procedure PerMonthSelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date)
+    procedure PerMonthSelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]; Sdate: date; Edate: Date) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1057,13 +1141,81 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
             end;
 
         end;
     end;
 
-    procedure PerDaySelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"Customer Price Group");
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer Price Group");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
+        L_MaxOrderQty.SetRange("Item Code", ItemCat);
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_Category_Code, ItemCat);
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item Category Code", ItemCat);
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Item_Category_Code, ItemCat);
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1125,11 +1277,79 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
-    procedure PerDaySelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"Customer Price Group");
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer Price Group");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
+        L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1191,11 +1411,78 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
-    procedure PerDaySelCustomerGroupAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerGroupAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"Customer Price Group");
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer Price Group");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Customer_Price_Group, _CustomerTrends."Customer Price Group");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerGroupAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1256,12 +1543,121 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+        end;
+    end;
+
+    procedure ExceptionPerDaySelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+        L_DefaultDimension: Record "Default Dimension";
+
+        //New
+        L_SalesLine: Record "Sales Line";
+        L_CustomerTrendsPerdayQty: Record CustomerTrends;
+        DefaultDimension_2: Record "Default Dimension";
+        L_SaleasHeader: Record "Sales Header";
+        L_DimensionSetEntry: Record "Dimension Set Entry";
+        L_SalesShipmentLine: Record "Sales Shipment Line";
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_DefaultDimension.Reset();
+        L_DefaultDimension.SetRange("Table ID", 18);
+        L_DefaultDimension.SetRange("Parent Type", L_DefaultDimension."Parent Type"::Customer);
+        L_DefaultDimension.SetRange("No.", _CustomerTrends."Customer No.");
+        if L_DefaultDimension.FindSet() then begin
+            repeat
+                Clear(L_DayOrderQty);
+                Clear(L_RemainingQuantity);
+                Clear(L_OrderQty);
+                Clear(WarningtypeOpion);
+
+                L_MaxOrderQty.RESET;
+                L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Dimension);
+                L_MaxOrderQty.SetRange("Sales Code", L_DefaultDimension."Dimension Code");
+                L_MaxOrderQty.SetRange("Dimension Value", L_DefaultDimension."Dimension Value Code");
+                L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
+                L_MaxOrderQty.SetRange("Item Code", ItemCat);
+                L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+                L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+                    if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                        WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                        //PerDay Cust Trends Order Qty++++++
+                        L_CustomerTrendsPerdayQty.Reset();
+                        L_CustomerTrendsPerdayQty.SETFILTER("Salesperson Code", '<>%1', _CustomerTrends."Salesperson Code");
+                        L_CustomerTrendsPerdayQty.SetRange("Order Date", _CustomerTrends."Order Date");
+                        L_CustomerTrendsPerdayQty.SetRange("Item Category Code", ItemCat);
+                        if L_CustomerTrendsPerdayQty.FindSet() then begin
+                            repeat
+                                DefaultDimension_2.Reset();
+                                DefaultDimension_2.SetRange("Table ID", 18);
+                                DefaultDimension_2.SetRange("Parent Type", DefaultDimension_2."Parent Type"::Customer);
+                                DefaultDimension_2.SetRange("No.", L_CustomerTrendsPerdayQty."Customer No.");
+                                DefaultDimension_2.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                DefaultDimension_2.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if DefaultDimension_2.FindFirst() then begin
+                                    L_DayOrderQty += L_CustomerTrendsPerdayQty."Qty. to be added to SO";
+                                end;
+                            until L_CustomerTrendsPerdayQty.Next() = 0;
+                        end;
+
+
+                        //PerDay Current Cust Trends Order Qty++++++
+                        L_CustomerTrend.RESET;
+                        L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                        L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                        L_CustomerTrend.SETRANGE("Item Category Code", ItemCat);
+                        IF L_CustomerTrend.FINDSET THEN BEGIN
+                            L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                            L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                        end;
+
+                        //PerDay Shipped Qty+++++
+                        L_SalesShipmentLine.Reset();
+                        L_SalesShipmentLine.SetRange("Item Category Code", ItemCat);
+                        L_SalesShipmentLine.SetRange(Type, L_SalesShipmentLine.Type::Item);
+                        L_SalesShipmentLine.SetRange("Order Date", _CustomerTrends."Order Date");
+                        if L_SalesShipmentLine.FindSet() then begin
+                            repeat
+                                L_DimensionSetEntry.Reset();
+                                L_DimensionSetEntry.SetRange("Dimension Set ID", L_SalesShipmentLine."Dimension Set ID");
+                                L_DimensionSetEntry.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                L_DimensionSetEntry.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if L_DimensionSetEntry.FindFirst() then begin
+                                    L_DayOrderQty += L_SalesShipmentLine.Quantity;
+                                end;
+                            until L_SalesShipmentLine.Next() = 0;
+                        end;
+
+                        L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                        IF L_RemainingQuantity < 0 THEN
+                            L_RemainingQuantity := 0;
+
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
+                    end;
+                end;
+            until L_DefaultDimension.Next() = 0;
         end;
     end;
 
 
-    procedure PerDaySelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerDaySelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1360,13 +1756,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     IF L_RemainingQuantity < 0 THEN
                         L_RemainingQuantity := 0;
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-    procedure PerDaySelDimensionAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelDimensionAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1377,8 +1775,112 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
         WarningtypeOpion: Text;
         L_DefaultDimension: Record "Default Dimension";
+        //New
+        L_SalesLine: Record "Sales Line";
+        L_CustomerTrendsPerdayQty: Record CustomerTrends;
+        DefaultDimension_2: Record "Default Dimension";
+        L_SaleasHeader: Record "Sales Header";
+        L_DimensionSetEntry: Record "Dimension Set Entry";
+        L_SalesShipmentLine: Record "Sales Shipment Line";
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
 
+        L_DefaultDimension.Reset();
+        L_DefaultDimension.SetRange("Table ID", 18);
+        L_DefaultDimension.SetRange("Parent Type", L_DefaultDimension."Parent Type"::Customer);
+        L_DefaultDimension.SetRange("No.", _CustomerTrends."Customer No.");
+        if L_DefaultDimension.FindSet() then begin
+            repeat
+                Clear(L_DayOrderQty);
+                Clear(L_RemainingQuantity);
+                Clear(L_OrderQty);
+                Clear(WarningtypeOpion);
 
+                L_MaxOrderQty.RESET;
+                L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Dimension);
+                L_MaxOrderQty.SetRange("Sales Code", L_DefaultDimension."Dimension Code");
+                L_MaxOrderQty.SetRange("Dimension Value", L_DefaultDimension."Dimension Value Code");
+                L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
+                L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+                L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+                    if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                        WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                        //PerDay Cust Trends Order Qty++++++
+                        L_CustomerTrendsPerdayQty.Reset();
+                        L_CustomerTrendsPerdayQty.SETFILTER("Salesperson Code", '<>%1', _CustomerTrends."Salesperson Code");
+                        L_CustomerTrendsPerdayQty.SetRange("Order Date", _CustomerTrends."Order Date");
+                        L_CustomerTrendsPerdayQty.SetRange("Item No.", _CustomerTrends."Item No.");
+                        if L_CustomerTrendsPerdayQty.FindSet() then begin
+                            repeat
+                                DefaultDimension_2.Reset();
+                                DefaultDimension_2.SetRange("Table ID", 18);
+                                DefaultDimension_2.SetRange("Parent Type", DefaultDimension_2."Parent Type"::Customer);
+                                DefaultDimension_2.SetRange("No.", L_CustomerTrendsPerdayQty."Customer No.");
+                                DefaultDimension_2.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                DefaultDimension_2.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if DefaultDimension_2.FindFirst() then begin
+                                    L_DayOrderQty += L_CustomerTrendsPerdayQty."Qty. to be added to SO";
+                                end;
+                            until L_CustomerTrendsPerdayQty.Next() = 0;
+                        end;
+
+                        //PerDay Current Cust Trends Order Qty++++++
+                        L_CustomerTrend.RESET;
+                        L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                        L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                        L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                        IF L_CustomerTrend.FINDSET THEN BEGIN
+                            L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                            L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                        end;
+
+                        //PerDay Shipped Qty++++++
+                        L_SalesShipmentLine.Reset();
+                        L_SalesShipmentLine.SetRange("No.", _CustomerTrends."Item No.");
+                        L_SalesShipmentLine.SetRange(Type, L_SalesShipmentLine.Type::Item);
+                        L_SalesShipmentLine.SetRange("Order Date", _CustomerTrends."Order Date");
+                        if L_SalesShipmentLine.FindSet() then begin
+                            repeat
+                                L_DimensionSetEntry.Reset();
+                                L_DimensionSetEntry.SetRange("Dimension Set ID", L_SalesShipmentLine."Dimension Set ID");
+                                L_DimensionSetEntry.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                L_DimensionSetEntry.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if L_DimensionSetEntry.FindFirst() then begin
+                                    L_DayOrderQty += L_SalesShipmentLine.Quantity;
+                                end;
+                            until L_SalesShipmentLine.Next() = 0;
+                        end;
+
+                        L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                        IF L_RemainingQuantity < 0 THEN
+                            L_RemainingQuantity := 0;
+
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
+                    end;
+                end;
+            until L_DefaultDimension.Next() = 0;
+        end;
+    end;
+
+    procedure PerDaySelDimensionAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+        L_DefaultDimension: Record "Default Dimension";
         //New
         L_SalesLine: Record "Sales Line";
         L_CustomerTrendsPerdayQty: Record CustomerTrends;
@@ -1464,15 +1966,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     IF L_RemainingQuantity < 0 THEN
                         L_RemainingQuantity := 0;
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-
-
-    procedure PerDaySelDimensionSelItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelDimensionSelItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1496,6 +1998,118 @@ codeunit 80128 "Customer Trend Sales Quota"
         Clear(L_RemainingQuantity);
         Clear(L_OrderQty);
         Clear(WarningtypeOpion);
+
+        L_DefaultDimension.Reset();
+        L_DefaultDimension.SetRange("Table ID", 18);
+        L_DefaultDimension.SetRange("Parent Type", L_DefaultDimension."Parent Type"::Customer);
+        L_DefaultDimension.SetRange("No.", _CustomerTrends."Customer No.");
+        if L_DefaultDimension.FindSet() then begin
+            repeat
+                Clear(L_DayOrderQty);
+                Clear(L_RemainingQuantity);
+                Clear(L_OrderQty);
+                Clear(WarningtypeOpion);
+
+                L_MaxOrderQty.RESET;
+                L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Dimension);
+                L_MaxOrderQty.SetRange("Sales Code", L_DefaultDimension."Dimension Code");
+                L_MaxOrderQty.SetRange("Dimension Value", L_DefaultDimension."Dimension Value Code");
+                L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
+                L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
+                L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+                L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+                    if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                        WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                        //PerDay Cust Trends Order Qty++++++
+                        L_CustomerTrendsPerdayQty.Reset();
+                        L_CustomerTrendsPerdayQty.SETFILTER("Salesperson Code", '<>%1', _CustomerTrends."Salesperson Code");
+                        L_CustomerTrendsPerdayQty.SetRange("Order Date", _CustomerTrends."Order Date");
+                        L_CustomerTrendsPerdayQty.SetRange("Item No.", _CustomerTrends."Item No.");
+                        if L_CustomerTrendsPerdayQty.FindSet() then begin
+                            repeat
+                                DefaultDimension_2.Reset();
+                                DefaultDimension_2.SetRange("Table ID", 18);
+                                DefaultDimension_2.SetRange("Parent Type", DefaultDimension_2."Parent Type"::Customer);
+                                DefaultDimension_2.SetRange("No.", L_CustomerTrendsPerdayQty."Customer No.");
+                                DefaultDimension_2.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                DefaultDimension_2.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if DefaultDimension_2.FindFirst() then begin
+                                    L_DayOrderQty += L_CustomerTrendsPerdayQty."Qty. to be added to SO";
+                                end;
+                            until L_CustomerTrendsPerdayQty.Next() = 0;
+                        end;
+
+
+                        //PerDay Current Cust Trends Order Qty++++++
+                        L_CustomerTrend.RESET;
+                        L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                        L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                        L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                        IF L_CustomerTrend.FINDSET THEN BEGIN
+                            L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                            L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                        end;
+
+
+                        //PerDay Shipped Qty++++++
+                        L_SalesShipmentLine.Reset();
+                        L_SalesShipmentLine.SetRange("No.", _CustomerTrends."Item No.");
+                        L_SalesShipmentLine.SetRange(Type, L_SalesShipmentLine.Type::Item);
+                        L_SalesShipmentLine.SetRange("Order Date", _CustomerTrends."Order Date");
+                        if L_SalesShipmentLine.FindSet() then begin
+                            repeat
+                                L_DimensionSetEntry.Reset();
+                                L_DimensionSetEntry.SetRange("Dimension Set ID", L_SalesShipmentLine."Dimension Set ID");
+                                L_DimensionSetEntry.SetRange("Dimension Code", L_DefaultDimension."Dimension Code");
+                                L_DimensionSetEntry.SetRange("Dimension Value Code", L_DefaultDimension."Dimension Value Code");
+                                if L_DimensionSetEntry.FindFirst() then begin
+                                    L_DayOrderQty += L_SalesShipmentLine.Quantity;
+                                end;
+                            until L_SalesShipmentLine.Next() = 0;
+                        end;
+
+                        L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                        IF L_RemainingQuantity < 0 THEN
+                            L_RemainingQuantity := 0;
+
+                        Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                        if Exceeded = true then
+                            exit;
+                    end;
+                end;
+            until L_DefaultDimension.Next() = 0;
+        end;
+    end;
+
+
+    procedure PerDaySelDimensionSelItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+        L_DefaultDimension: Record "Default Dimension";
+
+        //New
+        L_SalesLine: Record "Sales Line";
+        L_CustomerTrendsPerdayQty: Record CustomerTrends;
+        DefaultDimension_2: Record "Default Dimension";
+        L_SaleasHeader: Record "Sales Header";
+        L_DimensionSetEntry: Record "Dimension Set Entry";
+        L_SalesShipmentLine: Record "Sales Shipment Line";
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
         L_DefaultDimension.Reset();
         L_DefaultDimension.SetRange("Table ID", 18);
         L_DefaultDimension.SetRange("Parent Type", L_DefaultDimension."Parent Type"::Customer);
@@ -1571,15 +2185,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     IF L_RemainingQuantity < 0 THEN
                         L_RemainingQuantity := 0;
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-
-
-    procedure PerDaySelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1594,6 +2208,78 @@ codeunit 80128 "Customer Trend Sales Quota"
         Clear(L_RemainingQuantity);
         Clear(L_OrderQty);
         Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Customer);
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
+        L_MaxOrderQty.SetRange("Item Code", ItemCat);
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_Category_Code, ItemCat);
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item Category Code", ItemCat);
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Item_Category_Code, ItemCat);
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
         L_MaxOrderQty.RESET;
         L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Customer);
         L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
@@ -1605,6 +2291,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
@@ -1642,11 +2329,84 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
-    procedure PerDaySelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Customer);
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
+        L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1673,6 +2433,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
@@ -1712,12 +2473,11 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
-
-    procedure PerDaySelCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDaySelCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1732,6 +2492,77 @@ codeunit 80128 "Customer Trend Sales Quota"
         Clear(L_RemainingQuantity);
         Clear(L_OrderQty);
         Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Customer);
+        L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Ship_to_Code, _CustomerTrends."Ship-to Code");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDaySelCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
         L_MaxOrderQty.RESET;
         L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::Customer);
         L_MaxOrderQty.SetRange("Sales Code", _CustomerTrends."Customer No.");
@@ -1742,6 +2573,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
             //PerDay Cust Trends Order Qty++++++
             L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
             L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
@@ -1779,13 +2611,79 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
-
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
 
-    procedure PerDayAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDayAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"All Customer");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"Item Category");
+        L_MaxOrderQty.SetRange("Item Code", ItemCat);
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_Category_Code, ItemCat);
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item Category Code", ItemCat);
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(L_DayWiseShippedQty.Item_Category_Code, ItemCat);
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDayAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1846,11 +2744,78 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
-    procedure PerDayAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure ExceptionPerDayAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
+
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"All Customer");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::Item);
+        L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            End;
+        end;
+    end;
+
+    procedure PerDayAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1911,13 +2876,77 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
-
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         End;
     end;
 
+    procedure ExceptionPerDayAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
+    var
+        L_MaxOrderQty: Record "Sales Quota";
+        L_DayOrderQty: Decimal;
+        L_RemainingQuantity: Decimal;
+        L_OrderQty: Decimal;
+        L_CustomerTrend: Record CustomerTrends;
+        L_DayWiseShippedQty: Query "DayShippe Qty";
+        L_DaywiseCustTrendsquantity: Query "Daywise Cust Trends quantity";
+        WarningtypeOpion: Text;
+    begin
+        Clear(L_DayOrderQty);
+        Clear(L_RemainingQuantity);
+        Clear(L_OrderQty);
+        Clear(WarningtypeOpion);
 
-    procedure PerDayAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+        L_MaxOrderQty.RESET;
+        L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"All Customer");
+        L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
+        L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
+        L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
+        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        IF L_MaxOrderQty.FINDFIRST THEN BEGIN
+            if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
+                WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
+
+                //PerDay Cust Trends Order Qty++++++
+                L_DaywiseCustTrendsquantity.SETFILTER(L_DaywiseCustTrendsquantity.Salesperson_Code, '<>%1', _CustomerTrends."Salesperson Code");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Customer_No_, _CustomerTrends."Customer No.");
+                L_DaywiseCustTrendsquantity.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DaywiseCustTrendsquantity.SETRANGE(L_DaywiseCustTrendsquantity.Item_No_, _CustomerTrends."Item No.");
+                L_DaywiseCustTrendsquantity.OPEN;
+                WHILE L_DaywiseCustTrendsquantity.READ DO BEGIN
+                    L_DayOrderQty += L_DaywiseCustTrendsquantity.Sum_Quantity;
+                END;
+                L_DaywiseCustTrendsquantity.CLOSE;
+
+                //PerDay Current Cust Trends Order Qty++++++
+                L_CustomerTrend.RESET;
+                L_CustomerTrend.SETRANGE("Salesperson Code", _CustomerTrends."Salesperson Code");
+                L_CustomerTrend.SETRANGE("Customer No.", _CustomerTrends."Customer No.");
+                L_CustomerTrend.SETRANGE("Item No.", _CustomerTrends."Item No.");
+                IF L_CustomerTrend.FINDSET THEN BEGIN
+                    L_CustomerTrend.CalcSums("Qty. to be added to SO");
+                    L_OrderQty := L_CustomerTrend."Qty. to be added to SO";
+                end;
+
+                //PerDay Shipped Qty++
+                L_DayWiseShippedQty.SETRANGE(Sell_to_Customer_No, _CustomerTrends."Customer No.");
+                L_DayWiseShippedQty.SETRANGE(Order_Date, _CustomerTrends."Order Date");
+                L_DayWiseShippedQty.SETRANGE(No, _CustomerTrends."Item No.");
+                L_DayWiseShippedQty.OPEN;
+                WHILE L_DayWiseShippedQty.READ DO BEGIN
+                    L_DayOrderQty += L_DayWiseShippedQty.Sum_Quantity;
+                END;
+                L_DayWiseShippedQty.CLOSE;
+
+                L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity" - L_DayOrderQty;
+                IF L_RemainingQuantity < 0 THEN
+                    L_RemainingQuantity := 0;
+
+                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            end;
+        end;
+    end;
+
+    procedure PerDayAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1977,12 +3006,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             IF L_RemainingQuantity < 0 THEN
                 L_RemainingQuantity := 0;
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
         end;
     end;
 
 
-    procedure PerOrderSelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerGroupSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -1998,6 +3027,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         Clear(L_RemainingQuantity);
         Clear(L_OrderQty);
         Clear(WarningtypeOpion);
+
         L_MaxOrderQty.RESET;
         L_MaxOrderQty.SETRANGE("Sales Type", L_MaxOrderQty."Sales Type"::"Customer Price Group");
         L_Customer.Reset();
@@ -2026,12 +3056,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderSelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerGroupSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2073,11 +3103,11 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
-    procedure PerOrderSelCustomerGroupAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerGroupAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2117,12 +3147,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderSelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2164,12 +3194,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderSelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2209,12 +3239,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure CheckingRemainingQty(RemQty: Decimal; Errcode: code[20]; WarningtypeOpion: Text; _TotalMaxQuantity: Decimal; _QuantityRestriction: Option "Per Day","Per Order","Per Month"; _OrderQuanitity: Decimal)
+    procedure CheckingRemainingQty(RemQty: Decimal; Errcode: code[20]; WarningtypeOpion: Text; _TotalMaxQuantity: Decimal; _QuantityRestriction: Option "Per Day","Per Order","Per Month","Exception Per Day"; _OrderQuanitity: Decimal) Exceeded: Boolean
     var
     begin
         if _QuantityRestriction = _QuantityRestriction::"Per Order" then begin
@@ -2223,6 +3253,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                     ERROR('Maximum quantity %1  %2 allowed has been exceeded.You can use only %3 Qty.', _TotalMaxQuantity, _QuantityRestriction, _TotalMaxQuantity)
                 else begin
                     Message('Maximum quantity %1  %2 allowed has been exceeded.You can use only %3 Qty.', _TotalMaxQuantity, _QuantityRestriction, _TotalMaxQuantity);
+                    Exceeded := true;
                 end;
             end;
         end else begin
@@ -2231,20 +3262,14 @@ codeunit 80128 "Customer Trend Sales Quota"
                     ERROR('Maximum quantity %1  %2 allowed has been exceeded.Remaining quantity is %3.', _TotalMaxQuantity, _QuantityRestriction, RemQty)
                 else begin
                     Message('Maximum quantity %1  %2 allowed has been exceeded.Remaining quantity is %3.', _TotalMaxQuantity, _QuantityRestriction, RemQty);
+                    Exceeded := true;
                 end;
             end;
         end;
-
-
-        // IF RemQty < 0 THEN
-        //     if WarningtypeOpion = 'error' then
-        //         ERROR('Maximum quantity %1  %2 allowed has been exceeded.', _TotalMaxQuantity, _QuantityRestriction)
-        //     else
-        //         Message('Maximum quantity %1 %2 allowed has been exceeded.', _TotalMaxQuantity, _QuantityRestriction);
     end;
 
 
-    procedure PerOrderSelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelDimensionSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2298,13 +3323,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     else
                         L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-    procedure PerOrderSelDimensionAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelDimensionAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2356,13 +3383,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     else
                         L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-    procedure PerOrderSelDimensionSelItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelDimensionSelItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2415,14 +3444,15 @@ codeunit 80128 "Customer Trend Sales Quota"
                     else
                         L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-                    CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
-
+                    Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+                    if Exceeded = true then
+                        exit;
                 end;
             until L_DefaultDimension.Next() = 0;
         end;
     end;
 
-    procedure PerOrderSelCustomerAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderSelCustomerAllItem(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2461,12 +3491,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderAllCustomerSelItemCatQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2506,12 +3536,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderAllCustomerAllItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2549,12 +3579,12 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
         end;
     end;
 
 
-    procedure PerOrderAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20])
+    procedure PerOrderAllCustomerSelItemQty(_CustomerTrends: Record CustomerTrends; ItemCat: code[20]) Exceeded: Boolean
     var
         L_MaxOrderQty: Record "Sales Quota";
         L_DayOrderQty: Decimal;
@@ -2593,15 +3623,9 @@ codeunit 80128 "Customer Trend Sales Quota"
             else
                 L_RemainingQuantity := L_MaxOrderQty."Maximum Quantity";
 
-            CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
-
+            Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", (L_DayOrderQty + L_OrderQty));
+            if Exceeded = true then
+                exit;
         end;
     end;
-
-    // procedure CheckingRemainingQty(RemQty: Decimal; Errcode: code[20])
-    // var
-    // begin
-    //     IF (RemQty < 0) THEN
-    //         ERROR('Maximum quantity allowed has been exceeded. Error Code:' + Errcode);
-    // end;
 }

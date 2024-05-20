@@ -446,7 +446,7 @@ table 80125 CustomerTrends
             FieldClass = FlowField;
             CalcFormula = exist("Item Variant" where("Item No." = field("Item No.")));
         }
-        field(70158; "Date Filter"; Date)
+        field(60; "Date Filter"; Date)
         {
             FieldClass = FlowFilter;
         }

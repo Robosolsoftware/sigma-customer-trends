@@ -632,12 +632,6 @@ page 80126 "Customer Trends"
             {
                 ApplicationArea = Notes;
             }
-            part("Lot-Number-by-Item"; "Lot-Number-by-Item")
-            {
-                SubPageLink = "Item No." = field("Item No.");
-                ApplicationArea = all;
-                //Provider = PurchLines;
-            }
             part(Control1902018507; "Customer Statistics FactBox")
             {
                 ApplicationArea = Basic, Suite;
