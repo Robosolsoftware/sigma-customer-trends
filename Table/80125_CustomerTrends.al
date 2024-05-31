@@ -369,6 +369,7 @@ table 80125 CustomerTrends
         {
             Caption = 'Weekend Shipping Agent Service Code';
             TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            ValidateTableRelation = false;
         }
         // field(44; "Total Back Orders"; Decimal)
         // {
