@@ -57,7 +57,9 @@ page 80126 "Customer Trends"
                         CH_ILE: Record "Item Ledger Entry";
                         CTFunctions: Codeunit "CT Functions";
                         L_Location: Record Location;
+                        L_Date: Record Date;
                     begin
+                        L_Customer.Reset();
                         L_Customer.SetRange("No.", CustomerAccountNoFilter);
                         if L_Customer.FindFirst() then begin
                             //Check Master Approval++
@@ -122,6 +124,31 @@ page 80126 "Customer Trends"
                             //         CTFunctions.FromCustomerNumberFilter_InsertAndModifyTrends(CH_ILE, SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter);
                             //     until CH_ILE.Next() = 0;
                             // end;
+
+                            //Update Shipment Date, Order Date, and Min Order Value++
+                            L_Customer.Reset();
+                            L_Customer.SetRange("No.", CustomerAccountNoFilter);
+                            if L_Customer.FindFirst() then begin
+                                MinOrderValue := L_Customer."Min Order Value";
+
+                                //Update Shipmet date++
+                                L_Date.Reset();
+                                L_Date.SetRange(L_Date."Period Type", L_Date."Period Type"::Date);
+                                L_Date.SetRange(L_Date."Period Start", Today);
+                                if L_Date.FindFirst() then
+                                    if UpperCase(L_Date."Period Name") = UpperCase('FRIDAY') then begin
+                                        if L_Customer."Weekend Ship. Agnt. Serv. Code" <> '' then
+                                            //Update Saturday++
+                                            DeliveryDate := CalcDate('<+1D>', Today)
+                                        else
+                                            //Update Monday
+                                            DeliveryDate := CalcDate('<+3D>', Today);
+                                    end else
+                                        DeliveryDate := CalcDate('<+1D>', Today);
+                            end;
+
+                            //Update Order Date++
+                            OrderDateFilter := WorkDate();
                         end;
                         //Apply Filter++
                         FilterOnAfterValidate;
