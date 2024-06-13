@@ -368,7 +368,7 @@ table 80125 CustomerTrends
         field(43; "Weekend Ship. Agnt. Serv. Code"; Code[10])
         {
             Caption = 'Weekend Shipping Agent Service Code';
-            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Shipping Agent Code"));
+            TableRelation = "Shipping Agent Services".Code where("Shipping Agent Code" = field("Weekend Shipping Agent Code"));
             ValidateTableRelation = false;
         }
         // field(44; "Total Back Orders"; Decimal)
@@ -451,7 +451,26 @@ table 80125 CustomerTrends
         {
             FieldClass = FlowFilter;
         }
+        field(61; "Weekend Shipping Agent Code"; Text[30])
+        {
+            Caption = 'Weekend Shipping Agent Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Shipping Agent";
+            Editable = false;
 
+            trigger OnValidate()
+            var
+                ShippingAgent: Record "Shipping Agent";
+            begin
+                if Rec."Weekend Shipping Agent Code" <> '' then begin
+                    ShippingAgent.Reset();
+                    ShippingAgent.SetRange(code, Rec."Weekend Shipping Agent Code");
+                    ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                    if Not ShippingAgent.FindFirst() then
+                        Error('Status must be equal to Released in Shipping Agent');
+                end;
+            end;
+        }
     }
 
     keys

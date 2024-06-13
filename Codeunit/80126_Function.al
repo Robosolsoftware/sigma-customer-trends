@@ -11,7 +11,7 @@ codeunit 80126 "CT Functions"
         G_SNo: Code[20];
         InsertedSalesHeader: Record "Sales Header";
 
-    procedure CreateCustomertrends(CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WorkDescription: Text[2048])
+    procedure CreateCustomertrends(CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WorkDescription: Text[2048]; _WeekendShippingAgentCode: Code[20])
     var
         L_PriceListLine: Record "Price List Line";
         L_SalesPriceHeader: Record "Price List Header";
@@ -29,7 +29,7 @@ codeunit 80126 "CT Functions"
             L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
             if L_PriceListLine.FindSet() then begin
                 repeat
-                    InsertAndModifyTrendsForPromostion(L_PriceListLine, CustNumber, SalesPersonCode, _DeliveryDate, _ShippingAgentCode, _ShippingAgentServiceCode, _WeekendShippingAgentServiceCode, _WorkDescription);
+                    InsertAndModifyTrendsForPromostion(L_PriceListLine, CustNumber, SalesPersonCode, _DeliveryDate, _ShippingAgentCode, _ShippingAgentServiceCode, _WeekendShippingAgentServiceCode, _WorkDescription, _WeekendShippingAgentCode);
                 until L_PriceListLine.Next() = 0;
             end;
         end;
@@ -63,7 +63,7 @@ codeunit 80126 "CT Functions"
 
 
 
-    procedure GetCustomertrendDetails(L_Months: Option " ","1W","2W","1M","3M","6M"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShiipingAgentServiceCode: Code[20]; _WeekendShiipingAgentServiceCode: Code[20]; _WorkDescription: Text[2048])
+    procedure GetCustomertrendDetails(L_Months: Option " ","1W","2W","1M","3M","6M"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShiipingAgentServiceCode: Code[20]; _WeekendShiipingAgentServiceCode: Code[20]; _WorkDescription: Text[2048]; _WeekendShiipingAgentCode: Code[20])
     var
         CH_ILE: Record "Item Ledger Entry";
         Routine: Report Populate_CustomerTrends;
@@ -84,7 +84,7 @@ codeunit 80126 "CT Functions"
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription);
+                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
             end;
@@ -104,7 +104,7 @@ codeunit 80126 "CT Functions"
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription);
+                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
             end;
@@ -125,7 +125,7 @@ codeunit 80126 "CT Functions"
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription);
+                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
             end;
@@ -148,7 +148,7 @@ codeunit 80126 "CT Functions"
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription);
+                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
             end;
@@ -170,14 +170,14 @@ codeunit 80126 "CT Functions"
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription);
+                            InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
             end;
         end;
     end;
 
-    procedure FromCustomerNumberFilter_InsertAndModifyTrends(CH_ILE: Record "Item Ledger Entry"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20])
+    procedure FromCustomerNumberFilter_InsertAndModifyTrends(CH_ILE: Record "Item Ledger Entry"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WeekendShippingAgentCode: Code[20]; _WorkDescription: Text[2048]);
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;
@@ -222,7 +222,9 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends.RRP := CH_Items.RRP;
                         CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
                         CH_CustTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                        CH_CustTrends.Validate("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
                         CH_CustTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
+                        CH_CustTrends.Validate("Work Description", _WorkDescription);
                         CH_CustTrends."Updated By" := UserId;
                         CH_CustTrends."Updated On" := CurrentDateTime;
                         CH_CustTrends."Created By" := UserId;
@@ -319,7 +321,7 @@ codeunit 80126 "CT Functions"
 
     end;
 
-    procedure InsertAndModifyTrends(CH_ILE: Record "Item Ledger Entry"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WorkDescription: Text[2048]);
+    procedure InsertAndModifyTrends(CH_ILE: Record "Item Ledger Entry"; _SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WorkDescription: Text[2048]; _WeekendShippingAgentCode: Code[20]);
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;
@@ -371,6 +373,7 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends.Validate("Delivery Date", _DeliveryDate);
                         CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
                         CH_CustTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                        CH_CustTrends.Validate("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
                         CH_CustTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
                         CH_CustTrends."Updated By" := UserId;
                         CH_CustTrends."Updated On" := CurrentDateTime;
@@ -451,7 +454,7 @@ codeunit 80126 "CT Functions"
         end;
     end;
 
-    procedure GetCustomertrendDetailsForPromostion(_SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: date; _ShippingAgentCode: Code[20]; _ShiipingAgentServiceCode: Code[20]; _WeekendShiipingAgentServiceCode: Code[20]; _WorkDescription: Text[2048])
+    procedure GetCustomertrendDetailsForPromostion(_SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: date; _ShippingAgentCode: Code[20]; _ShiipingAgentServiceCode: Code[20]; _WeekendShiipingAgentServiceCode: Code[20]; _WorkDescription: Text[2048]; _WeekendShiipingAgentCode: Code[20])
     var
         L_PriceListLine: Record "Price List Line";
         L_SalesPriceHeader: Record "Price List Header";
@@ -470,7 +473,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", L_PriceListLine."Product No.");
                     if L_Item.FindFirst() then begin
                         if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
-                            InsertAndModifyTrendsForPromostion(L_PriceListLine, _CustomerAccount, _SalesPersonCode, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription)
+                            InsertAndModifyTrendsForPromostion(L_PriceListLine, _CustomerAccount, _SalesPersonCode, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode)
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -478,7 +481,7 @@ codeunit 80126 "CT Functions"
     end;
 
 
-    procedure FromCustomerNumberFIlte_InsertAndModifyTrendsForPromostion(_PriceListLine: Record "Price List Line"; CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20])
+    procedure FromCustomerNumberFIlte_InsertAndModifyTrendsForPromostion(_PriceListLine: Record "Price List Line"; CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _WeekendShippingAgentCode: Code[20]; _WorkDescription: Text[2048])
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;
@@ -524,7 +527,9 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Minimum Quantity", _PriceListLine."Minimum Quantity");
                     CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
                     CH_CustTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                    CH_CustTrends.Validate("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
                     CH_CustTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
+                    CH_CustTrends."Work Description" := _WorkDescription;
                     CH_CustTrends."Updated By" := UserId;
                     CH_CustTrends."Updated On" := CurrentDateTime;
                     CH_CustTrends."Created By" := UserId;
@@ -600,7 +605,7 @@ codeunit 80126 "CT Functions"
         end;
     end;
 
-    procedure InsertAndModifyTrendsForPromostion(_PriceListLine: Record "Price List Line"; CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _workDescription: Text[2048])
+    procedure InsertAndModifyTrendsForPromostion(_PriceListLine: Record "Price List Line"; CustNumber: Code[100]; SalesPersonCode: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _workDescription: Text[2048]; _WeekendShippingAgentCode: Code[20])
     var
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;
@@ -646,6 +651,7 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Delivery Date", _DeliveryDate);
                     CH_CustTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
                     CH_CustTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                    CH_CustTrends.Validate("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
                     CH_CustTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
                     CH_CustTrends."Updated By" := UserId;
                     CH_CustTrends."Updated On" := CurrentDateTime;

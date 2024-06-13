@@ -32,6 +32,7 @@ page 80126 "Customer Trends"
                         Clear(ShippingAgentCodeFilter);
                         Clear(ShippingAgentServiceCodeFilter);
                         Clear(WeekendShippingAgentServiceCodeFilter);
+                        Clear(WeekendShippingAgentCodeFilter);
                         Clear(DeliveryDate);
                         Clear(LocationCodeFilter);
                         Clear(OrderDateFilter);
@@ -72,7 +73,9 @@ page 80126 "Customer Trends"
                             //If Customer trends exist then shipping details updating FilterOnAfterValidate
                             ShippingAgentCodeFilter := L_Customer."Shipping Agent Code";
                             ShippingAgentServiceCodeFilter := L_Customer."Shipping Agent Service Code";
+                            WeekendShippingAgentCodeFilter := L_Customer."Weekend Shipping Agent Code";
                             WeekendShippingAgentServiceCodeFilter := L_Customer."Weekend Ship. Agnt. Serv. Code";
+
 
                             //Get Default Location++
                             L_Location.Reset();
@@ -86,6 +89,7 @@ page 80126 "Customer Trends"
                             Clear(CustomerAccountName);
                             Clear(ShippingAgentCodeFilter);
                             Clear(ShippingAgentServiceCodeFilter);
+                            Clear(WeekendShippingAgentCodeFilter);
                             Clear(WeekendShippingAgentServiceCodeFilter);
                             Clear(DeliveryDate);
                             Clear(LocationCodeFilter);
@@ -108,7 +112,7 @@ page 80126 "Customer Trends"
                                 L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
                                 if L_PriceListLine.FindSet() then begin
                                     repeat
-                                        CTFunctions.FromCustomerNumberFIlte_InsertAndModifyTrendsForPromostion(L_PriceListLine, CustomerAccountNoFilter, SalesPersonCodeFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter);
+                                        CTFunctions.FromCustomerNumberFIlte_InsertAndModifyTrendsForPromostion(L_PriceListLine, CustomerAccountNoFilter, SalesPersonCodeFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter, WeekendShippingAgentCodeFilter, WorkDescription);
                                     until L_PriceListLine.Next() = 0;
                                 end;
                             end;
@@ -121,7 +125,7 @@ page 80126 "Customer Trends"
                             // CH_ILE.SetRange("Source No.", CustomerAccountNoFilter);
                             // if CH_ILE.FindSet() then begin
                             //     repeat
-                            //         CTFunctions.FromCustomerNumberFilter_InsertAndModifyTrends(CH_ILE, SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter);
+                            //         CTFunctions.FromCustomerNumberFilter_InsertAndModifyTrends(CH_ILE, SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter, WeekendShippingAgentCodeFilter, WorkDescription);
                             //     until CH_ILE.Next() = 0;
                             // end;
 
@@ -217,7 +221,7 @@ page 80126 "Customer Trends"
 
                         //Update Lines+++
                         ShippingAgentServiceCodeFilter := '';
-                        WeekendShippingAgentServiceCodeFilter := '';
+
 
                         L_Customertrends.Reset();
                         L_Customertrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
@@ -225,7 +229,6 @@ page 80126 "Customer Trends"
                         if L_Customertrends.FindSet() then begin
                             L_Customertrends.ModifyAll("Shipping Agent Code", ShippingAgentCodeFilter);
                             L_Customertrends.ModifyAll("Shipping Agent Service Code", ShippingAgentServiceCodeFilter);
-                            L_Customertrends.ModifyAll("Weekend Ship. Agnt. Serv. Code", WeekendShippingAgentServiceCodeFilter);
                         end;
                     end;
                 }
@@ -299,6 +302,47 @@ page 80126 "Customer Trends"
                         end;
                     end;
                 }
+
+                field(WeekendShippingAgentCodeFilter; WeekendShippingAgentCodeFilter)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Weekend Shipping Agent Code';
+                    TableRelation = "Shipping Agent";
+                    trigger OnValidate()
+                    var
+                        L_Customertrends: Record CustomerTrends;
+                        ShippingAgent: Record "Shipping Agent";
+                    begin
+                        //Check Master Approval++
+                        if WeekendShippingAgentCodeFilter <> '' then begin
+                            if CustomerAccountNoFilter = '' then
+                                Error('Sell-to Customer No. should not be blank.');
+
+                            if SalesPersonCodeFilter = '' then
+                                Error('SalesPerson/Purchaser Code should not be blank.');
+
+
+                            ShippingAgent.Reset();
+                            ShippingAgent.SetRange(code, WeekendShippingAgentCodeFilter);
+                            ShippingAgent.SetRange(Status, ShippingAgent.Status::Released);
+                            if Not ShippingAgent.FindFirst() then
+                                Error('Status must be equal to Released in Shipping Agent.');
+                        end;
+
+
+                        //Update Lines+++
+                        WeekendShippingAgentServiceCodeFilter := '';
+
+
+                        L_Customertrends.Reset();
+                        L_Customertrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
+                        L_Customertrends.SetRange("Customer No.", CustomerAccountNoFilter);
+                        if L_Customertrends.FindSet() then begin
+                            L_Customertrends.ModifyAll("Weekend Shipping Agent Code", WeekendShippingAgentCodeFilter);
+                            L_Customertrends.ModifyAll("Weekend Ship. Agnt. Serv. Code", WeekendShippingAgentServiceCodeFilter);
+                        end;
+                    end;
+                }
                 field(WeekendShippingAgentServiceCodeFilter; WeekendShippingAgentServiceCodeFilter)
                 {
                     ApplicationArea = All;
@@ -313,7 +357,7 @@ page 80126 "Customer Trends"
                         Clear(Page_ShippingAgentServices);
                         Table_ShippingAgentServices.Reset();
                         Page_ShippingAgentServices.LookupMode := true;
-                        Table_ShippingAgentServices.SetRange("Shipping Agent Code", ShippingAgentCodeFilter);
+                        Table_ShippingAgentServices.SetRange("Shipping Agent Code", WeekendShippingAgentCodeFilter);
                         Page_ShippingAgentServices.SetTableView(Table_ShippingAgentServices);
                         if Page_ShippingAgentServices.RunModal() = Action::LookupOK then begin
                             Page_ShippingAgentServices.GetRecord(Table_ShippingAgentServices);
@@ -459,6 +503,7 @@ page 80126 "Customer Trends"
                             Rec."Delivery Date" := DeliveryDate;
                             Rec."Shipping Agent Code" := ShippingAgentCodeFilter;
                             Rec."Shipping Agent Service Code" := ShippingAgentServiceCodeFilter;
+                            Rec."Weekend Shipping Agent Code" := WeekendShippingAgentCodeFilter;
                             Rec."Weekend Ship. Agnt. Serv. Code" := WeekendShippingAgentServiceCodeFilter;
 
 
@@ -580,41 +625,41 @@ page 80126 "Customer Trends"
                     ToolTip = 'Last sales unit price';
                 }
 
-                field("Total Physical"; Rec."Total Physical")
-                {
-                    Editable = false;
-                    ApplicationArea = All;
-                    ToolTip = 'Total Inventory';
-                    Caption = 'Total Physical';
-                    StyleExpr = G_Colour;
-                }
-                field("Total Allocated on SO"; Rec."Total Allocated on SO")
-                {
-                    Editable = false;
-                    ApplicationArea = All;
-                    ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
-                    DecimalPlaces = 0 : 5;
-                    Caption = 'Total Allocated on SO';
-                    StyleExpr = G_Colour;
-                }
-                field(Physical; Rec.Physical)
-                {
-                    Editable = false;
-                    ApplicationArea = All;
-                    ToolTip = 'Qty available';
-                    DecimalPlaces = 0 : 5;
-                    Caption = 'Physical';
-                    StyleExpr = G_Colour;
-                }
-                field("Allocated on SO"; Rec."Allocated on SO")
-                {
-                    Editable = false;
-                    ApplicationArea = All;
-                    ToolTip = 'Sum of Outstanding SO Qty.';
-                    DecimalPlaces = 0 : 5;
-                    Caption = 'Allocated on SO';
-                    StyleExpr = G_Colour;
-                }
+                // field("Total Physical"; Rec."Total Physical")
+                // {
+                //     Editable = false;
+                //     ApplicationArea = All;
+                //     ToolTip = 'Total Inventory';
+                //     Caption = 'Total Physical';
+                //     StyleExpr = G_Colour;
+                // }
+                // field("Total Allocated on SO"; Rec."Total Allocated on SO")
+                // {
+                //     Editable = false;
+                //     ApplicationArea = All;
+                //     ToolTip = 'Sum of Outstanding Qty on SO across ALL Locations';
+                //     DecimalPlaces = 0 : 5;
+                //     Caption = 'Total Allocated on SO';
+                //     StyleExpr = G_Colour;
+                // }
+                // field(Physical; Rec.Physical)
+                // {
+                //     Editable = false;
+                //     ApplicationArea = All;
+                //     ToolTip = 'Qty available';
+                //     DecimalPlaces = 0 : 5;
+                //     Caption = 'Physical';
+                //     StyleExpr = G_Colour;
+                // }
+                // field("Allocated on SO"; Rec."Allocated on SO")
+                // {
+                //     Editable = false;
+                //     ApplicationArea = All;
+                //     ToolTip = 'Sum of Outstanding SO Qty.';
+                //     DecimalPlaces = 0 : 5;
+                //     Caption = 'Allocated on SO';
+                //     StyleExpr = G_Colour;
+                // }
                 field("Shipper Qty"; Rec."Shipper Qty")
                 {
                     ApplicationArea = All;
@@ -653,28 +698,28 @@ page 80126 "Customer Trends"
                 UpdatePropagation = Both;
             }
         }
-        area(factboxes)
-        {
-            systempart(Control1905767507; Notes)
-            {
-                ApplicationArea = Notes;
-            }
-            part(Control1902018507; "Customer Statistics FactBox")
-            {
-                ApplicationArea = Basic, Suite;
-                SubPageLink = "No." = FIELD("Customer No.");
-            }
-            part(Control1900316107; "Customer Details FactBox")
-            {
-                ApplicationArea = Basic, Suite;
-                SubPageLink = "No." = FIELD("Customer No.");
-            }
-            part(Control1901314507; "Item Invoicing FactBox")
-            {
-                ApplicationArea = Basic, Suite;
-                SubPageLink = "No." = FIELD("Item No.");
-            }
-        }
+        // area(factboxes)
+        // {
+        //     systempart(Control1905767507; Notes)
+        //     {
+        //         ApplicationArea = Notes;
+        //     }
+        //     part(Control1902018507; "Customer Statistics FactBox")
+        //     {
+        //         ApplicationArea = Basic, Suite;
+        //         SubPageLink = "No." = FIELD("Customer No.");
+        //     }
+        //     part(Control1900316107; "Customer Details FactBox")
+        //     {
+        //         ApplicationArea = Basic, Suite;
+        //         SubPageLink = "No." = FIELD("Customer No.");
+        //     }
+        //     part(Control1901314507; "Item Invoicing FactBox")
+        //     {
+        //         ApplicationArea = Basic, Suite;
+        //         SubPageLink = "No." = FIELD("Item No.");
+        //     }
+        // }
     }
 
 
@@ -747,6 +792,7 @@ page 80126 "Customer Trends"
                     Clear(ShippingAgentCodeFilter);
                     Clear(ShippingAgentServiceCodeFilter);
                     Clear(WeekendShippingAgentServiceCodeFilter);
+                    Clear(WeekendShippingAgentCodeFilter);
                     Clear(LocationCodeFilter);
                     Clear(WorkDescription);
                     Clear(MinOrderValue);
@@ -794,7 +840,7 @@ page 80126 "Customer Trends"
                         Error('Delivery Date should not be blank.');
 
                     Clear(CustomerTrendDetails);
-                    CustomerTrendDetails.GetFilters(SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter, WorkDescription);
+                    CustomerTrendDetails.GetFilters(SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter, WorkDescription, WeekendShippingAgentCodeFilter);
                     CustomerTrendDetails.Run();
                 end;
 
@@ -856,6 +902,7 @@ page 80126 "Customer Trends"
             DeliveryDate := L_CustomerTrends."Delivery Date";
             ShippingAgentCodeFilter := L_CustomerTrends."Shipping Agent Code";
             ShippingAgentServiceCodeFilter := L_CustomerTrends."Shipping Agent Service Code";
+            WeekendShippingAgentCodeFilter := L_CustomerTrends."Weekend Shipping Agent Code";
             WeekendShippingAgentServiceCodeFilter := L_CustomerTrends."Weekend Ship. Agnt. Serv. Code";
             LocationCodeFilter := L_CustomerTrends."Location Code";
             OrderDateFilter := L_CustomerTrends."Order Date";
@@ -889,6 +936,7 @@ page 80126 "Customer Trends"
         Clear(DeliveryDate);
         Clear(ShippingAgentCodeFilter);
         Clear(ShippingAgentServiceCodeFilter);
+        Clear(WeekendShippingAgentCodeFilter);
         Clear(WeekendShippingAgentServiceCodeFilter);
         Clear(LocationCodeFilter);
         Clear(WorkDescription);
@@ -1014,6 +1062,7 @@ page 80126 "Customer Trends"
         ShippingAgentCodeFilter: Code[20];
         ShippingAgentServiceCodeFilter: Code[20];
         WeekendShippingAgentServiceCodeFilter: Code[20];
+        WeekendShippingAgentCodeFilter: Code[20];
         G_SalesPersonCode: Code[20];
         G_CustomerAccountNo: Code[20];
 

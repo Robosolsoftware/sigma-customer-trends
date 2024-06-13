@@ -12,10 +12,10 @@ report 80126 "Customer Trend Details"
             trigger OnAfterGetRecord()
             begin
                 //Insert and Modify the Customer Trends
-                CT_Functions.GetCustomertrendDetails(G_Months, G_SalesPersonCode, G_CustomerAccount, G_DeliveryDate, G_ShippingAgentCode, G_ShiipingAgentServiceCode, G_WeekendShiipingAgentServiceCode, G_WorkDescriptions);
+                CT_Functions.GetCustomertrendDetails(G_Months, G_SalesPersonCode, G_CustomerAccount, G_DeliveryDate, G_ShippingAgentCode, G_ShiipingAgentServiceCode, G_WeekendShiipingAgentServiceCode, G_WorkDescriptions, G_WeekendShiipingAgentCode);
 
                 //Insert and Modify the Customer Trends (Promotions Item)
-                CT_Functions.GetCustomertrendDetailsForPromostion(G_SalesPersonCode, G_CustomerAccount, G_DeliveryDate, G_ShippingAgentCode, G_ShiipingAgentServiceCode, G_WeekendShiipingAgentServiceCode, G_WorkDescriptions);
+                CT_Functions.GetCustomertrendDetailsForPromostion(G_SalesPersonCode, G_CustomerAccount, G_DeliveryDate, G_ShippingAgentCode, G_ShiipingAgentServiceCode, G_WeekendShiipingAgentServiceCode, G_WorkDescriptions, G_WeekendShiipingAgentCode);
             end;
         }
     }
@@ -56,8 +56,9 @@ report 80126 "Customer Trend Details"
         G_ShiipingAgentServiceCode: Code[20];
         G_WeekendShiipingAgentServiceCode: Code[20];
         G_WorkDescriptions: Text[2048];
+        G_WeekendShiipingAgentCode: Code[20];
 
-    procedure GetFilters(_SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _workDescription: text[2048])
+    procedure GetFilters(_SalesPersonCode: Code[20]; _CustomerAccount: Code[20]; _DeliveryDate: Date; _ShippingAgentCode: Code[20]; _ShippingAgentServiceCode: Code[20]; _WeekendShippingAgentServiceCode: Code[20]; _workDescription: text[2048]; _WeekendShippingAgentCode: Code[20])
     begin
         Clear(G_CustomerAccount);
         Clear(G_SalesPersonCode);
@@ -66,6 +67,7 @@ report 80126 "Customer Trend Details"
         Clear(G_ShiipingAgentServiceCode);
         Clear(G_WeekendShiipingAgentServiceCode);
         Clear(G_WorkDescriptions);
+        Clear(G_WeekendShiipingAgentCode);
         G_CustomerAccount := _CustomerAccount;
         G_SalesPersonCode := _SalesPersonCode;
         G_DeliveryDate := _DeliveryDate;
@@ -73,6 +75,7 @@ report 80126 "Customer Trend Details"
         G_ShiipingAgentServiceCode := _ShippingAgentServiceCode;
         G_WeekendShiipingAgentServiceCode := _WeekendShippingAgentServiceCode;
         G_WorkDescriptions := _workDescription;
+        G_WeekendShiipingAgentCode := _WeekendShippingAgentCode;
 
     end;
 }
