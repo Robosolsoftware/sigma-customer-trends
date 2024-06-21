@@ -87,9 +87,9 @@ table 80125 CustomerTrends
                                             Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");
                                         end;
                                     end else begin
-                                        DisUnitPrice := (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) / 100) * 10;
-                                        if (L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) - DisUnitPrice) > Rec."Unit Price" then
-                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.GetOriginalUnitPrice(Rec) - DisUnitPrice, Rec."Item No.");
+                                        DisUnitPrice := (L_CustomerPriceGroupChanges.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date") / 100) * 10;
+                                        if (L_CustomerPriceGroupChanges.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date") - DisUnitPrice) > Rec."Unit Price" then
+                                            Error('Unit Price should not be less than 10 percent of current Unit Price. It should be greater than %1. Item No.: %2', L_CustomerPriceGroupChanges.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date") - DisUnitPrice, Rec."Item No.");
                                     end;
                                 end;
                             end;
