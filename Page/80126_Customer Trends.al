@@ -479,6 +479,7 @@ page 80126 "Customer Trends"
                             //Check Master Approval++
                             L_Item.TestField("QAU Approved", true);
                             L_Item.TestField(Status, L_Item.Status::Released);
+                            L_Item.TestField("Special Product", false);
 
 
                             Rec."Item Description" := L_Item.Description;
