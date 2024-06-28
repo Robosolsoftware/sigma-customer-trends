@@ -83,7 +83,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", CH_ILE."Item No.");
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
@@ -103,7 +103,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", CH_ILE."Item No.");
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
@@ -124,7 +124,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", CH_ILE."Item No.");
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
@@ -147,7 +147,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", CH_ILE."Item No.");
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
@@ -169,7 +169,7 @@ codeunit 80126 "CT Functions"
                     L_Item.SetRange("No.", CH_ILE."Item No.");
                     if L_Item.FindFirst() then begin
                         //Skip if Not QAU Approved and Not Released++
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrends(CH_ILE, _SalesPersonCode, _CustomerAccount, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode);
                     end;
                 until CH_ILE.Next() = 0;
@@ -472,7 +472,7 @@ codeunit 80126 "CT Functions"
                     L_Item.Reset();
                     L_Item.SetRange("No.", L_PriceListLine."Product No.");
                     if L_Item.FindFirst() then begin
-                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then
+                        if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item."Special Product" = false) then
                             InsertAndModifyTrendsForPromostion(L_PriceListLine, _CustomerAccount, _SalesPersonCode, _DeliveryDate, _ShippingAgentCode, _ShiipingAgentServiceCode, _WeekendShiipingAgentServiceCode, _WorkDescription, _WeekendShiipingAgentCode)
                     end;
                 until L_PriceListLine.Next() = 0;
@@ -521,7 +521,10 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Item Category Code", L_Item."Item Category Code");
                     CH_CustTrends.RRP := L_Item.RRP;
                     //CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CustNumber, _PriceListLine."Product No.", 0));
-                    CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
+                    if _PriceListLine."Unit Price" = 0 then
+                        CH_CustTrends.Validate("Unit Price", L_Item."Unit Price")
+                    else
+                        CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
                     //CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CustNumber, _PriceListLine."Product No.", 0));
                     CH_CustTrends.Validate("Line Disc %", _PriceListLine."Line Discount %");
                     CH_CustTrends.Validate("Minimum Quantity", _PriceListLine."Minimum Quantity");
@@ -644,7 +647,10 @@ codeunit 80126 "CT Functions"
                     CH_CustTrends.Validate("Item Category Code", CH_Items."Item Category Code");
                     CH_CustTrends.RRP := CH_Items.RRP;
                     //CH_CustTrends.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(CustNumber, _PriceListLine."Product No.", 0));
-                    CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
+                    if _PriceListLine."Unit Price" = 0 then
+                        CH_CustTrends.Validate("Unit Price", L_Item."Unit Price")
+                    else
+                        CH_CustTrends.Validate("Unit Price", _PriceListLine."Unit Price");
                     //CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CustNumber, _PriceListLine."Product No.", 0));
                     CH_CustTrends.Validate("Line Disc %", _PriceListLine."Line Discount %");
                     CH_CustTrends.Validate("Minimum Quantity", _PriceListLine."Minimum Quantity");

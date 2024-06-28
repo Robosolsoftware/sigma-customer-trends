@@ -471,10 +471,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -499,10 +513,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -526,10 +554,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -553,10 +595,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -580,10 +636,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -607,10 +677,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -634,10 +718,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -661,10 +759,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -688,10 +800,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
@@ -715,10 +841,24 @@ codeunit 80125 EventSub
                 repeat
                     if L_PriceListLine."Minimum Quantity" <> 0 then begin
                         if L_PriceListLine."Minimum Quantity" <= _Quantity then begin
-                            exit(L_PriceListLine."Unit Price");
+                            if L_PriceListLine."Unit Price" = 0 then begin
+                                L_Item.Reset();
+                                L_Item.SetRange("No.", _ItemNumber);
+                                if L_Item.FindFirst() then begin
+                                    exit(L_Item."Unit Price");
+                                end;
+                            end else
+                                exit(L_PriceListLine."Unit Price");
                         end;
                     end else begin
-                        exit(L_PriceListLine."Unit Price");
+                        if L_PriceListLine."Unit Price" = 0 then begin
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", _ItemNumber);
+                            if L_Item.FindFirst() then begin
+                                exit(L_Item."Unit Price");
+                            end;
+                        end else
+                            exit(L_PriceListLine."Unit Price");
                     end;
                 until L_PriceListLine.Next() = 0;
             end;
