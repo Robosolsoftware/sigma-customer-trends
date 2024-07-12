@@ -66,22 +66,23 @@ table 80125 CustomerTrends
             begin
                 //Min Sell price Validation application only for Normal Item.
                 //The below code only for Top Screen Items (We can Add Promotion Items on Top Screen)++
-                if Rec."Special Promotion" = false then begin
-                    L_SalesPriceHeader.Reset();
-                    L_SalesPriceHeader.SetRange("Special Price Daily", true);
-                    if L_SalesPriceHeader.FindFirst() then begin
-                        //If not Promotion Item then checking Min Sell Price Validation++
-                        L_PriceListLine.Reset();
-                        L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
-                        L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
-                        L_PriceListLine.SetRange("Product No.", Rec."Item No.");
-                        if not L_PriceListLine.FindFirst() then begin
-                            Clear(DisUnitPrice);
-                            UserSetup.Reset();
-                            UserSetup.SetRange("User ID", UserId);
-                            UserSetup.SetRange("Allow to change unit price", true);
-                            if not UserSetup.FindFirst() then begin
-                                if CurrFieldNo = 11 then begin
+                if CurrFieldNo = 11 then begin
+                    if Rec."Special Promotion" = false then begin
+                        L_SalesPriceHeader.Reset();
+                        L_SalesPriceHeader.SetRange("Special Price Daily", true);
+                        if L_SalesPriceHeader.FindFirst() then begin
+                            //If not Promotion Item then checking Min Sell Price Validation++
+                            L_PriceListLine.Reset();
+                            L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                            L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                            L_PriceListLine.SetRange("Product No.", Rec."Item No.");
+                            if not L_PriceListLine.FindFirst() then begin
+                                Clear(DisUnitPrice);
+                                UserSetup.Reset();
+                                UserSetup.SetRange("User ID", UserId);
+                                UserSetup.SetRange("Allow to change unit price", true);
+                                if not UserSetup.FindFirst() then begin
+
                                     if Rec."Min Sell Price" > 0 then begin
                                         if Rec."Unit Price" < Rec."Min Sell Price" then begin
                                             Error('Unit price %1 should not be less than Min Sell Price %2. Item No.: %3', Rec."Unit Price", Rec."Min Sell Price", Rec."Item No.");

@@ -462,6 +462,7 @@ page 80126 "Customer Trends"
                         EventAndSubscriber: Codeunit EventSub;
                         L_PriceListLine: Record "Price List Line";
                         L_SalesPriceHeader: Record "Price List Header";
+                        L_CustomerTrends: Record CustomerTrends;
                     begin
 
                         if SalesPersonCodeFilter = '' then
@@ -469,6 +470,18 @@ page 80126 "Customer Trends"
 
                         if CustomerAccountNoFilter = '' then
                             Error('Customer Account No. should not be blank.');
+
+                        //Check Duplicate Item++
+                        L_CustomerTrends.Reset();
+                        L_CustomerTrends.SetRange("Salesperson Code", Rec."Salesperson Code");
+                        L_CustomerTrends.SetRange("Customer No.", Rec."Customer No.");
+                        L_CustomerTrends.SetRange("Special Promotion", false);
+                        L_CustomerTrends.SetFilter("Entry Number", '<>%1', Rec."Entry Number");
+                        L_CustomerTrends.SetRange("Item No.", Rec."Item No.");
+                        if L_CustomerTrends.FindFirst() then begin
+                            if not Confirm(StrSubstNo('Item No. %1 already exists. Do you want to proceed??', Rec."Item No."), false) then
+                                Error('');
+                        end;
 
                         //Check Shipping Restriction for existing Lines++
                         L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter);
@@ -609,7 +622,8 @@ page 80126 "Customer Trends"
                 {
                     ApplicationArea = all;
                     StyleExpr = G_Colour;
-                    Editable = Rec."Item No." <> '';
+                    //Editable = Rec."Item No." <> '';
+                    Editable = false;
                 }
                 field(RRP; Rec.RRP)
                 {
