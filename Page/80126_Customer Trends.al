@@ -695,13 +695,15 @@ page 80126 "Customer Trends"
                     begin
                         //Check Item Sales Quota (For Both Promotion and Normal Item)++
                         CurrPage.Update();
-                        IF RecUserSetup.GET(USERID) THEN BEGIN
-                            IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                        if Rec."Qty. to be added to SO" > 0 then begin
+                            IF RecUserSetup.GET(USERID) THEN BEGIN
+                                IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                                    CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                                END;
+                            END ELSE BEGIN
                                 CustomerTrendSalesQuota.CheckExceededQty(Rec);
                             END;
-                        END ELSE BEGIN
-                            CustomerTrendSalesQuota.CheckExceededQty(Rec);
-                        END;
+                        end;
                     end;
                 }
 

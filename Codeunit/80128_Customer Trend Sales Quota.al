@@ -244,7 +244,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", ItemCat);
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -352,7 +352,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -462,7 +462,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -549,7 +549,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -617,7 +617,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -686,7 +686,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -755,7 +755,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -821,7 +821,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -888,7 +888,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -957,7 +957,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1027,7 +1027,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1099,7 +1099,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Month");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1170,7 +1170,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1238,7 +1238,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -1304,7 +1304,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1372,7 +1372,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -1437,7 +1437,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1504,7 +1504,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -1591,7 +1591,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", ItemCat);
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1701,7 +1701,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", ItemCat);
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -1806,7 +1806,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -1912,7 +1912,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2018,7 +2018,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                         WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2129,7 +2129,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2217,7 +2217,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2288,7 +2288,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2357,7 +2357,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2430,7 +2430,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2500,7 +2500,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2570,7 +2570,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2638,7 +2638,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2705,7 +2705,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2770,7 +2770,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2837,7 +2837,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -2901,7 +2901,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Exception Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             if (L_MaxOrderQty."Start Date" <= _CustomerTrends."Order Date") AND (L_MaxOrderQty."End Date" >= _CustomerTrends."Order Date") then begin
                 WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
@@ -2967,7 +2967,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Day");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3038,7 +3038,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3085,7 +3085,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3129,7 +3129,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3175,7 +3175,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3221,7 +3221,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3305,7 +3305,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", ItemCat);
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3365,7 +3365,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3426,7 +3426,7 @@ codeunit 80128 "Customer Trend Sales Quota"
                 L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
                 L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
                 L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-                L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+                //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
                 IF L_MaxOrderQty.FINDFIRST THEN BEGIN
                     WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3473,7 +3473,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Ship-to Code", _CustomerTrends."Ship-to Code");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3518,7 +3518,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", ItemCat);
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3561,7 +3561,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Type", L_MaxOrderQty."Item Type"::"All Items");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
@@ -3605,7 +3605,7 @@ codeunit 80128 "Customer Trend Sales Quota"
         L_MaxOrderQty.SetRange("Item Code", _CustomerTrends."Item No.");
         L_MaxOrderQty.SetRange("Quantity Restriction", L_MaxOrderQty."Quantity Restriction"::"Per Order");
         L_MaxOrderQty.SetRange("Restriction Type", L_MaxOrderQty."Restriction Type"::"By Quantity");
-        L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
+        //L_MaxOrderQty.SETFILTER("Maximum Quantity", '>%1', 0);
         IF L_MaxOrderQty.FINDFIRST THEN BEGIN
             WarningtypeOpion := Format(L_MaxOrderQty."Warning Type");
 
