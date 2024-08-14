@@ -17,8 +17,8 @@ codeunit 80126 "CT Functions"
         L_SalesPriceHeader: Record "Price List Header";
         L_SpecialPromotions: Page "Special Promotions";
         CH_ILE: Record "Item Ledger Entry";
-        CH_CustTrends: Record CustomerTrends;
-        PgCutTr: page "Customer Trends";
+        CH_CustTrends: Record CustomerTrendHeader;
+        PgCutTr: page "Customer Trend Card";
     begin
         //Insert Special Promotions Item++
         L_SalesPriceHeader.Reset();
@@ -51,11 +51,15 @@ codeunit 80126 "CT Functions"
 
         //Open Page++
         clear(CH_CustTrends);
-        CH_CustTrends.SetCurrentKey("Customer No.");
         CH_CustTrends.SetRange("Customer No.", CustNumber);
         CH_CustTrends.SetRange("Salesperson Code", SalesPersonCode);
-        if CH_CustTrends.FindSet() then begin
-            PgCutTr.GetFilters(CustNumber, SalesPersonCode, _DeliveryDate, true, _ShippingAgentCode, _ShippingAgentServiceCode);
+        CH_CustTrends.SetRange("Shipping Agent Code", _ShippingAgentCode);
+        CH_CustTrends.SetRange("Shipping Agent Service Code", _ShippingAgentServiceCode);
+        CH_CustTrends.SetRange("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
+        CH_CustTrends.SetRange("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
+        CH_CustTrends.SetRange("Delivery Date", _DeliveryDate);
+        if CH_CustTrends.FindFirst() then begin
+            // PgCutTr.GetFilters(CustNumber, SalesPersonCode, _DeliveryDate, true, _ShippingAgentCode, _ShippingAgentServiceCode);
             PgCutTr.SetTableView(CH_CustTrends);
             PgCutTr.Run();
         end;
@@ -621,6 +625,7 @@ codeunit 80126 "CT Functions"
         L_Customer: Record Customer;
         L_ShiptoAddress: Record "Ship-to Address";
         EventAndSubscriber: Codeunit EventSub;
+        L_CustomerTrends: Record CustomerTrendHeader;
     begin
         //This code execute From Call log and Past Month Details button of Customer Trends++
         //Get Special Promotion Item from Sales Price table++
@@ -635,7 +640,36 @@ codeunit 80126 "CT Functions"
             if L_Item.FindFirst() then begin
                 //Skip if Not QAU Approved and Not Released++
                 if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then begin
+
+                    //Header++
+                    L_CustomerTrends.Reset();
+                    L_CustomerTrends.SetRange("Customer No.", CustNumber);
+                    L_CustomerTrends.SetRange("Salesperson Code", SalesPersonCode);
+                    L_CustomerTrends.SetRange("Shipping Agent Code", _ShippingAgentCode);
+                    L_CustomerTrends.SetRange("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                    L_CustomerTrends.SetRange("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
+                    L_CustomerTrends.SetRange("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
+                    L_CustomerTrends.SetRange("Delivery Date", _DeliveryDate);
+                    if NOT L_CustomerTrends.FindFirst() then begin
+                        L_CustomerTrends.Init();
+                        L_CustomerTrends.Validate("Salesperson Code", SalesPersonCode);
+                        L_CustomerTrends.Validate("Customer No.", CustNumber);
+                        L_CustomerTrends.Validate("Delivery Date", _DeliveryDate);
+                        L_CustomerTrends.Validate("Shipping Agent Code", _ShippingAgentCode);
+                        L_CustomerTrends.Validate("Shipping Agent Service Code", _ShippingAgentServiceCode);
+                        L_CustomerTrends.Validate("Weekend Shipping Agent Code", _WeekendShippingAgentCode);
+                        L_CustomerTrends.Validate("Weekend Ship. Agnt. Serv. Code", _WeekendShippingAgentServiceCode);
+                        L_CustomerTrends."Order Date" := WorkDate();
+                        L_Customer.Reset();
+                        L_Customer.SetRange("No.", CustNumber);
+                        if L_Customer.FindFirst() then
+                            L_CustomerTrends.Validate("Min Order Value", L_Customer."Min Order Value");
+                        L_CustomerTrends.Insert(true);
+                    end;
+                    //Header--
+
                     CH_CustTrends.Init();
+                    CH_CustTrends.Validate("Entry Number", L_CustomerTrends."Entry Number");
                     CH_CustTrends.Validate("Item No.", _PriceListLine."Product No.");
                     CH_CustTrends."Item Description" := L_Item.Description;
                     CH_CustTrends.Validate("Customer No.", CustNumber);
@@ -714,6 +748,8 @@ codeunit 80126 "CT Functions"
 
 
                     CH_CustTrends.Insert(true);
+
+
                 end;
             end;
         end else begin
