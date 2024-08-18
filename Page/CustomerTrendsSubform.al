@@ -36,142 +36,131 @@ page 80130 "Customer Trends Subform"
                         EventAndSubscriber: Codeunit EventSub;
                         L_PriceListLine: Record "Price List Line";
                         L_SalesPriceHeader: Record "Price List Header";
-                        L_CustomerTrends: Record CustomerTrends;
-                        L_CustomerTrendsHeader: Record CustomerTrendHeader;
+                        L_CustomerTrendLine: Record CustomerTrends;
+                        L_CustomerTrendsHeader: Record "Customer Trend Header";
+                        Last_CustomerTrendLine: Record CustomerTrends;
                     begin
+                        //Check Duplicate Item++
+                        L_CustomerTrendLine.Reset();
+                        L_CustomerTrendLine.SetRange("Salesperson Code", Rec."Salesperson Code");
+                        L_CustomerTrendLine.SetRange("Customer No.", Rec."Customer No.");
+                        L_CustomerTrendLine.SetRange("Special Promotion", false);
+                        L_CustomerTrendLine.SetFilter("Entry Number", Rec."Entry Number");
+                        L_CustomerTrendLine.SetRange("Item No.", Rec."Item No.");
+                        L_CustomerTrendLine.SetFilter("Line No.", '<>%1', Rec."Line No.");
+                        if L_CustomerTrendLine.FindFirst() then begin
+                            if not Confirm(StrSubstNo('Item No. %1 already exists. Do you want to proceed??', Rec."Item No."), false) then
+                                Error('');
+                        end;
+
                         L_CustomerTrendsHeader.Reset();
                         L_CustomerTrendsHeader.SetRange("Salesperson Code", Rec."Salesperson Code");
                         L_CustomerTrendsHeader.SetRange("Customer No.", Rec."Customer No.");
                         L_CustomerTrendsHeader.SetRange("Entry Number", Rec."Entry Number");
                         if L_CustomerTrendsHeader.FindFirst() then begin
-                            SalesPersonCodeFilter := L_CustomerTrendsHeader."Salesperson Code";
-                            CustomerAccountNoFilter := L_CustomerTrendsHeader."Customer No.";
-                            DeliveryDate := L_CustomerTrendsHeader."Delivery Date";
-                            ShippingAgentCodeFilter := L_CustomerTrendsHeader."Shipping Agent Code";
-                            ShippingAgentServiceCodeFilter := L_CustomerTrendsHeader."Shipping Agent Service Code";
-                            WeekendShippingAgentCodeFilter := L_CustomerTrendsHeader."Weekend Shipping Agent Code";
-                            WeekendShippingAgentServiceCodeFilter := L_CustomerTrendsHeader."Weekend Ship. Agnt. Serv. Code";
-                            OrderDateFilter := L_CustomerTrendsHeader."Order Date";
-                            WorkDescription := L_CustomerTrendsHeader."Work Description";
-                            MinOrderValue := L_CustomerTrendsHeader."Min Order Value";
-                            Rec.Init();
                             Rec."Entry Number" := L_CustomerTrendsHeader."Entry Number";
+
+                            //GetLast Line No++
+                            Last_CustomerTrendLine.Reset();
+                            Last_CustomerTrendLine.SetRange("Entry Number", L_CustomerTrendsHeader."Entry Number");
+                            if Last_CustomerTrendLine.FindLast() then begin
+                                Rec."Line No." := Last_CustomerTrendLine."Line No." + 10000;
+                            end else
+                                Rec."Line No." := 10000;
+
                             Rec."Salesperson Code" := L_CustomerTrendsHeader."Salesperson Code";
                             Rec."Customer No." := L_CustomerTrendsHeader."Customer No.";
-                        end;
-
-                        //Check Duplicate Item++
-                        L_CustomerTrends.Reset();
-                        L_CustomerTrends.SetRange("Salesperson Code", Rec."Salesperson Code");
-                        L_CustomerTrends.SetRange("Customer No.", Rec."Customer No.");
-                        L_CustomerTrends.SetRange("Special Promotion", false);
-                        L_CustomerTrends.SetFilter("Entry Number", '<>%1', Rec."Entry Number");
-                        L_CustomerTrends.SetRange("Item No.", Rec."Item No.");
-                        if L_CustomerTrends.FindFirst() then begin
-                            if not Confirm(StrSubstNo('Item No. %1 already exists. Do you want to proceed??', Rec."Item No."), false) then
-                                Error('');
-                        end;
-
-
-                        //Check Shipping Restriction for existing Lines++
-                        L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter);
-
-                        L_Item.Reset();
-                        L_Item.SetRange("No.", Rec."Item No.");
-                        if L_Item.FindFirst() then begin
-                            //Check Master Approval++
-                            L_Item.TestField("QAU Approved", true);
-                            L_Item.TestField(Status, L_Item.Status::Released);
-                            L_Item.TestField("Special Product", false);
-
-                            Rec."Item No." := L_Item."No.";
-                            Rec."Item Description" := L_Item.Description;
-                            Rec."Units of Measure" := L_Item."Sales Unit of Measure";
-                            Rec.Validate("Min Sell Price", L_Item."Min Sell Price");
-                            Rec.RRP := L_Item.RRP;
                             Rec."Special Promotion" := false;
-                            Rec."Item Category Code" := L_Item."Item Category Code";
-                            Rec."Order Date" := WorkDate();
-                            //Rec.Validate("Unit Price", L_Item."Unit Price");
-                            Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
-                            Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
-
-                            Rec."Work Description" := WorkDescription;
+                            Rec."Shipping Agent Code" := L_CustomerTrendsHeader."Shipping Agent Code";
+                            Rec."Shipping Agent Service Code" := L_CustomerTrendsHeader."Shipping Agent Service Code";
+                            Rec."Weekend Shipping Agent Code" := L_CustomerTrendsHeader."Weekend Shipping Agent Code";
+                            Rec."Weekend Ship. Agnt. Serv. Code" := L_CustomerTrendsHeader."Weekend Ship. Agnt. Serv. Code";
+                            Rec."Min Order Value" := L_CustomerTrendsHeader."Min Order Value";
+                            Rec."Order Date" := L_CustomerTrendsHeader."Order Date";
+                            Rec."Delivery Date" := L_CustomerTrendsHeader."Delivery Date";
+                            Rec."Work Description" := L_CustomerTrendsHeader."Work Description";
+                            Rec."Location Code" := L_CustomerTrendsHeader."Location Code";
                             Rec.Validate("Created By", UserId);
                             Rec.Validate("Created On", CurrentDateTime);
                             Rec.Validate("Updated By", UserId);
                             Rec.Validate("Updated On", CurrentDateTime);
 
-                            Rec."Salesperson Code" := SalesPersonCodeFilter;
-                            Rec."Customer No." := CustomerAccountNoFilter;
-                            Rec."Delivery Date" := DeliveryDate;
-                            Rec."Shipping Agent Code" := ShippingAgentCodeFilter;
-                            Rec."Shipping Agent Service Code" := ShippingAgentServiceCodeFilter;
-                            Rec."Weekend Shipping Agent Code" := WeekendShippingAgentCodeFilter;
-                            Rec."Weekend Ship. Agnt. Serv. Code" := WeekendShippingAgentServiceCodeFilter;
+                            L_Item.Reset();
+                            L_Item.SetRange("No.", Rec."Item No.");
+                            if L_Item.FindFirst() then begin
+                                //Check Master Approval++
+                                L_Item.TestField("QAU Approved", true);
+                                L_Item.TestField(Status, L_Item.Status::Released);
+                                L_Item.TestField("Special Product", false);
+
+                                //Check Shipping Restriction for existing Lines++
+                                L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Shipping Agent Code", L_CustomerTrendsHeader."Shipping Agent Service Code");
+
+                                Rec."Item No." := L_Item."No.";
+                                Rec."Item Description" := L_Item.Description;
+                                Rec."Units of Measure" := L_Item."Sales Unit of Measure";
+                                Rec.Validate("Min Sell Price", L_Item."Min Sell Price");
+                                Rec.RRP := L_Item.RRP;
+                                Rec."Item Category Code" := L_Item."Item Category Code";
+
+                                //Update Price and Percentage++
+                                Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
+                                Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", 0, Rec."Order Date"));
+
+                                //Get the last unit price from sales shipment table++
+                                CH_SShip.Reset();
+                                CH_SShip.SetRange("Sell-to Customer No.", Rec."Customer No.");
+                                CH_SShip.SetRange("No.", Rec."Item No.");
+                                CH_SShip.SetRange("Unit of Measure Code", Rec."Units of Measure");
+                                if CH_SShip.FindLast() then
+                                    Rec."Last Price" := CH_SShip."Unit Price";
 
 
-                            //Get the last unit price from sales shipment table++
-                            CH_SShip.Reset();
-                            CH_SShip.SetRange("Sell-to Customer No.", Rec."Customer No.");
-                            CH_SShip.SetRange("No.", Rec."Item No.");
-                            CH_SShip.SetRange("Unit of Measure Code", Rec."Units of Measure");
-                            if CH_SShip.FindLast() then
-                                Rec."Last Price" := CH_SShip."Unit Price";
+                                //Get Shipper Quantity from Item unit measure table++
+                                L_ItemUnitofMeasure.Reset();
+                                L_ItemUnitofMeasure.SetRange("Item No.", Rec."Item No.");
+                                L_ItemUnitofMeasure.SetRange(Code, Rec."Units of Measure");
+                                if L_ItemUnitofMeasure.FindFirst() then
+                                    Rec.Validate("Shipper Qty", L_ItemUnitofMeasure."Qty. per Unit of Measure");
 
+                                //Company License Validatio++
+                                L_Customer.Reset();
+                                L_Customer.SetRange("No.", Rec."Customer No.");
+                                if L_Customer.FindFirst() then begin
+                                    Rec."Ship-to Code" := L_Customer."Ship-to Code";
+                                    Rec."Customer Price Group" := L_Customer."Customer Price Group";
 
-                            //Get Shipper Quantity from Item unit measure table++
-                            L_ItemUnitofMeasure.Reset();
-                            L_ItemUnitofMeasure.SetRange("Item No.", Rec."Item No.");
-                            L_ItemUnitofMeasure.SetRange(Code, Rec."Units of Measure");
-                            if L_ItemUnitofMeasure.FindFirst() then
-                                Rec.Validate("Shipper Qty", L_ItemUnitofMeasure."Qty. per Unit of Measure");
-                            //  Rec."Shipper Qty" := L_ItemUnitofMeasure."Qty. per Unit of Measure";
-
-
-                            //Get Default Location++
-                            L_Location.Reset();
-                            L_Location.SetRange("Customer Trend Default Loc", true);
-                            if L_Location.FindFirst() then
-                                Rec."Location Code" := L_Location.Code;
-
-
-                            //Company License Validatio++
-                            L_Customer.Reset();
-                            L_Customer.SetRange("No.", CustomerAccountNoFilter);
-                            if L_Customer.FindFirst() then begin
-                                Rec."Ship-to Code" := L_Customer."Ship-to Code";
-                                Rec."Customer Price Group" := L_Customer."Customer Price Group";
-                                Rec."Min Order Value" := L_Customer."Min Order Value";
-
-                                if L_Customer."Ship-to Code" <> '' then begin
-                                    L_ShiptoAddress.Reset();
-                                    L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
-                                    L_ShiptoAddress.SetRange("Customer No.", CustomerAccountNoFilter);
-                                    if L_ShiptoAddress.FindFirst() then begin
-                                        CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustomerAccountNoFilter, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", Rec."Order Date", Rec."Item No.", L_ShiptoAddress."Post Code");
+                                    if L_Customer."Ship-to Code" <> '' then begin
+                                        L_ShiptoAddress.Reset();
+                                        L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
+                                        L_ShiptoAddress.SetRange("Customer No.", Rec."Customer No.");
+                                        if L_ShiptoAddress.FindFirst() then begin
+                                            CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", Rec."Order Date", Rec."Item No.", L_ShiptoAddress."Post Code");
+                                        end;
+                                    end else begin
+                                        CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_Customer."Country/Region Code", Rec."Order Date", Rec."Item No.", L_Customer."Post Code");
                                     end;
-                                end else begin
-                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, CustomerAccountNoFilter, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", Rec."Order Date", Rec."Item No.", L_Customer."Post Code");
                                 end;
-                            end;
 
-                            //Check Special Promotion Item on Top Screen++
-                            L_SalesPriceHeader.Reset();
-                            L_SalesPriceHeader.SetRange("Special Price Daily", true);
-                            if L_SalesPriceHeader.FindFirst() then begin
-                                L_PriceListLine.Reset();
-                                L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
-                                L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
-                                L_PriceListLine.SetRange("Product No.", Rec."Item No.");
-                                if L_PriceListLine.FindFirst() then begin
-                                    Rec.Validate("Special Item on Top SCreen", true);
+                                //Check Special Promotion Item on Top Screen++
+                                L_SalesPriceHeader.Reset();
+                                L_SalesPriceHeader.SetRange("Special Price Daily", true);
+                                if L_SalesPriceHeader.FindFirst() then begin
+                                    L_PriceListLine.Reset();
+                                    L_PriceListLine.SetRange("Price List Code", L_SalesPriceHeader.Code);
+                                    L_PriceListLine.SetRange("Asset Type", L_PriceListLine."Asset Type"::Item);
+                                    L_PriceListLine.SetRange("Product No.", Rec."Item No.");
+                                    if L_PriceListLine.FindFirst() then begin
+                                        Rec.Validate("Special Item on Top SCreen", true);
+                                    end;
                                 end;
+
+                                //Rec.Insert();
                             end;
-                            Rec.Insert();
-                            //Update flow fields Description, Inventory etc.++
-                            CurrPage.Update();
                         end;
+
+                        //Update flow fields Description, Inventory etc.++
+                        CurrPage.Update();
                     end;
 
                 }
@@ -205,7 +194,7 @@ page 80130 "Customer Trends Subform"
                 field("Line Disc %"; Rec."Line Disc %")
                 {
                     ApplicationArea = all;
-                    Editable = false;
+                    //Editable = false;
                     StyleExpr = G_Colour;
                 }
                 field("Line Discount Amount"; Rec."Line Discount Amount")
@@ -306,62 +295,73 @@ page 80130 "Customer Trends Subform"
                 field("Line Amount"; Rec.Amount)
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Amount Including VAT"; Rec."Amount Including VAT")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("VAT%"; Rec."VAT%")
                 {
                     ApplicationArea = All;
                     Visible = false;
+                    Editable = false;
                 }
                 field("VAT amount"; Rec."VAT amount")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
-                field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
-                {
-                    ApplicationArea = All;
-                }
-                field("VAT Bus. Posting Group"; Rec."VAT Bus. Posting Group")
-                {
-                    ApplicationArea = All;
-                }
+                // field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("VAT Bus. Posting Group"; Rec."VAT Bus. Posting Group")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("VAT %"; Rec."VAT %")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
 
             }
             group(Control51)
             {
                 ShowCaption = false;
-                group(Control45)
-                {
-                    ShowCaption = false;
+                // group(Control45)
+                // {
+                //     ShowCaption = false;
 
-                    field(LineAmount; LineAmount)
+                //     field(LineAmount; LineAmount)
 
-                    {
-                        ApplicationArea = Basic, Suite;
-                        Caption = 'Subtotal Excl. VAT (GBP)';
-                        Editable = false;
-                        ToolTip = 'Specifies the sum of the value in the Line Amount Excl. VAT field on all lines in the document.';
-                    }
-                    field("Invoice Discount Amount"; InvoiceDiscountAmount)
-                    {
-                        ApplicationArea = Basic, Suite;
-                        Caption = 'Inv. Discount Amount Excl. VAT (GBP)';
-                        Editable = false;
+                //     {
+                //         ApplicationArea = Basic, Suite;
+                //         Caption = 'Subtotal Excl. VAT (GBP)';
+                //         Editable = false;
+                //         ToolTip = 'Specifies the sum of the value in the Line Amount Excl. VAT field on all lines in the document.';
+                //     }
+                //     field("Invoice Discount Amount"; InvoiceDiscountAmount)
+                //     {
+                //         ApplicationArea = Basic, Suite;
+                //         Caption = 'Inv. Discount Amount Excl. VAT (GBP)';
+                //         Editable = false;
 
-                    }
-                    field("Invoice Disc. Pct."; InvoiceDiscountPct)
-                    {
-                        ApplicationArea = Basic, Suite;
-                        Caption = 'Invoice Discount %';
+                //     }
+                //     field("Invoice Disc. Pct."; InvoiceDiscountPct)
+                //     {
+                //         ApplicationArea = Basic, Suite;
+                //         Caption = 'Invoice Discount %';
 
-                        Editable = false;
+                //         Editable = false;
 
 
-                    }
-                }
+                //     }
+                // }
                 group(Control28)
                 {
                     ShowCaption = false;
@@ -391,155 +391,11 @@ page 80130 "Customer Trends Subform"
                 }
             }
         }
-        // area(factboxes)
-        // {
-        //     systempart(Control1905767507; Notes)
-        //     {
-        //         ApplicationArea = Notes;
-        //     }
-        //     part(Control1902018507; "Customer Statistics FactBox")
-        //     {
-        //         ApplicationArea = Basic, Suite;
-        //         SubPageLink = "No." = FIELD("Customer No.");
-        //     }
-        //     part(Control1900316107; "Customer Details FactBox")
-        //     {
-        //         ApplicationArea = Basic, Suite;
-        //         SubPageLink = "No." = FIELD("Customer No.");
-        //     }
-        //     part(Control1901314507; "Item Invoicing FactBox")
-        //     {
-        //         ApplicationArea = Basic, Suite;
-        //         SubPageLink = "No." = FIELD("Item No.");
-        //     }
-        // }
+
     }
 
 
-    actions
-    {
-        area(Processing)
-        {
 
-            //Moved this button to KNAPP extension becuase of KNAPP Code++
-            // action("Register Sales Order")
-            // {
-            //     ApplicationArea = All;
-            //     Image = Register;
-
-            //     trigger OnAction()
-            //     var
-            //         CTFunctions: Codeunit "CT Functions";
-            //         L_Customertrends: Record CustomerTrends;
-            //     begin
-            //         if not Confirm('Do you want to register?', false) then
-            //             Error('');
-
-            //         if SalesPersonCodeFilter = '' then
-            //             Error('SalesPerson/Purchaser Code should not be blank');
-
-            //         if CustomerAccountNoFilter = '' then
-            //             Error('Customer Account No. should not be blank');
-
-            //         //Update Latest Delivery Date, and Shipping details++
-            //         L_Customertrends.Reset();
-            //         L_Customertrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
-            //         L_Customertrends.SetRange("Customer No.", CustomerAccountNoFilter);
-            //         if L_Customertrends.FindSet() then begin
-            //             L_Customertrends.ModifyAll("Delivery Date", DeliveryDate);
-            //             L_Customertrends.ModifyAll("Shipping Agent Code", ShippingAgentCodeFilter);
-            //             L_Customertrends.ModifyAll("Shipping Agent Service Code", ShippingAgentServiceCodeFilter);
-            //             L_Customertrends.ModifyAll("Weekend Ship. Agnt. Serv. Code", WeekendShippingAgentServiceCodeFilter);
-            //             L_Customertrends.ModifyAll("Location Code", LocationCodeFilter);
-            //         end;
-
-            //         //Create and Update SO++
-            //         CTFunctions.CreateAndUpdateSalesOrder(CustomerAccountNoFilter, SalesPersonCodeFilter);
-            //     end;
-            // }
-            //Moved this button to KNAPP extension becuase of KNAPP Code++
-
-            action(Clear)
-            {
-                ApplicationArea = All;
-                Image = Delete;
-
-                trigger OnAction()
-                var
-                    L_CustTrends: Record CustomerTrends;
-                begin
-                    if not Confirm('Do you want to Delete?', false) then
-                        Error('');
-
-                    L_CustTrends.Reset();
-                    L_CustTrends.SetRange("Salesperson Code", SalesPersonCodeFilter);
-                    L_CustTrends.SetRange("Customer No.", CustomerAccountNoFilter);
-                    if L_CustTrends.FindSet() then begin
-                        L_CustTrends.DeleteAll();
-                    end;
-
-                    Clear(CustomerAccountNoFilter);
-                    Clear(CustomerAccountName);
-                    Clear(OrderDateFilter);
-                    Clear(DeliveryDate);
-                    Clear(ShippingAgentCodeFilter);
-                    Clear(ShippingAgentServiceCodeFilter);
-                    Clear(WeekendShippingAgentServiceCodeFilter);
-                    Clear(WeekendShippingAgentCodeFilter);
-                    Clear(LocationCodeFilter);
-                    Clear(WorkDescription);
-                    Clear(MinOrderValue);
-                    CurrPage.Update();
-                end;
-            }
-            action(Comments)
-            {
-                ApplicationArea = All;
-                Caption = 'Comments';
-                Image = ViewComments;
-                ToolTip = 'View or add comments for the record.';
-
-                trigger OnAction()
-                var
-                    ApprovalsMgmt: Codeunit "Approvals Mgmt.";
-                    L_CommentLine: Record "Comment Line";
-                    CommentSheet: Page "Comment Sheet";
-                begin
-                    Clear(CommentSheet);
-                    L_CommentLine.Reset();
-                    L_CommentLine.SetRange("No.", CustomerAccountNoFilter);
-                    if L_CommentLine.FindFirst() then begin
-                        CommentSheet.SetTableView(L_CommentLine);
-                        CommentSheet.Run();
-                    end;
-
-                end;
-            }
-            action("Past Months Details")
-            {
-                ApplicationArea = All;
-                Image = Report;
-                trigger OnAction();
-                var
-                    CustomerTrendDetails: report "Customer Trend Details";
-                begin
-                    if SalesPersonCodeFilter = '' then
-                        Error('SalesPerson/Purchaser Code should not be blank.');
-
-                    if CustomerAccountNoFilter = '' then
-                        Error('Customer Account No. should not be blank.');
-
-                    if DeliveryDate = 0D then
-                        Error('Delivery Date should not be blank.');
-
-                    Clear(CustomerTrendDetails);
-                    CustomerTrendDetails.GetFilters(SalesPersonCodeFilter, CustomerAccountNoFilter, DeliveryDate, ShippingAgentCodeFilter, ShippingAgentServiceCodeFilter, WeekendShippingAgentServiceCodeFilter, WorkDescription, WeekendShippingAgentCodeFilter);
-                    CustomerTrendDetails.Run();
-                end;
-
-            }
-        }
-    }
 
     //Moved this code on Ochannel Extension for calculation++
     // local procedure TotalAvailableQtyForSealable(_Rec: Record CustomerTrends): Decimal
@@ -571,7 +427,6 @@ page 80130 "Customer Trends Subform"
     trigger OnAfterGetCurrRecord()
     var
         L_CustomerTrends: Record CustomerTrends;
-        test: Record 37;
     begin
         Clear(LineAmount);
         Clear(Amount);
@@ -579,9 +434,7 @@ page 80130 "Customer Trends Subform"
         Clear(VATAmount);
         Clear(InvoiceDiscountAmount);
         L_CustomerTrends.Reset();
-        L_CustomerTrends.SetRange("Salesperson Code", Rec."Salesperson Code");
-        L_CustomerTrends.SetRange("Customer No.", Rec."Customer No.");
-        L_CustomerTrends.SetRange("Special Promotion", false); //For Top SCreen
+        L_CustomerTrends.SetRange("Entry Number", Rec."Entry Number");
         if L_CustomerTrends.FindSet() then begin
             repeat
                 //LineAmount += (L_CustomerTrends.Amount - L_CustomerTrends."Line Discount Amount");
@@ -609,7 +462,27 @@ page 80130 "Customer Trends Subform"
     trigger OnAfterGetRecord()
     var
         L_CustomerTrends: Record CustomerTrends;
+        L_CustomerTrendHeader: Record "Customer Trend Header";
     begin
+        Clear(LineAmount);
+        Clear(Amount);
+        Clear(AmountIncVat);
+        Clear(VATAmount);
+        Clear(InvoiceDiscountAmount);
+        L_CustomerTrends.Reset();
+        L_CustomerTrends.SetRange("Entry Number", Rec."Entry Number");
+        if L_CustomerTrends.FindSet() then begin
+            repeat
+                //LineAmount += (L_CustomerTrends.Amount - L_CustomerTrends."Line Discount Amount");
+                AmountIncVat += L_CustomerTrends."Amount Including VAT";
+                VATAmount += L_CustomerTrends."VAT amount";
+                Amount += L_CustomerTrends.Amount;
+                LineAmount += L_CustomerTrends.Amount;
+            //InvoiceDiscountAmount += L_CustomerTrends."Line Discount Amount";
+            until L_CustomerTrends.Next() = 0;
+        end;
+
+
         //Set Color For Special Items on Top Screen++
         Clear(G_Colour);
         L_CustomerTrends.Reset();
@@ -627,24 +500,7 @@ page 80130 "Customer Trends Subform"
 
 
     var
-
-        SalesPersonCodeFilter: Text;
-        CustomerAccountNoFilter: Text;
-        CustomerAccountName: Text;
-        DeliveryDate: Date;
-        ShippingAgentCodeFilter: Code[20];
-        ShippingAgentServiceCodeFilter: Code[20];
-        WeekendShippingAgentServiceCodeFilter: Code[20];
-        WeekendShippingAgentCodeFilter: Code[20];
-
-        LocationCodeFilter: Code[20];
-        OrderDateFilter: Date;
-
-        WorkDescription: Text[2048];
-
         G_Colour: Text;
-        MinOrderValue: Decimal;
-
         InvDiscAmountEditable: Boolean;
         InvoiceDiscountAmount: Decimal;
         InvoiceDiscountPct: Decimal;

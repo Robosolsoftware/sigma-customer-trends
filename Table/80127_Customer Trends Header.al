@@ -1,4 +1,4 @@
-table 80127 CustomerTrendHeader
+table 80127 "Customer Trend Header"
 {
     DataClassification = CustomerContent;
     Caption = 'Customer Trend Header';
@@ -7,9 +7,9 @@ table 80127 CustomerTrendHeader
 
     fields
     {
-        field(50000; "Entry Number"; Integer)
+        field(50000; "Entry Number"; Code[20])
         {
-            AutoIncrement = true;
+
         }
         field(50001; "Salesperson Code"; Code[20])
         {
@@ -24,8 +24,6 @@ table 80127 CustomerTrendHeader
         }
         field(50003; "Customer Name"; Text[100])
         {
-            FieldClass = FlowField;
-            CalcFormula = lookup(Customer.Name where("No." = field("Customer No.")));
         }
         field(50004; "Order Date"; Date)
         {
@@ -78,13 +76,65 @@ table 80127 CustomerTrendHeader
             FieldClass = FlowField;
             CalcFormula = sum(CustomerTrends."Amount Including VAT" where("Entry Number" = field("Entry Number")));
         }
+        field(50014; "Location Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+            TableRelation = Location;
+        }
+        field(50015; "CallLog Date"; Date)
+        {
+            Editable = false;
+        }
+        field(50016; "CallLog Time"; Time)
+        {
+            Editable = false;
+        }
     }
     keys
     {
-        key(PK; "Entry Number")
+        key(PK; "Entry Number", "Salesperson Code", "Customer No.")
         {
             Clustered = true;
         }
     }
+
+    procedure LinesEditable() IsEditable: Boolean;
+    begin
+        IsEditable := Rec."Customer No." <> '';
+    end;
+
+    trigger OnDelete()
+    var
+        L_CustomerTrendLine: Record CustomerTrends;
+
+    begin
+        L_CustomerTrendLine.Reset();
+        L_CustomerTrendLine.SetRange("Entry Number", Rec."Entry Number");
+        L_CustomerTrendLine.DeleteAll();
+    end;
+
+    trigger OnInsert()
+    var
+        L_SalesAndRecSetup: Record "Sales & Receivables Setup";
+        NoSeriesManagement: Codeunit "No. Series";
+        L_UserSetup: Record "User Setup";
+    begin
+        if Rec."Entry Number" = '' then begin
+            L_SalesAndRecSetup.Get();
+
+            L_SalesAndRecSetup.TestField("Customer Trend Nos.");
+
+            Rec."Entry Number" := NoSeriesManagement.GetNextNo(L_SalesAndRecSetup."Customer Trend Nos.", TODAY, TRUE);
+
+            L_UserSetup.Reset();
+            L_UserSetup.SetRange("User ID", UserId);
+            if L_UserSetup.FindFirst() then begin
+                L_UserSetup.TestField("Salespers./Purch. Code");
+                Rec."Salesperson Code" := L_UserSetup."Salespers./Purch. Code";
+            end else
+                Error('Salespers./Purch. Code should not be blank. Please check with Admin');
+        end;
+    end;
 }
 

@@ -119,6 +119,42 @@ page 80128 "Special Promotions"
                         end;
                     end;
                 }
+                field("Line Amount"; Rec.Amount)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Amount Including VAT"; Rec."Amount Including VAT")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("VAT%"; Rec."VAT%")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    Editable = false;
+                }
+                field("VAT amount"; Rec."VAT amount")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                // field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("VAT Bus. Posting Group"; Rec."VAT Bus. Posting Group")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
+                // field("VAT %"; Rec."VAT %")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
             }
         }
     }

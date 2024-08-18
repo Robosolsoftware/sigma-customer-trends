@@ -3,7 +3,7 @@ page 80125 "Customer Trends List"
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    SourceTable = CustomerTrendHeader;
+    SourceTable = "Customer Trend Header";
     CaptionML = ENU = 'Customer Trends List',
                 ENG = 'Customer Trends List';
     CardPageID = "Customer Trend Card";
@@ -87,16 +87,44 @@ page 80125 "Customer Trends List"
 
     }
 
+    actions
+    {
+        area(Creation)
+        {
+            action("Delete Customer Trends")
+            {
+                ApplicationArea = All;
+                Image = Action;
+
+                trigger OnAction()
+                var
+                    L_CustomerTrends: Record CustomerTrends;
+                    L_CustomerTrendsHeader: Record "Customer Trend Header";
+                begin
+                    L_CustomerTrends.Reset();
+                    L_CustomerTrends.DeleteAll();
+                    L_CustomerTrendsHeader.Reset();
+                    L_CustomerTrendsHeader.DeleteAll();
+                end;
+            }
+        }
+    }
+
     trigger OnOpenPage()
     var
         L_UserSetup: Record "User Setup";
     begin
+        //For Inventory Calculation++
         Rec.SetFilter("Date Filter", '>=%1', WorkDate());
 
+        //Open List Page for Selected SalesPerson Code++
         L_UserSetup.Reset();
         L_UserSetup.SetRange("User ID", UserId);
-        if L_UserSetup.FindFirst() then
+        if L_UserSetup.FindFirst() then begin
+            L_UserSetup.TestField("Salespers./Purch. Code");
             Rec.SetRange("Salesperson Code", L_UserSetup."Salespers./Purch. Code");
+        end else
+            Error('Salespers./Purch. Code should not be blank. Please check with Admin');
 
     end;
 

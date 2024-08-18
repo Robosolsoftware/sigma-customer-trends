@@ -158,7 +158,6 @@ report 80125 Populate_CustomerTrends
         CH_CustTrends: Record CustomerTrends;
         CH_Items: Record Item;
         CH_SShip: Record "Sales Shipment Line";
-        PgCutTr: page "Customer Trends";
         CH_ILE: Record "Item Ledger Entry";
         SalesPrice: Record "Price List Line";
 

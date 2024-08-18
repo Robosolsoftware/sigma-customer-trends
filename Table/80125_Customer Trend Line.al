@@ -1,7 +1,7 @@
-table 80125 CustomerTrends
+table 80125 "CustomerTrends"
 {
     DataClassification = CustomerContent;
-    Caption = 'Customer Trends';
+    Caption = 'Customer Trend Line';
     DataPerCompany = true;
 
 
@@ -24,8 +24,6 @@ table 80125 CustomerTrends
         }
         field(4; "Customer Name"; Text[100])
         {
-            FieldClass = FlowField;
-            CalcFormula = lookup(Customer.Name where("No." = field("Customer No.")));
         }
         field(5; "Quantity purchased this Week"; Decimal)
         {
@@ -40,10 +38,6 @@ table 80125 CustomerTrends
             DataClassification = CustomerContent;
             Caption = 'Quantity purchased Last Month';
         }
-        // field(8; "Updated"; Boolean)
-        // {
-        //     DataClassification = CustomerContent;
-        // }
         field(9; "Updated By"; Code[20])
         {
             DataClassification = CustomerContent;
@@ -106,7 +100,7 @@ table 80125 CustomerTrends
                                 Error('Unit Price %1 should not be less then special promotion price %2. For special item %3', Rec."Unit Price", L_PriceListLine."Unit Price", Rec."Item No.");
                         end;
 
-                        IF (xRec."Unit Price" <> Rec."Unit Price") AND (Rec."Qty. to be added to SO" > 0) THEN BEGIN
+                        IF xRec."Unit Price" <> Rec."Unit Price" THEN BEGIN
                             CalculateVatAmount(Rec);
                         END;
                     end;
@@ -171,6 +165,7 @@ table 80125 CustomerTrends
                             Error('Qty. to be added to SO should be blank on the Special Promotions screen. current value is %1.', L_CustomerTrend."Qty. to be added to SO");
                     end;
 
+
                     if Rec."Special Promotion" = true then begin
                         //Check Min Quantity (For Promotion Item)++
                         if Rec."Minimum Quantity" > Rec."Qty. to be added to SO" then
@@ -198,18 +193,18 @@ table 80125 CustomerTrends
                         end;
                     end;
 
-                    //Update Price++
-                    if Rec."Special Promotion" = false then
+
+                    if Rec."Special Promotion" = false then begin
+                        //Update Price++
                         Rec.Validate("Unit Price", EventAndSubscriber.CustomerTrend_GetUnitPrice(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date"));
-
-                    //Update Discount %
-                    if Rec."Special Promotion" = false then
+                        //Update Discount %
                         Rec.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(Rec."Customer No.", Rec."Item No.", Rec."Qty. to be added to SO", Rec."Order Date"));
-
-                    IF ("Qty. to be added to SO" > 0) THEN begin
-                        CalculateVatAmount(Rec);
                     end;
+
                 end;
+
+                //Calculate Amount++
+                CalculateVatAmount(Rec);
             end;
         }
         field(14; "New Price"; Decimal)
@@ -392,6 +387,7 @@ table 80125 CustomerTrends
         {
             DataClassification = ToBeClassified;
             Editable = false;
+            TableRelation = Location;
         }
         field(46; "Minimum Quantity"; Decimal)
         {
@@ -415,7 +411,10 @@ table 80125 CustomerTrends
         }
         field(51; "Line Disc %"; Decimal)
         {
-
+            trigger OnValidate()
+            begin
+                CalculateVatAmount(Rec);
+            end;
         }
         field(52; "Total Allocated on SO"; Decimal)
         {
@@ -439,7 +438,7 @@ table 80125 CustomerTrends
         {
 
         }
-        field(55; "Entry Number"; Integer)
+        field(55; "Entry Number"; Code[20])
         {
             //AutoIncrement = true;
         }
@@ -533,11 +532,19 @@ table 80125 CustomerTrends
         {
 
         }
+        field(71; "Line No."; Integer)
+        {
+
+        }
+        field(72; "VAT %"; Decimal)
+        {
+            Editable = false;
+        }
     }
 
     keys
     {
-        key(PrimaryKey; "Entry Number", "Item No.", "Customer No.", "Salesperson Code", "Special Promotion")
+        key(PrimaryKey; "Entry Number", "Line No.", "Customer No.", "Salesperson Code", "Special Promotion")
         {
             Clustered = true;
         }
@@ -545,7 +552,7 @@ table 80125 CustomerTrends
 
     var
         myInt: Integer;
-        res: Page "Sales Order";
+
 
 
     procedure InsertSalesLinesfromTrends(OrderNo: Code[20]; CustTrends: Record CustomerTrends)
@@ -582,39 +589,94 @@ table 80125 CustomerTrends
         L_Item: Record Item;
         UnitVatAmount: Decimal;
         L_VatProdPostingSetup: Record "VAT Posting Setup";
+        L_SalesLine: Record "Sales Line";
     begin
+        if P_CustomerTrendLine."Qty. to be added to SO" > 0 then begin
+            IF L_Customer.GET(P_CustomerTrendLine."Customer No.") THEN;
+            P_CustomerTrendLine."VAT Bus. Posting Group" := L_Customer."VAT Bus. Posting Group";
 
 
-        IF L_Customer.GET(P_CustomerTrendLine."Customer No.") THEN;
-        P_CustomerTrendLine."VAT Bus. Posting Group" := L_Customer."VAT Bus. Posting Group";
+            if L_Item.Get(P_CustomerTrendLine."Item No.") then begin
+                P_CustomerTrendLine."VAT Prod. Posting Group" := L_Item."VAT Prod. Posting Group";
+            end;
 
 
-        if L_Item.Get(P_CustomerTrendLine."Item No.") then begin
+            Currency.Reset();
+            Currency.SetRange(Code, P_CustomerTrendLine."Currency Code");
+            if Currency.FindFirst() then;
 
-            P_CustomerTrendLine."VAT Prod. Posting Group" := L_Item."VAT Prod. Posting Group";
+            //Sigma - They are not using Price Inclue VAT++
+            CLEAR(UnitVatAmount);
+            L_VatProdPostingSetup.RESET;
+            IF L_VatProdPostingSetup.GET(P_CustomerTrendLine."VAT Bus. Posting Group", P_CustomerTrendLine."VAT Prod. Posting Group") THEN BEGIN
+                P_CustomerTrendLine."VAT %" := L_VatProdPostingSetup."VAT %";
 
-        end;
+                case L_VatProdPostingSetup."VAT Calculation Type" of
+                    L_VatProdPostingSetup."VAT Calculation Type"::"Normal VAT",
+                    L_VatProdPostingSetup."VAT Calculation Type"::"Reverse Charge VAT":
+                        begin
+                            P_CustomerTrendLine.Amount := Round(P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO", Currency."Amount Rounding Precision");
+                            P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
 
+                            //Update Amount With Line Discount++
+                            P_CustomerTrendLine.Amount := P_CustomerTrendLine.Amount - P_CustomerTrendLine."Line Discount Amount";
 
-        CLEAR(UnitVatAmount);
-        L_VatProdPostingSetup.RESET;
-        IF L_VatProdPostingSetup.GET(P_CustomerTrendLine."VAT Bus. Posting Group", P_CustomerTrendLine."VAT Prod. Posting Group") THEN BEGIN
-            if L_VatProdPostingSetup."VAT Calculation Type" = L_VatProdPostingSetup."VAT Calculation Type"::"Reverse Charge VAT" then
-                L_VatProdPostingSetup."VAT %" := 0;
-            IF L_VatProdPostingSetup."VAT %" <> 0 THEN BEGIN
-                P_CustomerTrendLine.Amount := (ROUND(((P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO") / ((L_VatProdPostingSetup."VAT %" / 100) + 1)), 0.01, '='));
-                P_CustomerTrendLine."Amount Including VAT" := round((P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO"), 0.01, '=');
-                P_CustomerTrendLine."VAT amount" := P_CustomerTrendLine."Amount Including VAT" - P_CustomerTrendLine.Amount;
-                P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
-            END ELSE BEGIN
-                P_CustomerTrendLine.Amount := P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO";
-                P_CustomerTrendLine."Amount Including VAT" := ((ROUND((P_CustomerTrendLine.Amount) * (1 + (L_VatProdPostingSetup."VAT %" / 100)), 0.01)));
-                P_CustomerTrendLine."VAT amount" := P_CustomerTrendLine."Amount Including VAT" - P_CustomerTrendLine.Amount;
-                P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
+                            P_CustomerTrendLine."Amount Including VAT" := (P_CustomerTrendLine.Amount) + Round((P_CustomerTrendLine.Amount) * L_VatProdPostingSetup."VAT %" / 100, Currency."Amount Rounding Precision", Currency.VATRoundingDirection());
+                            P_CustomerTrendLine."VAT amount" := P_CustomerTrendLine."Amount Including VAT" - (P_CustomerTrendLine.Amount);
+                        end;
+                    L_VatProdPostingSetup."VAT Calculation Type"::"Full VAT":
+                        begin
+                            P_CustomerTrendLine.Amount := Round(P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO", Currency."Amount Rounding Precision");
+                            P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
+
+                            //Update Amount With Line Discount++
+                            P_CustomerTrendLine.Amount := P_CustomerTrendLine.Amount - P_CustomerTrendLine."Line Discount Amount";
+
+                            P_CustomerTrendLine."Amount Including VAT" := (P_CustomerTrendLine.Amount);
+                            P_CustomerTrendLine."VAT amount" := 0;
+                        end;
+                end;
             END;
 
-        END;
+            // CLEAR(UnitVatAmount);
+            // L_VatProdPostingSetup.RESET;
+            // IF L_VatProdPostingSetup.GET(P_CustomerTrendLine."VAT Bus. Posting Group", P_CustomerTrendLine."VAT Prod. Posting Group") THEN BEGIN
+            //     if L_VatProdPostingSetup."VAT Calculation Type" = L_VatProdPostingSetup."VAT Calculation Type"::"Reverse Charge VAT" then
+            //         L_VatProdPostingSetup."VAT %" := 0;
+
+            //     IF L_VatProdPostingSetup."VAT %" <> 0 THEN BEGIN
+            //         P_CustomerTrendLine.Amount := (ROUND(((P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO") / ((L_VatProdPostingSetup."VAT %" / 100) + 1)), 0.01, '='));
+            //         P_CustomerTrendLine."Amount Including VAT" := round((P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO"), 0.01, '=');
+            //         P_CustomerTrendLine."VAT amount" := P_CustomerTrendLine."Amount Including VAT" - P_CustomerTrendLine.Amount;
+            //         P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
+            //     END ELSE BEGIN
+            //         P_CustomerTrendLine.Amount := P_CustomerTrendLine."Unit Price" * P_CustomerTrendLine."Qty. to be added to SO";
+            //         P_CustomerTrendLine."Amount Including VAT" := ((ROUND((P_CustomerTrendLine.Amount) * (1 + (L_VatProdPostingSetup."VAT %" / 100)), 0.01)));
+            //         P_CustomerTrendLine."VAT amount" := P_CustomerTrendLine."Amount Including VAT" - P_CustomerTrendLine.Amount;
+            //         P_CustomerTrendLine."Line Discount Amount" := P_CustomerTrendLine.Amount * (P_CustomerTrendLine."Line Disc %" / 100);
+            //     END;
+
+            // END;
+        end else begin
+            IF L_Customer.GET(P_CustomerTrendLine."Customer No.") THEN
+                P_CustomerTrendLine."VAT Bus. Posting Group" := L_Customer."VAT Bus. Posting Group";
+
+
+            if L_Item.Get(P_CustomerTrendLine."Item No.") then
+                P_CustomerTrendLine."VAT Prod. Posting Group" := L_Item."VAT Prod. Posting Group";
+
+            CLEAR(UnitVatAmount);
+            L_VatProdPostingSetup.RESET;
+            IF L_VatProdPostingSetup.GET(P_CustomerTrendLine."VAT Bus. Posting Group", P_CustomerTrendLine."VAT Prod. Posting Group") THEN
+                P_CustomerTrendLine."VAT %" := L_VatProdPostingSetup."VAT %";
+
+            P_CustomerTrendLine.Amount := 0;
+            P_CustomerTrendLine."Line Discount Amount" := 0;
+            P_CustomerTrendLine."Amount Including VAT" := 0;
+            P_CustomerTrendLine."VAT amount" := 0;
+        end;
     end;
+
 
 
     trigger OnInsert()
