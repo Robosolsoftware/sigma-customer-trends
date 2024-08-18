@@ -89,25 +89,7 @@ page 80125 "Customer Trends List"
 
     actions
     {
-        area(Creation)
-        {
-            action("Delete Customer Trends")
-            {
-                ApplicationArea = All;
-                Image = Action;
 
-                trigger OnAction()
-                var
-                    L_CustomerTrends: Record CustomerTrends;
-                    L_CustomerTrendsHeader: Record "Customer Trend Header";
-                begin
-                    L_CustomerTrends.Reset();
-                    L_CustomerTrends.DeleteAll();
-                    L_CustomerTrendsHeader.Reset();
-                    L_CustomerTrendsHeader.DeleteAll();
-                end;
-            }
-        }
     }
 
     trigger OnOpenPage()
