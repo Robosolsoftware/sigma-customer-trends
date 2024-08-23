@@ -28,12 +28,30 @@ page 80128 "Special Promotions"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Min Sell Price"; Rec."Min Sell Price")
+                field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {
-                    ApplicationArea = all;
-                    Editable = false;
+                    ApplicationArea = All;
+                    Editable = Rec."Item No." <> '';
+
+                    trigger OnValidate()
+                    var
+                        RecUserSetup: Record "User Setup";
+                        CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
+                    begin
+                        //Check Item Sales Quota (For Both Promotion and Normal Item)++
+                        CurrPage.Update();
+                        if Rec."Qty. to be added to SO" > 0 then begin
+                            IF RecUserSetup.GET(USERID) THEN BEGIN
+                                IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                                    CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                                END;
+                            END ELSE BEGIN
+                                CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                            END;
+                        end;
+                    end;
                 }
-                field("Line Disc %"; Rec."Line Disc %")
+                field("Min Sell Price"; Rec."Min Sell Price")
                 {
                     ApplicationArea = all;
                     Editable = false;
@@ -41,6 +59,35 @@ page 80128 "Special Promotions"
                 field("Unit Price"; Rec."Unit Price")
                 {
                     ApplicationArea = all;
+                }
+                field("Line Disc %"; Rec."Line Disc %")
+                {
+                    ApplicationArea = all;
+                    Editable = false;
+                }
+                field("Line Discount Amount"; Rec."Line Discount Amount")
+                {
+                    ApplicationArea = all;
+                    Editable = false;
+                }
+                field("Line Amount"; Rec.Amount)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("VAT %"; Rec."VAT %")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("VAT amount"; Rec."VAT amount")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Amount Including VAT"; Rec."Amount Including VAT")
+                {
+                    ApplicationArea = All;
                     Editable = false;
                 }
                 field("Last Price"; Rec."Last Price")
@@ -95,50 +142,6 @@ page 80128 "Special Promotions"
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the minimum quantity of the product.';
-                }
-                field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
-                {
-                    ApplicationArea = All;
-                    Editable = Rec."Item No." <> '';
-
-                    trigger OnValidate()
-                    var
-                        RecUserSetup: Record "User Setup";
-                        CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
-                    begin
-                        //Check Item Sales Quota (For Both Promotion and Normal Item)++
-                        CurrPage.Update();
-                        if Rec."Qty. to be added to SO" > 0 then begin
-                            IF RecUserSetup.GET(USERID) THEN BEGIN
-                                IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
-                                    CustomerTrendSalesQuota.CheckExceededQty(Rec);
-                                END;
-                            END ELSE BEGIN
-                                CustomerTrendSalesQuota.CheckExceededQty(Rec);
-                            END;
-                        end;
-                    end;
-                }
-                field("Line Amount"; Rec.Amount)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("Amount Including VAT"; Rec."Amount Including VAT")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("VAT%"; Rec."VAT%")
-                {
-                    ApplicationArea = All;
-                    Visible = false;
-                    Editable = false;
-                }
-                field("VAT amount"; Rec."VAT amount")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
                 }
                 // field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
                 // {

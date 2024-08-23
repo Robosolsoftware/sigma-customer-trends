@@ -61,6 +61,10 @@ table 80125 "CustomerTrends"
                 //Min Sell price Validation application only for Normal Item.
                 //The below code only for Top Screen Items (We can Add Promotion Items on Top Screen)++
                 if CurrFieldNo = 11 then begin
+                    Rec."Changed UnitPrice" := true;
+
+
+
                     if Rec."Special Promotion" = false then begin
                         L_SalesPriceHeader.Reset();
                         L_SalesPriceHeader.SetRange("Special Price Daily", true);
@@ -539,6 +543,10 @@ table 80125 "CustomerTrends"
         field(72; "VAT %"; Decimal)
         {
             Editable = false;
+        }
+        field(73; "Changed UnitPrice"; Boolean)
+        {
+
         }
     }
 
