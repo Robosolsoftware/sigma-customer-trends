@@ -90,6 +90,18 @@ table 80127 "Customer Trend Header"
         {
             Editable = false;
         }
+        field(50017; "Total Qty."; Decimal)
+        {
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = sum(CustomerTrends."Qty. to be added to SO" where("Entry Number" = field("Entry Number")));
+        }
+        field(50018; "Total Lines"; Integer)
+        {
+            Editable = false;
+            FieldClass = FlowField;
+            CalcFormula = count(CustomerTrends where("Entry Number" = field("Entry Number")));
+        }
     }
     keys
     {

@@ -273,6 +273,16 @@ page 80129 "Customer Trend Card"
                         end;
                     end;
                 }
+                field("Total Lines"; Rec."Total Lines")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Total Qty."; Rec."Total Qty.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Total Amount"; Rec."Total Amount")
                 {
                     ApplicationArea = All;

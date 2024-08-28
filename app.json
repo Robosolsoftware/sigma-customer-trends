@@ -2,7 +2,7 @@
   "id": "9d21f859-860e-4a4d-ab73-d2bf6815a030",
   "name": "Customer_Trends",
   "publisher": "Robosol",
-  "version": "24.0.0.15",
+  "version": "24.0.0.17",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -15,7 +15,7 @@
       "id": "89b2d3ff-cff9-4506-9a14-597a5b6d370f",
       "name": "Interim WMS BC Customisation",
       "publisher": "Robosol",
-      "version": "24.0.0.58"
+      "version": "24.0.0.59"
     },
     {
       "id": "1a0f1d96-00b3-4f86-b25b-d0af4bcd74f4",

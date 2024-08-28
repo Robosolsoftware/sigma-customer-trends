@@ -10,7 +10,7 @@ table 80125 "CustomerTrends"
         field(1; "Item No."; Code[20])
         {
             DataClassification = CustomerContent;
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where("Non Tele Sales" = const(false));
         }
         field(2; "Item Description"; Text[100])
         {
