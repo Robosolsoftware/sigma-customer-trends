@@ -49,33 +49,36 @@ codeunit 80128 "Customer Trend Sales Quota"
         //-------------3: Selected Customer, Selected Item Category, ErrorCode(SCSICPDQ)-------
         if ExceptionPerDaySelCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
             exit;
-        //-------------4: Selected Dimension, Selected Item, ErrorCode(SCAPOQ)-------------
-        if ExceptionPerDaySelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------5: Selected Dimension, All Item, ErrorCode(SCAPOQ)-------------
-        if ExceptionPerDaySelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPOQ)-------------
-        if ExceptionPerDaySelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------7: All Customer, Selected Item, ErrorCode(ASIPDQ)-------------
-        if ExceptionPerDayAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------8: All Customer, All Item, ErrorCode(AAPDQ)-------------
-        if ExceptionPerDayAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------9: All Customer, Selected Item Category, ErrorCode(ASICPDQ)-------------
-        if ExceptionPerDayAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPDQ)-------
-        if ExceptionPerDaySelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPDQ)-------------
-        if ExceptionPerDaySelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
-        //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPOQ)-------------
-        if ExceptionPerDaySelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
-            exit;
+
+        //As discussed with Customer(Dipesh) - Exception per day only work for sales type customer+++++++
+        // //-------------4: Selected Dimension, Selected Item, ErrorCode(SCAPOQ)-------------
+        // if ExceptionPerDaySelDimensionSelItem(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------5: Selected Dimension, All Item, ErrorCode(SCAPOQ)-------------
+        // if ExceptionPerDaySelDimensionAllItem(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------6: Selected Dimension, Selected Item Category, ErrorCode(SCSICPOQ)-------------
+        // if ExceptionPerDaySelDimensionSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------7: All Customer, Selected Item, ErrorCode(ASIPDQ)-------------
+        // if ExceptionPerDayAllCustomerSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------8: All Customer, All Item, ErrorCode(AAPDQ)-------------
+        // if ExceptionPerDayAllCustomerAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------9: All Customer, Selected Item Category, ErrorCode(ASICPDQ)-------------
+        // if ExceptionPerDayAllCustomerSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------10: Selected Customer Price Group, Selected Item, ErrorCode(SCGSIPDQ)-------
+        // if ExceptionPerDaySelCustomerGroupSelItemQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------11: Selected Customer Price Group, All Item, ErrorCode(SCGAPDQ)-------------
+        // if ExceptionPerDaySelCustomerGroupAllItemQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        // //-------------12: Selected Customer Price Group, Selected Item Category, ErrorCode(SCGSICPOQ)-------------
+        // if ExceptionPerDaySelCustomerGroupSelItemCatQty(_CustomerTrends, Recitem."Item Category Code") then
+        //     exit;
+        //As discussed with Customer(Dipesh) - Exception per day only work for sales type customer+++++++
         //ExceptionPer Day all 12 validation+++++++
 
 
@@ -2259,7 +2262,8 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := true;
             end;
         end;
     end;
@@ -2401,7 +2405,8 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := true;
             end;
         end;
     end;
@@ -2542,7 +2547,8 @@ codeunit 80128 "Customer Trend Sales Quota"
                 IF L_RemainingQuantity < 0 THEN
                     L_RemainingQuantity := 0;
 
-                Exceeded := CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                CheckingRemainingQty(L_RemainingQuantity, 'SCSIPOQ', WarningtypeOpion, L_MaxOrderQty."Maximum Quantity", L_MaxOrderQty."Quantity Restriction", L_OrderQty);
+                Exceeded := true;
             end;
         end;
     end;
