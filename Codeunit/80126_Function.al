@@ -498,7 +498,7 @@ codeunit 80126 "CT Functions"
             L_Item.SetRange("No.", _PriceListLine."Product No.");
             if L_Item.FindFirst() then begin
                 //Skip if Not QAU Approved and Not Released++
-                if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then begin
+                if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item.Blocked = false) AND (L_Item."Ops Sales Blocked" = false) AND (L_Item."Sales Blocked" = false) then begin
 
                     CH_CustTrends.Init();
                     CH_CustTrends."Entry Number" := _CustomerTrendHeader."Entry Number";
@@ -620,7 +620,7 @@ codeunit 80126 "CT Functions"
         L_Item.SetRange("No.", _PriceListLine."Product No.");
         if L_Item.FindFirst() then begin
             //Skip if Not QAU Approved and Not Released++
-            if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) then begin
+            if (L_Item."QAU Approved" = true) AND (L_Item.Status = L_Item.Status::Released) AND (L_Item.Blocked = false) AND (L_Item."Sales Blocked" = false) AND (L_Item."Ops Sales Blocked" = false) then begin
 
                 //Create Header if not Exist++
                 L_CustomerTrendsHeader.Reset();

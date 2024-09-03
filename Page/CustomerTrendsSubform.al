@@ -92,6 +92,9 @@ page 80130 "Customer Trends Subform"
                                 L_Item.TestField("QAU Approved", true);
                                 L_Item.TestField(Status, L_Item.Status::Released);
                                 L_Item.TestField("Special Product", false);
+                                L_Item.TestField(Blocked, false);
+                                L_Item.TestField("Sales Blocked", false);
+                                L_Item.TestField("Ops Sales Blocked", false);
 
                                 //Check Shipping Restriction for existing Lines++
                                 L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Shipping Agent Code", L_CustomerTrendsHeader."Shipping Agent Service Code");
