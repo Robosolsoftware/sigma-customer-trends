@@ -187,6 +187,8 @@ page 80130 "Customer Trends Subform"
                     StyleExpr = G_Colour;
                     Visible = false;
                 }
+
+
                 field("Qty. to be added to SO"; Rec."Qty. to be added to SO")
                 {
                     ApplicationArea = all;
@@ -194,23 +196,25 @@ page 80130 "Customer Trends Subform"
                     DecimalPlaces = 0 : 5;
                     Editable = Rec."Item No." <> '';
                     StyleExpr = G_Colour;
-                    trigger OnValidate()
-                    var
-                        RecUserSetup: Record "User Setup";
-                        CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
-                    begin
-                        //Check Item Sales Quota (For Both Promotion and Normal Item)++
-                        CurrPage.Update();
-                        if Rec."Qty. to be added to SO" > 0 then begin
-                            IF RecUserSetup.GET(USERID) THEN BEGIN
-                                IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
-                                    CustomerTrendSalesQuota.CheckExceededQty(Rec);
-                                END;
-                            END ELSE BEGIN
-                                CustomerTrendSalesQuota.CheckExceededQty(Rec);
-                            END;
-                        end;
-                    end;
+
+                    //This Code Moved to Ochannel Extension++
+                    // trigger OnValidate()
+                    // var
+                    //     RecUserSetup: Record "User Setup";
+                    //     CustomerTrendSalesQuota: Codeunit "Customer Trend Sales Quota";
+                    // begin
+                    //     //Check Item Sales Quota (For Both Promotion and Normal Item)++
+                    //     CurrPage.Update();
+                    //     if Rec."Qty. to be added to SO" > 0 then begin
+                    //         IF RecUserSetup.GET(USERID) THEN BEGIN
+                    //             IF NOT RecUserSetup."SO Override MaxQty Calculation" THEN BEGIN
+                    //                 CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                    //             END;
+                    //         END ELSE BEGIN
+                    //             CustomerTrendSalesQuota.CheckExceededQty(Rec);
+                    //         END;
+                    //     end;
+                    // end;
                 }
 
                 field("Min Sell Price"; Rec."Min Sell Price")
