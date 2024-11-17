@@ -21,6 +21,18 @@ table 80127 "Customer Trend Header"
             Caption = 'Sell to Customer No.';
             DataClassification = CustomerContent;
             TableRelation = Customer."No.";
+            trigger OnValidate()
+            var
+                L_Customer: Record Customer;
+            begin
+                L_Customer.Reset();
+                L_Customer.SetRange("No.", Rec."Customer No.");
+                if L_Customer.FindFirst() then begin
+                    if L_Customer.Blocked <> L_Customer.Blocked::" " then
+                        Error('Customer %1 is blocked', L_Customer."No.");
+                end;
+
+            end;
         }
         field(50003; "Customer Name"; Text[100])
         {
