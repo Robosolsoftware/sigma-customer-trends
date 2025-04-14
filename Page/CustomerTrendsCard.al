@@ -311,6 +311,16 @@ page 80129 "Customer Trend Card"
             }
         }
 
+        area(FactBoxes)
+        {
+            part("Customer Details"; "Customer Details")
+            {
+                SubPageLink = "No." = field("Customer No.");
+                ApplicationArea = all;
+                Editable = true;
+            }
+        }
+
     }
     actions
     {

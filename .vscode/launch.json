@@ -6,7 +6,7 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "SIGMAFTP_DEV",
+            "environmentName": "Sigma_11042025",
             //"environmentName": "Copy_10092024",
             "startupObjectId": 22,
             "startupObjectType": "Page",
