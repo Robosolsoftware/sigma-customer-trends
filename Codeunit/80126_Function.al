@@ -171,6 +171,7 @@ codeunit 80126 "CT Functions"
         CH_Items: Record Item;
         CH_SShip: Record "Sales Shipment Line";
         L_ItemUnitofMeasure: Record "Item Unit of Measure";
+        L_ShipperPalletData: Record "Shipper/Pallet Data";
         L_Location: Record Location;
         CompanyLicenseValidation: Codeunit "Check Item License";
         CalledFrom: Option "Sales","Purchase";
@@ -224,12 +225,17 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends.Validate("Line Disc %", EventAndSubscriber.CustomerTrend_GetLineDiscount(CH_ILE."Source No.", CH_ILE."Item No.", 0, CH_CustTrends."Order Date"));
 
                         //Get Shipper Qty From Item Unit of Measure table++
-                        L_ItemUnitofMeasure.Reset();
-                        L_ItemUnitofMeasure.SetRange("Item No.", CH_ILE."Item No.");
-                        L_ItemUnitofMeasure.SetRange(Code, CH_Items."Sales Unit of Measure");
-                        if L_ItemUnitofMeasure.FindFirst() then
-                            CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
-
+                        // L_ItemUnitofMeasure.Reset();
+                        // L_ItemUnitofMeasure.SetRange("Item No.", CH_ILE."Item No.");
+                        // L_ItemUnitofMeasure.SetRange(Code, CH_Items."Sales Unit of Measure");
+                        // if L_ItemUnitofMeasure.FindFirst() then
+                        //     CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+                        L_ShipperPalletData.Reset();
+                        L_ShipperPalletData.SetRange("Item No.", CH_ILE."Item No.");
+                        if L_ShipperPalletData.FindFirst() then begin
+                            CH_CustTrends."Shipper Qty" := L_ShipperPalletData."Shipper Qty."; //Mayank
+                            //CH_CustTrends."Pallet Qty" := L_ShipperPalletData."Pallet Qty.";
+                        end;
                         //Get Last Unit Price from Sales Shipment table++
                         CH_SShip.Reset();
                         CH_SShip.SetRange("Sell-to Customer No.", CH_ILE."Source No.");
@@ -315,6 +321,7 @@ codeunit 80126 "CT Functions"
         CH_Items: Record Item;
         CH_SShip: Record "Sales Shipment Line";
         L_ItemUnitofMeasure: Record "Item Unit of Measure";
+        L_ShipperPalletData: Record "Shipper/Pallet Data";
         L_Location: Record Location;
         CompanyLicenseValidation: Codeunit "Check Item License";
         CalledFrom: Option "Sales","Purchase";
@@ -371,11 +378,18 @@ codeunit 80126 "CT Functions"
                         CH_CustTrends."Work Description" := _WorkDescription;
 
                         //Get Shipper Qty From Item Unit of Measure table++
-                        L_ItemUnitofMeasure.Reset();
-                        L_ItemUnitofMeasure.SetRange("Item No.", CH_ILE."Item No.");
-                        L_ItemUnitofMeasure.SetRange(Code, CH_Items."Sales Unit of Measure");
-                        if L_ItemUnitofMeasure.FindFirst() then
-                            CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+                        // L_ItemUnitofMeasure.Reset();
+                        // L_ItemUnitofMeasure.SetRange("Item No.", CH_ILE."Item No.");
+                        // L_ItemUnitofMeasure.SetRange(Code, CH_Items."Sales Unit of Measure");
+                        // if L_ItemUnitofMeasure.FindFirst() then
+                        //     CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+
+                        L_ShipperPalletData.Reset();
+                        L_ShipperPalletData.SetRange("Item No.", CH_ILE."Item No.");
+                        if L_ShipperPalletData.FindFirst() then begin
+                            CH_CustTrends."Shipper Qty" := L_ShipperPalletData."Shipper Qty.";
+                            // CH_CustTrends."Pallet Qty" := L_ShipperPalletData."Pallet Qty.";
+                        end; //Mayank
 
                         //Get Last Unit Price from Sales Shipment table++
                         CH_SShip.Reset();
@@ -474,6 +488,7 @@ codeunit 80126 "CT Functions"
         CH_CustTrends: Record CustomerTrends;
         CH_SShip: Record "Sales Shipment Line";
         L_ItemUnitofMeasure: Record "Item Unit of Measure";
+        L_ShipperPalletData: Record "Shipper/Pallet Data";
         L_Item: Record Item;
         L_Date: Record Date;
         L_Location: Record Location;
@@ -547,12 +562,18 @@ codeunit 80126 "CT Functions"
 
 
                     //Get Shipper Qty From Item Unit of Measure table++
-                    L_ItemUnitofMeasure.Reset();
-                    L_ItemUnitofMeasure.SetRange("Item No.", _PriceListLine."Product No.");
-                    L_ItemUnitofMeasure.SetRange(Code, L_Item."Sales Unit of Measure");
-                    if L_ItemUnitofMeasure.FindFirst() then
-                        CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+                    // L_ItemUnitofMeasure.Reset();
+                    // L_ItemUnitofMeasure.SetRange("Item No.", _PriceListLine."Product No.");
+                    // L_ItemUnitofMeasure.SetRange(Code, L_Item."Sales Unit of Measure");
+                    // if L_ItemUnitofMeasure.FindFirst() then
+                    //     CH_CustTrends."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
 
+                    L_ShipperPalletData.Reset();
+                    L_ShipperPalletData.SetRange("Item No.", _PriceListLine."Product No.");
+                    if L_ShipperPalletData.FindFirst() then begin
+                        CH_CustTrends."Shipper Qty" := L_ShipperPalletData."Shipper Qty."; //Mayank
+                        //CH_CustTrends."Pallet Qty" := L_ShipperPalletData."Pallet Qty.";
+                    end;
                     //Get Last Unit Price from Sales Shipment table++
                     CH_SShip.Reset();
                     CH_SShip.SetRange("Sell-to Customer No.", _CustomerTrendHeader."Customer No.");
@@ -595,6 +616,7 @@ codeunit 80126 "CT Functions"
         L_CustTrendLine: Record CustomerTrends;
         CH_SShip: Record "Sales Shipment Line";
         L_ItemUnitofMeasure: Record "Item Unit of Measure";
+        L_ShipperPalletData: Record "Shipper/Pallet Data";
         L_Item: Record Item;
         L_Location: Record Location;
         CompanyLicenseValidation: Codeunit "Check Item License";
@@ -706,11 +728,17 @@ codeunit 80126 "CT Functions"
                     L_CustTrendLine."Location Code" := L_CustomerTrendsHeader."Location Code";
 
                     //Get Shipper Qty From Item Unit of Measure table++
-                    L_ItemUnitofMeasure.Reset();
-                    L_ItemUnitofMeasure.SetRange("Item No.", _PriceListLine."Product No.");
-                    L_ItemUnitofMeasure.SetRange(Code, L_Item."Sales Unit of Measure");
-                    if L_ItemUnitofMeasure.FindFirst() then
-                        L_CustTrendLine."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+                    // L_ItemUnitofMeasure.Reset();
+                    // L_ItemUnitofMeasure.SetRange("Item No.", _PriceListLine."Product No.");
+                    // L_ItemUnitofMeasure.SetRange(Code, L_Item."Sales Unit of Measure");
+                    // if L_ItemUnitofMeasure.FindFirst() then
+                    //     L_CustTrendLine."Shipper Qty" := L_ItemUnitofMeasure."Shipper Qty.";
+                    L_ShipperPalletData.Reset();
+                    L_ShipperPalletData.SetRange("Item No.", _PriceListLine."Product No.");
+                    if L_ShipperPalletData.FindFirst() then begin
+                        L_CustTrendLine."Shipper Qty" := L_ShipperPalletData."Shipper Qty."; //Mayank
+                        //L_CustTrendLine."Pallet Qty" := L_ShipperPalletData."Pallet Qty.";
+                    end;
 
                     //Get Last Unit Price from Sales Shipment table++
                     CH_SShip.Reset();

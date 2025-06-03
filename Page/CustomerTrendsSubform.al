@@ -39,6 +39,7 @@ page 80130 "Customer Trends Subform"
                         L_CustomerTrendLine: Record CustomerTrends;
                         L_CustomerTrendsHeader: Record "Customer Trend Header";
                         Last_CustomerTrendLine: Record CustomerTrends;
+                        L_ShipperPalletData: Record "Shipper/Pallet Data";
                     begin
                         //Check Duplicate Item++
                         L_CustomerTrendLine.Reset();
@@ -120,12 +121,17 @@ page 80130 "Customer Trends Subform"
 
 
                                 //Get Shipper Quantity from Item unit measure table++
-                                L_ItemUnitofMeasure.Reset();
-                                L_ItemUnitofMeasure.SetRange("Item No.", Rec."Item No.");
-                                L_ItemUnitofMeasure.SetRange(Code, Rec."Units of Measure");
-                                if L_ItemUnitofMeasure.FindFirst() then
-                                    Rec.Validate("Shipper Qty", L_ItemUnitofMeasure."Qty. per Unit of Measure");
+                                // L_ItemUnitofMeasure.Reset();
+                                // L_ItemUnitofMeasure.SetRange("Item No.", Rec."Item No.");
+                                // L_ItemUnitofMeasure.SetRange(Code, Rec."Units of Measure");
+                                // if L_ItemUnitofMeasure.FindFirst() then
+                                //     Rec.Validate("Shipper Qty", L_ItemUnitofMeasure."Qty. per Unit of Measure");
+                                L_ShipperPalletData.Reset();
+                                L_ShipperPalletData.SetRange("Item No.", Rec."Item No.");
+                                if L_ShipperPalletData.FindFirst() then begin
+                                    Rec.Validate("Shipper Qty", L_ShipperPalletData."Shipper Qty.");
 
+                                end;
                                 //Company License Validatio++
                                 L_Customer.Reset();
                                 L_Customer.SetRange("No.", Rec."Customer No.");
@@ -316,6 +322,11 @@ page 80130 "Customer Trends Subform"
                     ApplicationArea = All;
                     Editable = false;
                     StyleExpr = G_Colour;
+                }
+                field("Pallet Qty"; Rec."Pallet Qty")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
 
 

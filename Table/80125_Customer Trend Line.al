@@ -11,6 +11,18 @@ table 80125 "CustomerTrends"
         {
             DataClassification = CustomerContent;
             TableRelation = Item."No." where("Non Tele Sales" = const(false));
+
+            trigger OnValidate()
+            var
+                shipperPalletData: Record "Shipper/Pallet Data";
+            begin
+                shipperPalletData.Reset();
+                shipperPalletData.SetRange("Item No.", Rec."Item No.");
+                if shipperPalletData.FindFirst() then begin
+                    Validate("Shipper Qty", shipperPalletData."Shipper Qty.");
+                    //Validate("Pallet Qty", shipperPalletData."Pallet Qty.");
+                end;
+            end;
         }
         field(2; "Item Description"; Text[100])
         {
@@ -547,6 +559,10 @@ table 80125 "CustomerTrends"
         field(73; "Changed UnitPrice"; Boolean)
         {
 
+        }
+        field(74; "Pallet Qty"; Decimal)
+        {
+            DataClassification = ToBeClassified;
         }
     }
 
