@@ -323,11 +323,11 @@ page 80130 "Customer Trends Subform"
                     Editable = false;
                     StyleExpr = G_Colour;
                 }
-                field("Pallet Qty"; Rec."Pallet Qty")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
+                // field("Pallet Qty"; Rec."Pallet Qty")
+                // {
+                //     ApplicationArea = All;
+                //     Editable = false;
+                // }
 
 
                 // field("VAT Prod. Posting Group"; Rec."VAT Prod. Posting Group")
