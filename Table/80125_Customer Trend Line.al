@@ -201,10 +201,10 @@ table 80125 "CustomerTrends"
                                 L_ShiptoAddress.SetRange(Code, Rec."Ship-to Code");
                                 L_ShiptoAddress.SetRange("Customer No.", Rec."Customer No.");
                                 if L_ShiptoAddress.FindFirst() then begin
-                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", Rec."Order Date", Rec."Item No.", L_ShiptoAddress."Post Code");
+                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", Rec."Order Date", Rec."Item No.", L_ShiptoAddress."Post Code", '');
                                 end;
                             end else begin
-                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_Customer."Country/Region Code", Rec."Order Date", Rec."Item No.", L_Customer."Post Code");
+                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, Rec."Customer No.", L_Customer."Customer Posting Group", L_Customer."Country/Region Code", Rec."Order Date", Rec."Item No.", L_Customer."Post Code", '');
                             end;
                         end;
                     end;

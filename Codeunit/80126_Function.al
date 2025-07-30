@@ -266,10 +266,10 @@ codeunit 80126 "CT Functions"
                                 L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
                                 L_ShiptoAddress.SetRange("Customer No.", _CustomerAccount);
                                 if L_ShiptoAddress.FindFirst() then begin
-                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
+                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code", '');
                                 end;
                             end else begin
-                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
+                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code", '');
                             end;
                         end;
 
@@ -421,10 +421,10 @@ codeunit 80126 "CT Functions"
                                 L_ShiptoAddress.SetRange(Code, L_Customer."Ship-to Code");
                                 L_ShiptoAddress.SetRange("Customer No.", _CustomerAccount);
                                 if L_ShiptoAddress.FindFirst() then begin
-                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code");
+                                    CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_ShiptoAddress."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_ShiptoAddress."Post Code", '');
                                 end;
                             end else begin
-                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code");
+                                CompanyLicenseValidation.ValidateLicense(CalledFrom::Sales, _CustomerAccount, L_Customer."Customer Posting Group", L_Customer."Country/Region Code", CH_CustTrends."Order Date", CH_CustTrends."Item No.", L_Customer."Post Code", '');
                             end;
                         end;
 
