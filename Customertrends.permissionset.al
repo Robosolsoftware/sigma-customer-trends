@@ -15,5 +15,6 @@ permissionset 80125 Customertrends
         table "Customer Trend Header" = X,
         page "Customer Trend Card" = X,
         page "Customer Trends List" = X,
-        page "Customer Trends Subform" = X;
+        page "Customer Trends Subform" = X,
+        page "Customer Details" = X;
 }

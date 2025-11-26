@@ -104,10 +104,22 @@ page 80125 "Customer Trends List"
         L_UserSetup.SetRange("User ID", UserId);
         if L_UserSetup.FindFirst() then begin
             L_UserSetup.TestField("Salespers./Purch. Code");
-            Rec.SetRange("Salesperson Code", L_UserSetup."Salespers./Purch. Code");
+            //Rec.SetRange("Salesperson Code", L_UserSetup."Salespers./Purch. Code");
+            Rec.SetRange(SystemCreatedBy, GetUserName(UserId));
         end else
             Error('Salespers./Purch. Code should not be blank. Please check with Admin');
 
+    end;
+
+    procedure GetUserName(UserSecurityId: Code[50]): Text[100]
+    var
+        Users: Record User;
+        tes: page "Warehouse Receipt";
+    begin
+        Users.Reset();
+        Users.SetRange("User Name", UserSecurityId);
+        if Users.FindFirst() then
+            exit(Users."User Security ID");
     end;
 
 
