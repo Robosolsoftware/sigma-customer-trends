@@ -141,6 +141,7 @@ page 80129 "Customer Trend Card"
                 field("Shipping Agent Code"; Rec."Shipping Agent Code")
                 {
                     ApplicationArea = All;
+                    Editable = false;
 
                     trigger OnValidate()
                     var
@@ -200,6 +201,7 @@ page 80129 "Customer Trend Card"
                 field("Weekend Shipping Agent Code"; Rec."Weekend Shipping Agent Code")
                 {
                     ApplicationArea = All;
+                    Editable = false;
 
                     trigger OnValidate()
                     var
