@@ -434,6 +434,11 @@ page 80129 "Customer Trend Card"
             G_EditFields := true;
 
 
+
+        //SBB-219++
+        if Rec."Entry Number" <> '' then
+            Rec.SetRecFilter();
+        //SBB-219++
     end;
 
 

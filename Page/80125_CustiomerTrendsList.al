@@ -104,8 +104,8 @@ page 80125 "Customer Trends List"
         L_UserSetup.SetRange("User ID", UserId);
         if L_UserSetup.FindFirst() then begin
             L_UserSetup.TestField("Salespers./Purch. Code");
-            //Rec.SetRange("Salesperson Code", L_UserSetup."Salespers./Purch. Code");
-            Rec.SetRange(SystemCreatedBy, GetUserName(UserId));
+            Rec.SetRange("Salesperson Code", L_UserSetup."Salespers./Purch. Code");
+            //Rec.SetRange(SystemCreatedBy, GetUserName(UserId));
         end else
             Error('Salespers./Purch. Code should not be blank. Please check with Admin');
 
