@@ -403,7 +403,8 @@ codeunit 80125 EventSub
     procedure CreateOrder(CustNo: Code[100]; var SalesOrderNo: Code[100])
     var
         L_SalesHeader: Record "Sales Header";
-        NoSeriesManagement: Codeunit NoSeriesManagement;
+        //NoSeriesManagement: Codeunit NoSeriesManagement;
+        NoSeriesManagement: Codeunit "No. Series";
         SalesRecSetup: Record "Sales & Receivables Setup";
         L_DocumetNo: Code[20];
     begin
