@@ -98,7 +98,18 @@ page 80130 "Customer Trends Subform"
                                 L_Item.TestField("Ops Sales Blocked", false);
 
                                 //Check Shipping Restriction for existing Lines++
-                                L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Shipping Agent Code", L_CustomerTrendsHeader."Shipping Agent Service Code");
+                                if Format(L_CustomerTrendsHeader."Delivery Date", 0, '<Weekday Text>') <> 'Saturday' then begin
+                                    if L_CustomerTrendsHeader."Shipping Agent Service Code" <> '' then begin
+                                        L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Shipping Agent Code", L_CustomerTrendsHeader."Shipping Agent Service Code");
+                                    end;
+                                end else begin
+                                    if L_CustomerTrendsHeader."Weekend Shipping Agent Code" <> '' then begin
+                                        L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Weekend Shipping Agent Code", L_CustomerTrendsHeader."Weekend Ship. Agnt. Serv. Code");
+                                    end else begin
+                                        L_SalesAndEvent.CheckShippingAgentServiceRestriction(Rec."Item No.", L_CustomerTrendsHeader."Shipping Agent Code", L_CustomerTrendsHeader."Shipping Agent Service Code");
+                                    end;
+                                end;
+
 
                                 Rec."Item No." := L_Item."No.";
                                 Rec."Item Description" := L_Item.Description;

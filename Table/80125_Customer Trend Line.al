@@ -189,7 +189,19 @@ table 80125 "CustomerTrends"
 
 
                         //Check Shipping Restriction for existing Lines++
-                        L_SalesEventAndFunction.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Shipping Agent Code", Rec."Shipping Agent Service Code");
+                        if Format(Rec."Delivery Date", 0, '<Weekday Text>') <> 'Saturday' then begin
+                            if Rec."Shipping Agent Service Code" <> '' then begin
+                                L_SalesEventAndFunction.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Shipping Agent Code", Rec."Shipping Agent Service Code");
+                            end;
+                        end else begin
+                            if Rec."Weekend Shipping Agent Code" <> '' then begin
+                                L_SalesEventAndFunction.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Weekend Shipping Agent Code", Rec."Weekend Ship. Agnt. Serv. Code");
+                            end else begin
+                                L_SalesEventAndFunction.CheckShippingAgentServiceRestriction(Rec."Item No.", Rec."Shipping Agent Code", Rec."Shipping Agent Service Code");
+                            end;
+                        end;
+
+
 
 
                         //Company License Validatio++

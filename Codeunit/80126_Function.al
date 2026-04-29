@@ -251,7 +251,17 @@ codeunit 80126 "CT Functions"
                             CH_CustTrends."Location Code" := L_Location.Code;
 
                         //Check Shipping Restriction for existing Lines++
-                        L_SalesandEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                        if Format(CH_CustTrends."Delivery Date", 0, '<Weekday Text>') <> 'Saturday' then begin
+                            if CH_CustTrends."Shipping Agent Service Code" <> '' then begin
+                                L_SalesandEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                            end;
+                        end else begin
+                            if CH_CustTrends."Weekend Shipping Agent Code" <> '' then begin
+                                L_SalesAndEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Weekend Shipping Agent Code", CH_CustTrends."Weekend Ship. Agnt. Serv. Code");
+                            end else begin
+                                L_SalesandEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                            end;
+                        end;
 
                         //Company License Validatio++
                         L_Customer.Reset();
@@ -406,7 +416,18 @@ codeunit 80126 "CT Functions"
                             CH_CustTrends."Location Code" := L_Location.Code;
 
                         //Check Shipping Restriction for existing Lines++
-                        L_SalesAndEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                        if Format(CH_CustTrends."Delivery Date", 0, '<Weekday Text>') <> 'Saturday' then begin
+                            if CH_CustTrends."Shipping Agent Service Code" <> '' then begin
+                                L_SalesandEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                            end;
+                        end else begin
+                            if CH_CustTrends."Weekend Shipping Agent Code" <> '' then begin
+                                L_SalesAndEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Weekend Shipping Agent Code", CH_CustTrends."Weekend Ship. Agnt. Serv. Code");
+                            end else begin
+                                L_SalesandEvent.CheckShippingAgentServiceRestriction(CH_CustTrends."Item No.", CH_CustTrends."Shipping Agent Code", CH_CustTrends."Shipping Agent Service Code");
+                            end;
+                        end;
+
 
                         //Company License Validatio++
                         L_Customer.Reset();

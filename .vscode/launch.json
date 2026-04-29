@@ -6,8 +6,8 @@
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            //"environmentName": "Sigma_UAT",
-            "environmentName": "Sigma_Copy25",
+            "environmentName": "Sigma_2804",
+            //"environmentName": "Sigma_Copy25",
             "startupObjectId": 22,
             "startupObjectType": "Page",
             "breakOnError": "All",
@@ -15,7 +15,7 @@
             "enableLongRunningSqlStatements": true,
             "enableSqlInformationDebugger": true,
             "tenant": "55614040-8b3d-41a1-bae8-2140b06bd0c3",
-            "schemaUpdateMode": "Synchronize"
+            "schemaUpdateMode": "ForceSync"
         }
     ]
 }
